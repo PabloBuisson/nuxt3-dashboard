@@ -5,7 +5,7 @@ interface State {
   _tiles: Tile[];
 }
 
-export const usePartnersStore = defineStore("tiles", {
+export const useTilesStore = defineStore("tiles", {
   state: (): State => ({
     _lastFetch: null,
     _tiles: [
