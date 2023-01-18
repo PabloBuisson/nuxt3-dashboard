@@ -13,7 +13,18 @@ export const useTilesStore = defineStore("tiles", {
         id: "t1",
         title: "Tile 1",
         category: TileCategory.TODOS,
-        content: [{ "Promener le chien": true }, { "Promener le chat": false }],
+        content: [
+          {
+            key: "Promener le chien",
+            value: true,
+            id: "promener-le-chien",
+          },
+          {
+            key: "Promener le chat",
+            value: false,
+            id: "promener-le-chat",
+          },
+        ],
         dateCreation: new Date(),
       },
       {

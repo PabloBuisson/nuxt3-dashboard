@@ -5,7 +5,7 @@ export interface Tile {
   category: TileCategory;
   image?: string;
   contentLink?: string;
-  content: any[];
+  content: any;
   dateCreation: Date;
   dateModification?: Date;
 }
