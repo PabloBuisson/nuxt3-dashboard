@@ -36,20 +36,36 @@ import { useTilesStore } from "~~/stores/tiles-store";
 
 const route = useRoute();
 const store = useTilesStore();
+const config = useRuntimeConfig();
 const categories = TileCategory;
-console.log(store.tiles);
 
 const tileId = route.params.id;
-console.log(route.params.id);
-let tile: Tile | undefined;
+let tile: Tile;
 if (tileId) {
-  tile = store.tiles.find((tile) => tile.id === tileId);
+  tile = store.tiles.find((tile) => tile.id === tileId) as Tile;
 }
 
 // post tile in Firebase
 
-function onSubmit() {
+interface FirebasePOSTResponse {
+  name: string;
+}
+
+async function onSubmit() {
   console.log("sumbitted", tile);
+  console.log("Firebase url", config.public.apiBase);
+
+  const { data, pending, error, refresh } = await useFetch<FirebasePOSTResponse>(`tiles.json`, {
+    method: "POST",
+    body: tile,
+    baseURL: config.public.apiBase,
+  });
+
+  // tile.id = data.value?.name; FOR NEW POSTS
+
+  store.addTile(tile);
+
+  console.log(data.value?.name);
 }
 
 // get infos of tile in Firebase

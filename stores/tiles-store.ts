@@ -5,6 +5,14 @@ interface State {
   _tiles: Tile[];
 }
 
+interface FirebasePOSTResponse {
+  name: string;
+}
+
+interface FirebaseGETResponse {
+  name: string;
+}
+
 export const useTilesStore = defineStore("tiles", {
   state: (): State => ({
     _lastFetch: null,
@@ -79,6 +87,15 @@ export const useTilesStore = defineStore("tiles", {
   },
   actions: {
     // no context as first argument, use `this` instead
+    async registerTile(tile: Tile) {
+      const config = useRuntimeConfig();
+
+      const { data, pending, error, refresh } = await useFetch(`tiles.json`, {
+        method: "POST",
+        body: tile,
+        baseURL: config.public.apiBase,
+      });
+    },
     // async registerPartner(data: PartnerRegistration) {
     //   const authStore = useAuthStore();
     //   const partnerId = authStore.userId;
@@ -100,10 +117,19 @@ export const useTilesStore = defineStore("tiles", {
     //     id: partnerId ?? 0,
     //   });
     // },
-    async loadTiles(payload: { forceRefresh: boolean }) {
-      //   if (!payload.forceRefresh && !this.shouldUpdate) {
+    async loadTiles(data: { forceRefresh: boolean }) {
+      //   if (!data.forceRefresh && !this.shouldUpdate) {
       //     return;
       //   }
+      const config = useRuntimeConfig();
+      const {
+        data: response,
+        pending,
+        error,
+        refresh,
+      } = await useFetch<FirebaseGETResponse>(`tiles.json`, {
+        baseURL: config.public.apiBase,
+      });
       //   const response = await fetch(
       //     `${import.meta.env.VITE_FIREBASE_URL}/partners.json`
       //   );
@@ -134,11 +160,14 @@ export const useTilesStore = defineStore("tiles", {
     },
     // mutations can now become actions,
     // instead of `state` as first argument use `this`
-    // registerPartnerMutation(payload: Partner) {
-    //   this._tiles.push(payload);
+    // registerPartnerMutation(data: Partner) {
+    //   this._tiles.push(data);
     // },
-    setTiles(payload: Tile[]) {
-      this._tiles = payload;
+    addTile(data: Tile) {
+      this._tiles.push(data);
+    },
+    setTiles(data: Tile[]) {
+      this._tiles = data;
     },
     setFetchTimestamp() {
       this._lastFetch = new Date().getTime();
