@@ -52,11 +52,8 @@ interface FirebasePOSTResponse {
 }
 
 async function onSubmit() {
-  console.log("sumbitted", tile);
-  console.log("Firebase url", config.public.apiBase);
-
   const { data, pending, error, refresh } = await useFetch<FirebasePOSTResponse>(`tiles.json`, {
-    method: "POST",
+    method: "PUT",
     body: tile,
     baseURL: config.public.apiBase,
   });

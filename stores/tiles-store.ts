@@ -9,9 +9,7 @@ interface FirebasePOSTResponse {
   name: string;
 }
 
-interface FirebaseGETResponse {
-  name: string;
-}
+type FirebaseGETResponse = Record<string, Tile>;
 
 export const useTilesStore = defineStore("tiles", {
   state: (): State => ({
@@ -70,12 +68,6 @@ export const useTilesStore = defineStore("tiles", {
     hasTiles(state): boolean {
       return state._tiles && state._tiles.length > 0;
     },
-    // isPartner(): boolean {
-    //   // other getters now on `this`
-    //   const partners = this.tiles;
-    //   // const userId = rootGetters.userId; TODO
-    //   return partners.some((partner: Partner) => partner.id === "userId");
-    // },
     shouldUpdate(state): boolean {
       const lastFetch = state._lastFetch;
       if (!lastFetch) {
@@ -90,10 +82,17 @@ export const useTilesStore = defineStore("tiles", {
     async registerTile(tile: Tile) {
       const config = useRuntimeConfig();
 
-      const { data, pending, error, refresh } = await useFetch(`tiles.json`, {
-        method: "POST",
+      const { data, pending, error, refresh } = (
+        await useFetch
+      )<FirebasePOSTResponse>(`tiles.json`, {
+        method: "PUT",
         body: tile,
         baseURL: config.public.apiBase,
+      });
+
+      this.addTile({
+        ...tile,
+        id: data.value!.name,
       });
     },
     // async registerPartner(data: PartnerRegistration) {
@@ -117,7 +116,7 @@ export const useTilesStore = defineStore("tiles", {
     //     id: partnerId ?? 0,
     //   });
     // },
-    async loadTiles(data: { forceRefresh: boolean }) {
+    async loadTiles(data?: { forceRefresh: boolean }) {
       //   if (!data.forceRefresh && !this.shouldUpdate) {
       //     return;
       //   }
@@ -130,33 +129,30 @@ export const useTilesStore = defineStore("tiles", {
       } = await useFetch<FirebaseGETResponse>(`tiles.json`, {
         baseURL: config.public.apiBase,
       });
-      //   const response = await fetch(
-      //     `${import.meta.env.VITE_FIREBASE_URL}/partners.json`
-      //   );
-      //   const responseData = await response.json();
-      //   if (!response.ok) {
-      //     const error = new Error(responseData.message || "Failed to fetch!");
-      //     throw error;
-      //   }
-      //   const partners: Partner[] = [];
-      //   for (const key in responseData) {
-      //     const partner: Partner = {
-      //       id: key,
-      //       firstName: responseData[key].firstName,
-      //       lastName: responseData[key].lastName,
-      //       description: responseData[key].description,
-      //       pseudo: responseData[key].pseudo,
-      //       email: responseData[key].email,
-      //       langNative: responseData[key].langNative,
-      //       langPractice: responseData[key].langPractice,
-      //       level: responseData[key].level,
-      //       interests: responseData[key].interests,
-      //       exchange: responseData[key].exchange,
-      //     };
-      //     partners.push(partner);
-      //   }
-      //   this.setTiles(partners);
-      //   this.setFetchTimestamp();
+
+      const responseData = response.value;
+      if (error.value) {
+        const errorMessage = new Error(error.value.message || "Failed to fetch!");
+        throw errorMessage;
+      }
+
+      const tiles: Tile[] = [];
+      for (const key in responseData) {
+        const partner: Tile = {
+          id: key,
+          title: responseData[key].title,
+          standalone: responseData[key].standalone,
+          category: responseData[key].category,
+          image: responseData[key].image,
+          contentLink: responseData[key].contentLink,
+          content: responseData[key].content,
+          dateCreation: responseData[key].dateCreation,
+          dateModification: responseData[key].dateModification,
+        };
+        tiles.push(partner);
+      }
+      this.setTiles(tiles);
+      this.setFetchTimestamp();
     },
     // mutations can now become actions,
     // instead of `state` as first argument use `this`
