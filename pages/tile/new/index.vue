@@ -1,30 +1,17 @@
 <template>
   <div>
     <h1>My new tile</h1>
-    <form @submit.prevent="onSubmit">
-      <input v-model="tile.title" />
-      <div v-if="tile.category === categories.TODOS">
-        <div v-for="(todo, index) in content">
-          <label :for="todo.id">
-            <input v-model="todo.key" />
-          </label>
-          <input
-            :id="todo.id"
-            type="checkbox"
-            :value="todo.id"
-            v-model="todo.value"
-          />
-          <button @click="deleteTodo(index)" type="button">Delete</button>
-        </div>
-        <button @click="addTodo" type="button">Add todo</button>
-      </div>
-      <button
-        class="px-4 py-2 font-semibold bg-cyan-500 text-white rounded shadow-sm"
-        type="submit"
+    <label for="select-type">What type of tile you want to create ?</label>
+    <select id="select-type" v-model="selectedCategory">
+      <option
+        v-for="option in categoryOptions"
+        :key="option.value"
+        :value="option.value"
       >
-        Update
-      </button>
-    </form>
+        {{ option.text }}
+      </option>
+    </select>
+    <TileFormTodos @submit="onSubmitted" />
   </div>
 </template>
 
@@ -33,40 +20,23 @@ import { Tile, TileCategory } from "~~/models/tile";
 import { useTilesStore } from "~~/stores/tiles-store";
 
 const store = useTilesStore();
-const config = useRuntimeConfig();
-const categories = TileCategory;
-const tile: Tile = {
-  id: "",
-  title: "",
-  category: TileCategory.TODOS,
-  content: "",
-  dateCreation: new Date(),
-};
 
-const content = ref([
-  {
-    key: "Todo1",
-    value: false,
-    id: "todo1",
-  },
-]);
+const categoryOptions = [
+  { text: "Todos", value: TileCategory.TODOS },
+  { text: "To read", value: TileCategory.TOREAD },
+  { text: "Blog post", value: TileCategory.POST },
+  { text: "Agenda", value: TileCategory.EVENT },
+  { text: "Weather forecast", value: TileCategory.WEATHER },
+];
+const selectedCategory = ref("");
 
-function onSubmit() {
-    tile.content = content.value;
-    console.log(tile);
-    store.registerTile(tile);
-}
+watch(selectedCategory, (newType) => {
+  console.log(`selected category is ${newType}`);
+});
 
-function addTodo() {
-  content.value.push({
-    key: `Todo${content.value?.length + 1}`,
-    value: false,
-    id: `todo${content.value?.length + 1}`,
-  });
-}
-
-function deleteTodo(index: number) {
-
+function onSubmitted(tile: Tile) {
+  console.log(tile);
+  store.registerTile(tile);
 }
 </script>
 
