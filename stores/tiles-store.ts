@@ -82,18 +82,43 @@ export const useTilesStore = defineStore("tiles", {
     async registerTile(tile: Tile) {
       const config = useRuntimeConfig();
 
-      const { data, pending, error, refresh } = (
-        await useFetch
-      )<FirebasePOSTResponse>(`tiles.json`, {
-        method: "PUT",
-        body: tile,
-        baseURL: config.public.apiBase,
-      });
+      const { data, pending, error, refresh } =
+        await useFetch<FirebasePOSTResponse>(`tiles.json`, {
+          method: "POST",
+          body: tile,
+          baseURL: config.public.apiBase,
+        });
+
+      if (error.value) {
+        const errorMessage = new Error(
+          error.value.message || "Failed to register tile !"
+        );
+        throw errorMessage;
+      }
 
       this.addTile({
         ...tile,
         id: data.value!.name,
       });
+    },
+    async modifyTile(tile: Tile) {
+      const config = useRuntimeConfig();
+
+      const { data, pending, error, refresh } =
+        await useFetch<Tile>(`tiles/${tile.id}.json`, {
+          method: "PUT",
+          body: tile,
+          baseURL: config.public.apiBase,
+        });
+
+      if (error.value) {
+        const errorMessage = new Error(
+          error.value.message || "Failed to modify tile !"
+        );
+        throw errorMessage;
+      }
+
+      this.editTile(tile);
     },
     // async registerPartner(data: PartnerRegistration) {
     //   const authStore = useAuthStore();
@@ -132,7 +157,9 @@ export const useTilesStore = defineStore("tiles", {
 
       const responseData = response.value;
       if (error.value) {
-        const errorMessage = new Error(error.value.message || "Failed to fetch!");
+        const errorMessage = new Error(
+          error.value.message || "Failed to fetch!"
+        );
         throw errorMessage;
       }
 
@@ -156,11 +183,12 @@ export const useTilesStore = defineStore("tiles", {
     },
     // mutations can now become actions,
     // instead of `state` as first argument use `this`
-    // registerPartnerMutation(data: Partner) {
-    //   this._tiles.push(data);
-    // },
     addTile(data: Tile) {
       this._tiles.push(data);
+    },
+    editTile(data: Tile) {
+      const tileIndex = this._tiles.findIndex((tile) => tile.id === data.id);
+      this._tiles[tileIndex] = data;
     },
     setTiles(data: Tile[]) {
       this._tiles = data;

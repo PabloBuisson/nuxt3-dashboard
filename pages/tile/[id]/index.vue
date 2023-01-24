@@ -45,24 +45,8 @@ if (tileId) {
   tile = store.tiles.find((tile) => tile.id === tileId) as Tile;
 }
 
-// post tile in Firebase
-
-interface FirebasePOSTResponse {
-  name: string;
-}
-
-async function onSubmit() {
-  const { data, pending, error, refresh } = await useFetch<FirebasePOSTResponse>(`tiles.json`, {
-    method: "PUT",
-    body: tile,
-    baseURL: config.public.apiBase,
-  });
-
-  // tile.id = data.value?.name; FOR NEW POSTS
-
-  store.addTile(tile);
-
-  console.log(data.value?.name);
+function onSubmit() {
+  store.modifyTile(tile);
 }
 
 // get infos of tile in Firebase

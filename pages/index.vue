@@ -3,6 +3,7 @@
     <h1 class="text-4xl">My dashboard</h1>
     <DashboardGrid :tiles="tiles" />
     <p v-if="errorMessage">{{ errorMessage }}</p>
+    <NuxtLink to="tile/new">New tile</NuxtLink>
   </div>
 </template>
 
