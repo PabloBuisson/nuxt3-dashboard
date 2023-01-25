@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Todos Tile</h1>
+    <h1>To Read Tile</h1>
     <form @submit.prevent="onSubmit">
       <input v-model="tile.title" />
       <div v-if="tile.category === categories.TODOS">
@@ -14,9 +14,7 @@
             :value="todo.id"
             v-model="todo.value"
           />
-          <button v-if="index > 0" @click="deleteTodo(index)" type="button">
-            Delete
-          </button>
+          <button @click="deleteTodo(index)" type="button">Delete</button>
         </div>
         <button @click="addTodo" type="button">Add todo</button>
       </div>
@@ -44,13 +42,13 @@ const tile: Tile = {
   dateCreation: new Date(),
 };
 
-const emit = defineEmits(["submit"]);
+const emit = defineEmits(['submit'])
 
 const content = ref([
   {
     key: "Todo1",
     value: false,
-    id: "1",
+    id: "todo1",
   },
 ]);
 
@@ -60,19 +58,14 @@ function onSubmit() {
 }
 
 function addTodo() {
-  const todosLength = content.value.length;
-  const lastTodoId = content.value[todosLength - 1].id;
   content.value.push({
-    key: `Todo${+lastTodoId + 1}`,
+    key: `Todo${content.value?.length + 1}`,
     value: false,
-    id: `${+lastTodoId + 1}`,
+    id: `todo${content.value?.length + 1}`,
   });
 }
 
-function deleteTodo(index: number) {
-  const todoToDelete = content.value[index];
-  content.value = content.value.filter((todo) => todo.id !== todoToDelete.id);
-}
+function deleteTodo(index: number) {}
 </script>
 
 <style lang="scss" scoped></style>

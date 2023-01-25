@@ -11,7 +11,7 @@
         {{ option.text }}
       </option>
     </select>
-    <TileFormTodos @submit="onSubmitted" />
+    <component :is="selectedForm" @submit="onSubmitted" />
   </div>
 </template>
 
@@ -21,17 +21,24 @@ import { useTilesStore } from "~~/stores/tiles-store";
 
 const store = useTilesStore();
 
+const TileFormTodos = resolveComponent('TileFormTodos');
+const TileFormToRead = resolveComponent('TileFormToRead');
+const TileFormBlogPost = resolveComponent('TileFormBlogPost');
+const TileFormForecast = resolveComponent('TileFormForecast');
+const TileFormAgenda = resolveComponent('TileFormAgenda');
+
 const categoryOptions = [
-  { text: "Todos", value: TileCategory.TODOS },
-  { text: "To read", value: TileCategory.TOREAD },
-  { text: "Blog post", value: TileCategory.POST },
-  { text: "Agenda", value: TileCategory.EVENT },
-  { text: "Weather forecast", value: TileCategory.WEATHER },
+  { text: "Todos", value: TileCategory.TODOS, component: TileFormTodos },
+  { text: "To read", value: TileCategory.TOREAD, component: TileFormToRead },
+  { text: "Blog post", value: TileCategory.POST, component: TileFormBlogPost },
+  { text: "Agenda", value: TileCategory.EVENT, component: TileFormAgenda },
+  { text: "Weather forecast", value: TileCategory.WEATHER, component: TileFormForecast },
 ];
 const selectedCategory = ref("");
+const selectedForm = shallowRef();
 
 watch(selectedCategory, (newType) => {
-  console.log(`selected category is ${newType}`);
+  selectedForm.value = categoryOptions.find(option => option.value === selectedCategory.value)?.component;
 });
 
 function onSubmitted(tile: Tile) {
