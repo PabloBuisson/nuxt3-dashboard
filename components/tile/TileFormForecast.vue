@@ -30,11 +30,22 @@
 
 <script setup lang="ts">
 import { Tile, TileCategory } from "~~/models/tile";
-import { useTilesStore } from "~~/stores/tiles-store";
 
-const store = useTilesStore();
+interface Props {
+  tile?: Tile;
+}
+
+interface Todo {
+  key: string;
+  value: boolean;
+  id: string;
+}
+
+const props = defineProps<Props>();
+const emit = defineEmits(["submit"]);
+
 const categories = TileCategory;
-const tile: Tile = {
+const tile: Tile = props.tile ?? {
   id: "",
   title: "",
   category: TileCategory.TODOS,
@@ -42,15 +53,15 @@ const tile: Tile = {
   dateCreation: new Date(),
 };
 
-const emit = defineEmits(['submit'])
-
-const content = ref([
-  {
-    key: "Todo1",
-    value: false,
-    id: "todo1",
-  },
-]);
+const content = props.tile
+  ? ref(props.tile.content as Todo[])
+  : ref([
+      {
+        key: "Todo1",
+        value: false,
+        id: "1",
+      },
+    ]);
 
 function onSubmit() {
   tile.content = content.value;
@@ -58,14 +69,19 @@ function onSubmit() {
 }
 
 function addTodo() {
+  const todosLength = content.value.length;
+  const lastTodoId = content.value[todosLength - 1].id;
   content.value.push({
-    key: `Todo${content.value?.length + 1}`,
+    key: `Todo${+lastTodoId + 1}`,
     value: false,
-    id: `todo${content.value?.length + 1}`,
+    id: `${+lastTodoId + 1}`,
   });
 }
 
-function deleteTodo(index: number) {}
+function deleteTodo(index: number) {
+  const todoToDelete = content.value[index];
+  content.value = content.value.filter((todo) => todo.id !== todoToDelete.id);
+}
 </script>
 
 <style lang="scss" scoped></style>

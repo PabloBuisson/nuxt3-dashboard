@@ -32,11 +32,22 @@
 
 <script setup lang="ts">
 import { Tile, TileCategory } from "~~/models/tile";
-import { useTilesStore } from "~~/stores/tiles-store";
 
-const store = useTilesStore();
+interface Props {
+  tile?: Tile;
+}
+
+interface Todo {
+  key: string;
+  value: boolean;
+  id: string;
+}
+
+const props = defineProps<Props>();
+const emit = defineEmits(["submit"]);
+
 const categories = TileCategory;
-const tile: Tile = {
+const tile: Tile = props.tile ?? {
   id: "",
   title: "",
   category: TileCategory.TODOS,
@@ -44,15 +55,15 @@ const tile: Tile = {
   dateCreation: new Date(),
 };
 
-const emit = defineEmits(["submit"]);
-
-const content = ref([
-  {
-    key: "Todo1",
-    value: false,
-    id: "1",
-  },
-]);
+const content = props.tile
+  ? ref(props.tile.content as Todo[])
+  : ref([
+      {
+        key: "Todo1",
+        value: false,
+        id: "1",
+      },
+    ]);
 
 function onSubmit() {
   tile.content = content.value;

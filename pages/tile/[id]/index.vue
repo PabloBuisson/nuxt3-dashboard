@@ -1,27 +1,7 @@
 <template>
   <div>
     <div v-if="tile">
-      <form @submit.prevent="onSubmit">
-        <input v-model="tile.title" />
-        <!-- <h1>{{ tile.title }}</h1> -->
-        <div v-if="tile.category === categories.TODOS">
-          <div v-for="todo in tile.content">
-            <label :for="todo.id">{{ todo.key }}</label>
-            <input
-              :id="todo.id"
-              type="checkbox"
-              :value="todo.id"
-              v-model="todo.value"
-            />
-          </div>
-        </div>
-        <button
-          class="px-4 py-2 font-semibold bg-cyan-500 text-white rounded shadow-sm"
-          type="submit"
-        >
-          Update
-        </button>
-      </form>
+      <component :is="selectedForm" :tile="tile" @submit="onSubmitted" />
     </div>
     <div v-else>
       <p>Oops, tile not found !</p>
@@ -36,21 +16,33 @@ import { useTilesStore } from "~~/stores/tiles-store";
 
 const route = useRoute();
 const store = useTilesStore();
-const config = useRuntimeConfig();
-const categories = TileCategory;
+let selectedForm: any;
+const TileFormTodos = resolveComponent("TileFormTodos");
+const TileFormToRead = resolveComponent("TileFormToRead");
+const TileFormBlogPost = resolveComponent("TileFormBlogPost");
+const TileFormForecast = resolveComponent("TileFormForecast");
+const TileFormAgenda = resolveComponent("TileFormAgenda");
+
+const categoryOptions = [
+  { value: TileCategory.TODOS, component: TileFormTodos },
+  { value: TileCategory.TOREAD, component: TileFormToRead },
+  { value: TileCategory.POST, component: TileFormBlogPost },
+  { value: TileCategory.EVENT, component: TileFormAgenda },
+  { value: TileCategory.WEATHER, component: TileFormForecast },
+];
 
 const tileId = route.params.id;
 let tile: Tile;
 if (tileId) {
   tile = store.tiles.find((tile) => tile.id === tileId) as Tile;
+  selectedForm = categoryOptions.find(
+    (option) => option.value === tile.category
+  )?.component;
 }
 
-function onSubmit() {
+function onSubmitted(tile: Tile) {
   store.modifyTile(tile);
 }
-
-// get infos of tile in Firebase
-// display infos
 </script>
 
 <style lang="scss" scoped></style>
