@@ -3,23 +3,21 @@
     <h1>Todos Tile</h1>
     <form @submit.prevent="onSubmit">
       <input v-model="tile.title" />
-      <div v-if="tile.category === categories.TODOS">
-        <div v-for="(todo, index) in content">
-          <label :for="todo.id">
-            <input v-model="todo.key" />
-          </label>
-          <input
-            :id="todo.id"
-            type="checkbox"
-            :value="todo.id"
-            v-model="todo.value"
-          />
-          <button v-if="index > 0" @click="deleteTodo(index)" type="button">
-            Delete
-          </button>
-        </div>
-        <button @click="addTodo" type="button">Add todo</button>
+      <div v-for="(todo, index) in content">
+        <label :for="todo.id">
+          <input v-model="todo.key" />
+        </label>
+        <input
+          :id="todo.id"
+          type="checkbox"
+          :value="todo.id"
+          v-model="todo.value"
+        />
+        <button v-if="index > 0" @click="deleteTodo(index)" type="button">
+          Delete
+        </button>
       </div>
+      <button @click="addTodo" type="button">Add todo</button>
       <button
         class="px-4 py-2 font-semibold bg-cyan-500 text-white rounded shadow-sm"
         type="submit"

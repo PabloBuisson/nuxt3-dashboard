@@ -34,10 +34,13 @@ const categoryOptions = [
 const tileId = route.params.id;
 let tile: Tile;
 if (tileId) {
+  //TODO fetch to Firebase
   tile = store.tiles.find((tile) => tile.id === tileId) as Tile;
-  selectedForm = categoryOptions.find(
-    (option) => option.value === tile.category
-  )?.component;
+  if (tile != null) {
+    selectedForm = categoryOptions.find(
+      (option) => option.value === tile.category
+    )?.component;
+  }
 }
 
 function onSubmitted(tile: Tile) {

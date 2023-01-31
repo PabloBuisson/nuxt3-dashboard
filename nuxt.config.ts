@@ -12,6 +12,10 @@ export default defineNuxtConfig({
       },
     ],
   ],
+  alias: {
+    // bug fix https://stackoverflow.com/a/74801367 && https://github.com/nuxt/nuxt/issues/14585
+    pinia: "/node_modules/@pinia/nuxt/node_modules/pinia/dist/pinia.mjs",
+  },
   pages: true,
   runtimeConfig: {
     // Public keys that are exposed to the client
