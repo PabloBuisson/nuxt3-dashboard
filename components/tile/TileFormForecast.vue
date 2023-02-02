@@ -19,10 +19,10 @@
           Selected city : {{ selectedCity?.name }} ({{ selectedCity?.country }})
         </p>
         <p>
-          Current temperature : {{ selectedCity?.current_weather.temperature }}
+          Current temperature : {{ selectedCity?.current_weather?.temperature }}
         </p>
-        <p>Current time : {{ selectedCity?.current_weather.time }}</p>
-        <p>Current weather : {{ selectedCity?.current_weather.weathercode }}</p>
+        <p>Current time : {{ selectedCity?.current_weather?.time }}</p>
+        <p>Current weather : {{ selectedCity?.current_weather?.weathercode }}</p>
       </div>
       <button
         class="px-4 py-2 font-semibold bg-cyan-500 text-white rounded shadow-sm"
@@ -40,12 +40,6 @@ import { Tile, TileCategory } from "~~/models/tile";
 
 interface Props {
   tile?: Tile;
-}
-
-interface Todo {
-  key: string;
-  value: boolean;
-  id: string;
 }
 
 interface GeocodingGETResult {
@@ -106,30 +100,24 @@ const tile: Tile = props.tile ?? {
   id: "",
   title: "",
   category: TileCategory.WEATHER,
-  content: "",
+  content: undefined,
   dateCreation: new Date(),
 };
-
-const content = props.tile
-  ? ref(props.tile.content as Todo[])
-  : ref([
-      {
-        key: "Todo1",
-        value: false,
-        id: "1",
-      },
-    ]);
 
 const searchTerm = ref("");
 const searchCities: Ref<GeocodingGETResult[]> = ref([]);
 const selectedCity: Ref<
   (GeocodingGETResult & ForecastGETResponse) | undefined
-> = ref();
+> = ref(tile.content);
+let selectedCityDTO: GeocodingGETResult;
+
+if (tile.content) {
+  selectCity(tile.content);
+}
 
 const emit = defineEmits(["submit"]);
 
 watch(searchTerm, (newSearch) => {
-  console.log(newSearch);
   if (searchTerm.value.length < 3) {
     searchCities.value = [];
   } else {
@@ -152,7 +140,6 @@ async function fetchCities() {
 
 async function selectCity(city: GeocodingGETResult) {
   searchTerm.value = "";
-  console.log(`City selected = ${city.name}`);
 
   const {
     data: response,
@@ -170,11 +157,11 @@ async function selectCity(city: GeocodingGETResult) {
 
   selectedCity.value = { ...city, ...response.value } as GeocodingGETResult &
     ForecastGETResponse;
-  console.log(selectedCity.value);
+  selectedCityDTO = city;
 }
 
 function onSubmit() {
-  tile.content = content.value;
+  tile.content = selectedCityDTO;
   emit("submit", tile);
 }
 
