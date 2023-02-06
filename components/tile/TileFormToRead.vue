@@ -1,23 +1,29 @@
 <template>
   <div>
-    <h1>To Read Tile</h1>
+    <h1>Blog Post Tile</h1>
     <form @submit.prevent="onSubmit">
-      <input v-model="tile.title" />
-      <div v-if="tile.category === categories.TODOS">
-        <div v-for="(todo, index) in content">
-          <label :for="todo.id">
-            <input v-model="todo.key" />
-          </label>
-          <input
-            :id="todo.id"
-            type="checkbox"
-            :value="todo.id"
-            v-model="todo.value"
-          />
-          <button @click="deleteTodo(index)" type="button">Delete</button>
-        </div>
-        <button @click="addTodo" type="button">Add todo</button>
-      </div>
+      <AppInput id="post-title" v-model="tile.title">Title</AppInput>
+      <AppInput id="post-subtitle" v-model="tile.content.summary"
+        >Summary</AppInput
+      >
+      <AppInput id="post-author" v-model="tile.content.author"
+        >Author Name</AppInput
+      >
+      <AppInput
+        id="post-content"
+        control-type="textarea"
+        v-model="tile.content.link"
+        >Link</AppInput
+      >
+      <AppInput id="post-thumbnail" v-model="tile.content.thumbnail"
+        >Thumbnail Link</AppInput
+      >
+      <AppInput
+        id="post-preview"
+        control-type="textarea"
+        v-model="tile.content.previewText"
+        >Preview Text</AppInput
+      >
       <button
         class="px-4 py-2 font-semibold bg-cyan-500 text-white rounded shadow-sm"
         type="submit"
@@ -35,52 +41,34 @@ interface Props {
   tile?: Tile;
 }
 
-interface Todo {
-  key: string;
-  value: boolean;
-  id: string;
+interface Article {
+  title: string;
+  link: string;
+  summary?: string;
+  preview: string;
+  keywords?: string[];
+  thumbnail?: string;
 }
 
 const props = defineProps<Props>();
 const emit = defineEmits(["submit"]);
-
-const categories = TileCategory;
 const tile: Tile = props.tile ?? {
   id: "",
   title: "",
-  category: TileCategory.TODOS,
-  content: "",
+  category: TileCategory.POST,
+  content: {
+    title: "",
+    link: "",
+    summary: "",
+    preview: "",
+    keywords: [],
+    thumbnail: "",
+  } as Article,
   dateCreation: new Date(),
 };
 
-const content = props.tile
-  ? ref(props.tile.content as Todo[])
-  : ref([
-      {
-        key: "Todo1",
-        value: false,
-        id: "1",
-      },
-    ]);
-
 function onSubmit() {
-  tile.content = content.value;
   emit("submit", tile);
-}
-
-function addTodo() {
-  const todosLength = content.value.length;
-  const lastTodoId = content.value[todosLength - 1].id;
-  content.value.push({
-    key: `Todo${+lastTodoId + 1}`,
-    value: false,
-    id: `${+lastTodoId + 1}`,
-  });
-}
-
-function deleteTodo(index: number) {
-  const todoToDelete = content.value[index];
-  content.value = content.value.filter((todo) => todo.id !== todoToDelete.id);
 }
 </script>
 
