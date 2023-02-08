@@ -5,35 +5,68 @@
       v-if="controlType === 'input'"
       :id="id"
       v-bind="$attrs"
-      :value="modelValue"
+      :value="modelValue.value"
       @input="onFieldUpdate($event)"
+      @focusin="clearValidity()"
     />
     <textarea
       v-if="controlType === 'textarea'"
       rows="10"
       :id="id"
-      :value="modelValue"
+      :value="modelValue.value"
       @input="onFieldUpdate($event)"
+      @focusin="clearValidity()"
     ></textarea>
+    <div v-if="!isValid">
+      <p v-for="message of errorMessages">{{ message }}</p>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
+interface Validators {
+  required?: boolean;
+  email?: boolean;
+  number?: boolean;
+}
+
+interface ModelValue {
+  value: any;
+  isValid: boolean;
+}
+
 interface Props {
   id: string;
   controlType?: string;
-  modelValue: string;
+  modelValue: ModelValue
+  validators?: Validators;
 }
+
 const props = withDefaults(defineProps<Props>(), {
   id: `${new Date().getTime()}`,
   controlType: "input",
-  modelValue: "",
 });
+let errorMessages: string[] = [];
+let isValid = ref(true);
+
 const emit = defineEmits(["update:modelValue"]);
+
+function clearValidity() {
+  errorMessages = [];
+  isValid.value = true;
+}
 
 function onFieldUpdate(event: Event) {
   const eventValue = (event.target as HTMLInputElement).value;
-  console.log(eventValue);
-  emit('update:modelValue', eventValue);
+
+  if (props.validators?.required) {
+    if (eventValue === "") {
+      errorMessages.push("This field is required");
+      console.log("error in the form");
+      isValid.value = false;
+    }
+  }
+
+  emit("update:modelValue", { value: eventValue, isValid: isValid.value });
 }
 </script>
