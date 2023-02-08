@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="tile">
-      <component :is="selectedForm" :tile="tile" @submit="onSubmitted" />
+      <component :is="selectedForm" :tile="tile" @submit="onSubmitted" @delete="onDeleted" />
     </div>
     <div v-else>
       <p>Oops, tile not found !</p>
@@ -45,6 +45,10 @@ if (tileId) {
 
 function onSubmitted(tile: Tile) {
   store.modifyTile(tile);
+}
+
+function onDeleted(tileId: string) {
+  store.deleteTile(tileId);
 }
 </script>
 

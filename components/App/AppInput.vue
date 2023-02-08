@@ -24,17 +24,6 @@
 </template>
 
 <script setup lang="ts">
-interface Validators {
-  required?: boolean;
-  email?: boolean;
-  number?: boolean;
-}
-
-interface ModelValue {
-  value: any;
-  isValid: boolean;
-}
-
 interface Props {
   id: string;
   controlType?: string;

@@ -43,8 +43,6 @@ interface Todo {
 
 const props = defineProps<Props>();
 const emit = defineEmits(["submit"]);
-
-const categories = TileCategory;
 const tile: Tile = props.tile ?? {
   id: "",
   title: "",

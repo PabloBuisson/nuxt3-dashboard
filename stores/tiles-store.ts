@@ -104,12 +104,14 @@ export const useTilesStore = defineStore("tiles", {
     async modifyTile(tile: Tile) {
       const config = useRuntimeConfig();
 
-      const { data, pending, error, refresh } =
-        await useFetch<Tile>(`tiles/${tile.id}.json`, {
+      const { data, pending, error, refresh } = await useFetch<Tile>(
+        `tiles/${tile.id}.json`,
+        {
           method: "PUT",
           body: tile,
           baseURL: config.public.apiBase,
-        });
+        }
+      );
 
       if (error.value) {
         const errorMessage = new Error(
@@ -119,6 +121,26 @@ export const useTilesStore = defineStore("tiles", {
       }
 
       this.editTile(tile);
+    },
+    async deleteTile(tileId: string) {
+      const config = useRuntimeConfig();
+
+      const { data, pending, error, refresh } = await useFetch<Tile>(
+        `tiles/${tileId}.json`,
+        {
+          method: "DELETE",
+          baseURL: config.public.apiBase,
+        }
+      );
+
+      if (error.value) {
+        const errorMessage = new Error(
+          error.value.message || "Failed to delete tile !"
+        );
+        throw errorMessage;
+      }
+
+      this.clearTile(tileId);
     },
     // async registerPartner(data: PartnerRegistration) {
     //   const authStore = useAuthStore();
@@ -189,6 +211,9 @@ export const useTilesStore = defineStore("tiles", {
     editTile(data: Tile) {
       const tileIndex = this._tiles.findIndex((tile) => tile.id === data.id);
       this._tiles[tileIndex] = data;
+    },
+    clearTile(tileId: string) {
+      this._tiles = this._tiles.filter(tile => tile.id !== tileId);
     },
     setTiles(data: Tile[]) {
       this._tiles = data;

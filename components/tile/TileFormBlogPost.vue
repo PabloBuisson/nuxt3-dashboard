@@ -36,6 +36,7 @@
       >
         Update
       </button>
+      <button v-if="isEditPage" @click="onDelete" type="button">Delete</button>
     </form>
   </div>
 </template>
@@ -45,11 +46,6 @@ import { Tile, TileCategory } from "~~/models/tile";
 
 interface Props {
   tile?: Tile;
-}
-
-interface ModelValue {
-  value: any;
-  isValid: boolean;
 }
 
 interface FormData {
@@ -74,7 +70,7 @@ interface Article {
 
 const props = defineProps<Props>();
 let formIsValid = true;
-const emit = defineEmits(["submit"]);
+const emit = defineEmits(["submit", "delete"]);
 const tile: Tile = props.tile ?? {
   id: "",
   title: "",
@@ -82,7 +78,7 @@ const tile: Tile = props.tile ?? {
   content: {},
   dateCreation: new Date(),
 };
-
+const isEditPage = computed(() => tile.id !== "");
 const formData: FormData = {
   title: {
     value: props?.tile?.title ?? "",
@@ -114,27 +110,6 @@ const formData: FormData = {
   },
 };
 
-// const formValidators = {
-//   title: {
-//     isValid: true,
-//   },
-//   subtitle: {
-//     isValid: true,
-//   },
-//   content: {
-//     isValid: true,
-//   },
-//   preview: {
-//     isValid: true,
-//   },
-//   keywords: {
-//     isValid: true,
-//   },
-//   thumbnail: {
-//     isValid: true,
-//   },
-// };
-
 function validateForm() {
   formIsValid = true;
   for (const field in formData) {
@@ -162,6 +137,10 @@ function onSubmit() {
   }
   getFormData();
   emit("submit", tile);
+}
+
+function onDelete() {
+  emit("delete", tile.id);
 }
 </script>
 
