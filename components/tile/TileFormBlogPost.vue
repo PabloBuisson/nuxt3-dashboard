@@ -3,7 +3,6 @@
     <h1>Blog Post Tile</h1>
     <form @submit.prevent="onSubmit">
       <AppInput
-        :validators="{ required: true }"
         id="post-title"
         v-model="formData.title"
         >Title</AppInput
@@ -18,7 +17,6 @@
         >Thumbnail Link</AppInput
       >
       <AppInput
-        :validators="{ required: true }"
         id="post-content"
         control-type="textarea"
         v-model="formData.content"
@@ -48,24 +46,18 @@ interface Props {
   tile?: Tile;
 }
 
-interface FormData {
-  title: ModelValue;
-  subtitle: ModelValue;
-  author: ModelValue;
-  preview: ModelValue;
-  thumbnail: ModelValue;
-  content: ModelValue;
-  keywords: ModelValue;
-}
+type FormData = {
+  [propName in keyof Article]: ModelValue;
+};
 
 interface Article {
   title: string;
-  subtitle?: string;
-  author?: string;
+  subtitle: string;
+  author: string;
   content: string;
   preview: string;
-  keywords?: string[];
-  thumbnail?: string;
+  keywords: string[];
+  thumbnail: string;
 }
 
 const props = defineProps<Props>();
@@ -83,6 +75,7 @@ const formData: FormData = {
   title: {
     value: props?.tile?.title ?? "",
     isValid: true,
+    validators: ["required"]
   },
   subtitle: {
     value: props?.tile?.content?.subtitle ?? "",
@@ -95,6 +88,7 @@ const formData: FormData = {
   content: {
     value: props?.tile?.content?.content ?? "",
     isValid: true,
+    validators: ["required"]
   },
   preview: {
     value: props?.tile?.content?.preview ?? "",

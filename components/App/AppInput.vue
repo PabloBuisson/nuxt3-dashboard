@@ -27,8 +27,7 @@
 interface Props {
   id: string;
   controlType?: string;
-  modelValue: ModelValue
-  validators?: Validators;
+  modelValue: ModelValue;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -48,7 +47,7 @@ function clearValidity() {
 function onFieldUpdate(event: Event) {
   const eventValue = (event.target as HTMLInputElement).value;
 
-  if (props.validators?.required) {
+  if (props.modelValue.validators?.includes("required")) {
     if (eventValue === "") {
       errorMessages.push("This field is required");
       console.log("error in the form");
