@@ -1,5 +1,7 @@
 interface ModelValue {
   value: any;
   isValid: boolean;
-  validators?: string[]
+  validators?: Validator[]
 }
+
+type Validator = "required" | "email" | "number";
