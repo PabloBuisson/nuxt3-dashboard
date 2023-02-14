@@ -4,6 +4,7 @@
     <input
       v-if="controlType === 'input'"
       :id="id"
+      :type="type"
       v-bind="$attrs"
       :value="modelValue.value"
       @input="onFieldUpdate($event)"
@@ -26,6 +27,7 @@
 <script setup lang="ts">
 interface Props {
   id: string;
+  type?: string;
   controlType?: string;
   modelValue: ModelValue;
 }
