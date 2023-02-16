@@ -6,7 +6,7 @@
 </template>
 
 <script setup lang="ts">
-definePageMeta({ title: "My tiles" });
+definePageMeta({ title: "My tiles", middleware: ["auth"] });
 </script>
 
 <style lang="scss" scoped></style>

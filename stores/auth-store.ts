@@ -18,8 +18,6 @@ enum AuthMode {
   SignUp = "signup",
 }
 
-let timer: any;
-
 export const useAuthStore = defineStore("auth", {
   state: (): State => ({
     _userId: null,
@@ -94,43 +92,60 @@ export const useAuthStore = defineStore("auth", {
       localStorage.setItem("userId", responseData!.localId);
       localStorage.setItem("tokenExpiration", `${expirationDate}`);
 
-      timer = setTimeout(() => {
-        this.autoLogout();
-      }, expiresIn);
+      // save tokens on server
+      const expirationDateJwt = new Date(
+        new Date().getTime() + Number.parseInt(responseData!.expiresIn) * 1000
+      );
+      const jwtCookie = useCookie("jwt", { expires: expirationDateJwt });
+      jwtCookie.value = responseData!.idToken;
+      const userIdCookie = useCookie("userId");
+      userIdCookie.value = responseData!.localId;
 
       this.setUser({
         token: responseData!.idToken,
         userId: responseData!.localId,
       });
     },
-    tryLogin() {
-      const token = localStorage.getItem("token");
-      const userId = localStorage.getItem("userId");
-      const tokenExpiration = localStorage.getItem("tokenExpiration") ?? "0";
+    handleSession() {
+      // Try to login at start of the app
+      // or when a page is refreshed
+      if (process.server) {
+        const jwtCookie = useCookie("jwt");
+        const userIdCookie = useCookie("userId");
 
-      const expiresIn = parseInt(tokenExpiration) - new Date().getTime();
-
-      if (expiresIn < 0) {
-        return;
+        if (jwtCookie && userIdCookie) {
+          this.setUser({
+            token: jwtCookie.value,
+            userId: userIdCookie.value,
+          });
+        } else {
+          this.logout();
+        }
       }
 
-      timer = setTimeout(() => {
-        this.autoLogout();
-      }, expiresIn);
+      // only verify if token is still valid
+      if (process.client) {
+        const tokenExpiration = localStorage.getItem("tokenExpiration") ?? "0";
 
-      if (token && userId) {
-        this.setUser({
-          token: token,
-          userId: userId,
-        });
+        const expiresIn = parseInt(tokenExpiration) - new Date().getTime();
+
+        if (expiresIn < 0) {
+          this.logout();
+        }
       }
     },
     logout() {
-      localStorage.removeItem("token");
-      localStorage.removeItem("userId");
-      localStorage.removeItem("tokenExpiration");
-
-      clearTimeout(timer);
+      // delete cookies
+      const jwtCookie = useCookie("jwt");
+      jwtCookie.value = null;
+      const userIdCookie = useCookie("userId");
+      userIdCookie.value = null;
+      // delete local storage
+      if (process.client) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("userId");
+        localStorage.removeItem("tokenExpiration");
+      }
 
       this.setUser({
         token: null,

@@ -2,31 +2,31 @@
   <div>
     <h1>Blog Post Tile</h1>
     <form @submit.prevent="onSubmit">
-      <AppInput
+      <FormInput
         id="post-title"
         v-model="formData.title"
-        >Title</AppInput
+        >Title</FormInput
       >
-      <AppInput id="post-subtitle" v-model="formData.subtitle"
-        >Subtitle</AppInput
+      <FormInput id="post-subtitle" v-model="formData.subtitle"
+        >Subtitle</FormInput
       >
-      <AppInput id="post-author" v-model="formData.author"
-        >Author Name</AppInput
+      <FormInput id="post-author" v-model="formData.author"
+        >Author Name</FormInput
       >
-      <AppInput id="post-thumbnail" v-model="formData.thumbnail"
-        >Thumbnail Link</AppInput
+      <FormInput id="post-thumbnail" v-model="formData.thumbnail"
+        >Thumbnail Link</FormInput
       >
-      <AppInput
+      <FormInput
         id="post-content"
         control-type="textarea"
         v-model="formData.content"
-        >Content</AppInput
+        >Content</FormInput
       >
-      <AppInput
+      <FormInput
         id="post-preview"
         control-type="textarea"
         v-model="formData.preview"
-        >Preview Text</AppInput
+        >Preview Text</FormInput
       >
       <button
         class="px-4 py-2 font-semibold bg-cyan-500 text-white rounded shadow-sm"

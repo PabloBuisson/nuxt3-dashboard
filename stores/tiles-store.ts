@@ -1,4 +1,5 @@
 import { Tile, TileCategory } from "~~/models/tile";
+import { useAuthStore } from "./auth-store";
 
 interface State {
   _lastFetch: number | null;
@@ -81,12 +82,14 @@ export const useTilesStore = defineStore("tiles", {
     // no context as first argument, use `this` instead
     async registerTile(tile: Tile) {
       const config = useRuntimeConfig();
+      const authStore = useAuthStore();
 
       const { data, pending, error, refresh } =
         await useFetch<FirebasePOSTResponse>(`tiles.json`, {
           method: "POST",
           body: tile,
           baseURL: config.public.apiBase,
+          params: { auth: authStore.token },
         });
 
       if (error.value) {
@@ -103,6 +106,7 @@ export const useTilesStore = defineStore("tiles", {
     },
     async modifyTile(tile: Tile) {
       const config = useRuntimeConfig();
+      const authStore = useAuthStore();
 
       const { data, pending, error, refresh } = await useFetch<Tile>(
         `tiles/${tile.id}.json`,
@@ -110,6 +114,7 @@ export const useTilesStore = defineStore("tiles", {
           method: "PUT",
           body: tile,
           baseURL: config.public.apiBase,
+          params: { auth: authStore.token },
         }
       );
 
@@ -124,12 +129,14 @@ export const useTilesStore = defineStore("tiles", {
     },
     async deleteTile(tileId: string) {
       const config = useRuntimeConfig();
+      const authStore = useAuthStore();
 
       const { data, pending, error, refresh } = await useFetch<Tile>(
         `tiles/${tileId}.json`,
         {
           method: "DELETE",
           baseURL: config.public.apiBase,
+          params: { auth: authStore.token },
         }
       );
 
@@ -168,6 +175,8 @@ export const useTilesStore = defineStore("tiles", {
       //     return;
       //   }
       const config = useRuntimeConfig();
+      const authStore = useAuthStore();
+
       const {
         data: response,
         pending,
@@ -175,6 +184,7 @@ export const useTilesStore = defineStore("tiles", {
         refresh,
       } = await useFetch<FirebaseGETResponse>(`tiles.json`, {
         baseURL: config.public.apiBase,
+        params: { auth: authStore.token },
       });
 
       const responseData = response.value;
@@ -213,7 +223,7 @@ export const useTilesStore = defineStore("tiles", {
       this._tiles[tileIndex] = data;
     },
     clearTile(tileId: string) {
-      this._tiles = this._tiles.filter(tile => tile.id !== tileId);
+      this._tiles = this._tiles.filter((tile) => tile.id !== tileId);
     },
     setTiles(data: Tile[]) {
       this._tiles = data;

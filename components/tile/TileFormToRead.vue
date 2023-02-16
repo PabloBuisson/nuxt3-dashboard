@@ -2,25 +2,25 @@
   <div>
     <h1>Bookmark Tile</h1>
     <form @submit.prevent="onSubmit">
-      <AppInput id="post-title" v-model="formData.title">Title</AppInput>
-      <AppInput
+      <FormInput id="post-title" v-model="formData.title">Title</FormInput>
+      <FormInput
         id="post-subtitle"
         control-type="textarea"
         v-model="formData.summary"
-        >Summary</AppInput
+        >Summary</FormInput
       >
-      <AppInput id="post-author" v-model="formData.author"
-        >Author Name</AppInput
+      <FormInput id="post-author" v-model="formData.author"
+        >Author Name</FormInput
       >
-      <AppInput id="post-content" v-model="formData.link">Link</AppInput>
-      <AppInput id="post-thumbnail" v-model="formData.thumbnail"
-        >Thumbnail Link</AppInput
+      <FormInput id="post-content" v-model="formData.link">Link</FormInput>
+      <FormInput id="post-thumbnail" v-model="formData.thumbnail"
+        >Thumbnail Link</FormInput
       >
-      <AppInput
+      <FormInput
         id="post-preview"
         control-type="textarea"
         v-model="formData.preview"
-        >Preview Text</AppInput
+        >Preview Text</FormInput
       >
       <button
         class="px-4 py-2 font-semibold bg-cyan-500 text-white rounded shadow-sm"

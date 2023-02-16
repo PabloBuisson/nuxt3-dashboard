@@ -1,14 +1,15 @@
 <template>
-  <div class="bg-slate-600 h-screen">
-    <h1 class="text-4xl">My dashboard</h1>
+  <section>
     <DashboardGrid :tiles="tiles" />
     <p v-if="errorMessage">{{ errorMessage }}</p>
     <NuxtLink to="tile/new">New tile</NuxtLink>
-  </div>
+  </section>
 </template>
 
 <script setup lang="ts">
 import { useTilesStore } from "~~/stores/tiles-store";
+
+definePageMeta({ title: "My Dashboard", layout: "default" });
 
 // Store
 const store = useTilesStore();

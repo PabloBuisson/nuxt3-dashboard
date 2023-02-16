@@ -1,11 +1,11 @@
 <template>
   <div>
     <form @submit.prevent="onSubmit">
-      <AppInput id="auth-email" v-model="formData.email" type="email"
-        >E-Mail Address</AppInput
+      <FormInput id="auth-email" v-model="formData.email" type="email"
+        >E-Mail Address</FormInput
       >
-      <AppInput id="auth-password" v-model="formData.password" type="password"
-        >Password</AppInput
+      <FormInput id="auth-password" v-model="formData.password" type="password"
+        >Password</FormInput
       >
       <button type="submit">{{ submitButtonCaption }}</button>
       <button type="button" @click="switchAuthMode">
