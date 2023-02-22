@@ -51,8 +51,8 @@ export const useAuthStore = defineStore("auth", {
       const tokenExpiration =
         localStorage.getItem(ItemCache.tokenExpiration) ?? "0";
       const expiresIn = parseInt(tokenExpiration) - new Date().getTime();
-
-      return expiresIn < 0;
+      
+      return expiresIn > 0;
     },
     isAuthenticated(state): boolean {
       return !!state._token;
@@ -125,6 +125,7 @@ export const useAuthStore = defineStore("auth", {
       );
       const tokenCookie = useCookie(ItemCache.token, {
         expires: expirationDateJwt,
+        sameSite: "lax",
       });
       const expirationDaysMax = 365;
       const expirationDateMax = new Date(
@@ -133,10 +134,12 @@ export const useAuthStore = defineStore("auth", {
       tokenCookie.value = responseData.idToken;
       const userIdCookie = useCookie(ItemCache.userId, {
         expires: expirationDateMax,
+        sameSite: "lax",
       });
       userIdCookie.value = responseData.localId;
       const refreshTokenCookie = useCookie(ItemCache.refreshToken, {
         expires: expirationDateMax,
+        sameSite: "lax",
       });
       refreshTokenCookie.value = responseData.refreshToken;
 
@@ -161,6 +164,7 @@ export const useAuthStore = defineStore("auth", {
       );
       const tokenCookie = useCookie(ItemCache.token, {
         expires: expirationDateJwt,
+        sameSite: "lax",
       });
       tokenCookie.value = responseData.id_token;
       const expirationDaysMax = 365;
@@ -169,10 +173,12 @@ export const useAuthStore = defineStore("auth", {
       );
       const userIdCookie = useCookie(ItemCache.userId, {
         expires: expirationDateMax,
+        sameSite: "lax",
       });
       userIdCookie.value = responseData.user_id;
       const refreshTokenCookie = useCookie(ItemCache.refreshToken, {
         expires: expirationDateMax,
+        sameSite: "lax",
       });
       refreshTokenCookie.value = responseData.refresh_token;
 
