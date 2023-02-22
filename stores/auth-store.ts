@@ -181,7 +181,7 @@ export const useAuthStore = defineStore("auth", {
         userId: responseData.user_id,
       });
     },
-    handleSession() {
+    initSession() {
       // Try to login at start of the app
       // or when a page is refreshed
       if (process.server) {
@@ -197,15 +197,7 @@ export const useAuthStore = defineStore("auth", {
           this.refreshToken();
         }
       }
-
-      // only verify if token is still valid
-      if (process.client) {
-        if (!this.isTokenValid) {
-          this.refreshToken();
-        }
-      }
     },
-    //TODO call on request
     async refreshToken() {
       const refreshToken = process.server
         ? useCookie(ItemCache.refreshToken)?.value
