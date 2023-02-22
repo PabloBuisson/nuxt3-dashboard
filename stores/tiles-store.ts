@@ -108,13 +108,28 @@ export const useTilesStore = defineStore("tiles", {
       const config = useRuntimeConfig();
       const authStore = useAuthStore();
 
+      const headersRequest = {
+        method: "PUT",
+        body: tile,
+        baseURL: config.public.apiBase,
+        params: { auth: authStore.token },
+      };
+
       const { data, pending, error, refresh } = await useFetch<Tile>(
         `tiles/${tile.id}.json`,
         {
-          method: "PUT",
-          body: tile,
-          baseURL: config.public.apiBase,
-          params: { auth: authStore.token },
+          ...headersRequest,
+          async onRequest({ request, options }) {
+            if (!authStore.isTokenValid) {
+              await authStore.refreshToken();
+              options.params = { auth: authStore.token };
+            }
+          },
+          async onResponseError({ request, response, options }) {
+            if (response.status === 401) {
+              await authStore.refreshToken();
+            }
+          },
         }
       );
 

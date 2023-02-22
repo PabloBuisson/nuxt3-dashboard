@@ -24,6 +24,7 @@ export default defineNuxtConfig({
       apiKey: process.env.NUXT_FIREBASE_API_KEY,
       apiAuthSignup: process.env.NUXT_FIREBASE_AUTH_SIGNUP_ENTRYPOINT,
       apiAuthLogin: process.env.NUXT_FIREBASE_AUTH_LOGIN_ENTRYPOINT,
+      apiRefreshToken: process.env.NUXT_FIREBASE_REFRESH_TOKEN_ENTRYPOINT,
     },
   },
 });
