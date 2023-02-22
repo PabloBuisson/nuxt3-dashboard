@@ -83,13 +83,27 @@ export const useTilesStore = defineStore("tiles", {
     async registerTile(tile: Tile) {
       const config = useRuntimeConfig();
       const authStore = useAuthStore();
+      const optionsRequest = {
+        method: "POST",
+        body: tile,
+        baseURL: config.public.apiBase,
+        params: { auth: authStore.token },
+      };
 
       const { data, pending, error, refresh } =
         await useFetch<FirebasePOSTResponse>(`tiles.json`, {
-          method: "POST",
-          body: tile,
-          baseURL: config.public.apiBase,
-          params: { auth: authStore.token },
+          ...optionsRequest,
+          async onRequest({ request, options }) {
+            if (!authStore.isTokenValid) {
+              await authStore.refreshToken();
+              options.params = { auth: authStore.token };
+            }
+          },
+          async onResponseError({ request, response, options }) {
+            if (response.status === 401) {
+              await authStore.refreshToken();
+            }
+          },
         });
 
       if (error.value) {
@@ -108,7 +122,7 @@ export const useTilesStore = defineStore("tiles", {
       const config = useRuntimeConfig();
       const authStore = useAuthStore();
 
-      const headersRequest = {
+      const optionsRequest = {
         method: "PUT",
         body: tile,
         baseURL: config.public.apiBase,
@@ -118,7 +132,7 @@ export const useTilesStore = defineStore("tiles", {
       const { data, pending, error, refresh } = await useFetch<Tile>(
         `tiles/${tile.id}.json`,
         {
-          ...headersRequest,
+          ...optionsRequest,
           async onRequest({ request, options }) {
             if (!authStore.isTokenValid) {
               await authStore.refreshToken();
@@ -145,13 +159,27 @@ export const useTilesStore = defineStore("tiles", {
     async deleteTile(tileId: string) {
       const config = useRuntimeConfig();
       const authStore = useAuthStore();
+      const optionsRequest = {
+        method: "DELETE",
+        baseURL: config.public.apiBase,
+        params: { auth: authStore.token },
+      };
 
       const { data, pending, error, refresh } = await useFetch<Tile>(
         `tiles/${tileId}.json`,
         {
-          method: "DELETE",
-          baseURL: config.public.apiBase,
-          params: { auth: authStore.token },
+          ...optionsRequest,
+          async onRequest({ request, options }) {
+            if (!authStore.isTokenValid) {
+              await authStore.refreshToken();
+              options.params = { auth: authStore.token };
+            }
+          },
+          async onResponseError({ request, response, options }) {
+            if (response.status === 401) {
+              await authStore.refreshToken();
+            }
+          },
         }
       );
 
@@ -164,27 +192,6 @@ export const useTilesStore = defineStore("tiles", {
 
       this.clearTile(tileId);
     },
-    // async registerPartner(data: PartnerRegistration) {
-    //   const authStore = useAuthStore();
-    //   const partnerId = authStore.userId;
-    //   const token = authStore.token;
-    //   const partnerData = data;
-
-    //   const response = await fetch(
-    //     `${
-    //       import.meta.env.VITE_FIREBASE_URL
-    //     }/partners/${partnerId}.json?auth=${token}`,
-    //     {
-    //       method: "PUT",
-    //       body: JSON.stringify(partnerData),
-    //     }
-    //   );
-
-    //   this.registerPartnerMutation({
-    //     ...partnerData,
-    //     id: partnerId ?? 0,
-    //   });
-    // },
     async loadTiles(data?: { forceRefresh: boolean }) {
       //   if (!data.forceRefresh && !this.shouldUpdate) {
       //     return;
