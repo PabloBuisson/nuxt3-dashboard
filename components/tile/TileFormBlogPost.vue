@@ -2,11 +2,7 @@
   <div>
     <h1>Blog Post Tile</h1>
     <form @submit.prevent="onSubmit">
-      <FormInput
-        id="post-title"
-        v-model="formData.title"
-        >Title</FormInput
-      >
+      <FormInput id="post-title" v-model="formData.title">Title</FormInput>
       <FormInput id="post-subtitle" v-model="formData.subtitle"
         >Subtitle</FormInput
       >
@@ -29,18 +25,26 @@
         >Preview Text</FormInput
       >
       <button
+        v-if="isWriteRequestAllowed"
         class="px-4 py-2 font-semibold bg-cyan-500 text-white rounded shadow-sm"
         type="submit"
       >
         Update
       </button>
-      <button v-if="isEditPage" @click="onDelete" type="button">Delete</button>
+      <button
+        v-if="isEditPage && isWriteRequestAllowed"
+        @click="onDelete"
+        type="button"
+      >
+        Delete
+      </button>
     </form>
   </div>
 </template>
 
 <script setup lang="ts">
 import { Tile, TileCategory } from "~~/models/tile";
+import { useAuthStore } from "~~/stores/auth-store";
 
 interface Props {
   tile?: Tile;
@@ -61,6 +65,8 @@ interface Article {
 }
 
 const props = defineProps<Props>();
+const authStore = useAuthStore();
+const isWriteRequestAllowed = computed(() => authStore.isAuthenticated);
 let formIsValid = true;
 const emit = defineEmits(["submit", "delete"]);
 const tile: Tile = props.tile ?? {
@@ -75,7 +81,7 @@ const formData: FormData = {
   title: {
     value: props?.tile?.title ?? "",
     isValid: true,
-    validators: ["required"]
+    validators: ["required"],
   },
   subtitle: {
     value: props?.tile?.content?.subtitle ?? "",
@@ -88,7 +94,7 @@ const formData: FormData = {
   content: {
     value: props?.tile?.content?.content ?? "",
     isValid: true,
-    validators: ["required"]
+    validators: ["required"],
   },
   preview: {
     value: props?.tile?.content?.preview ?? "",
@@ -129,11 +135,13 @@ function onSubmit() {
   if (!formIsValid) {
     return;
   }
+  if (!isWriteRequestAllowed) return;
   getFormData();
   emit("submit", tile);
 }
 
 function onDelete() {
+  if (!isWriteRequestAllowed) return;
   emit("delete", tile.id);
 }
 </script>

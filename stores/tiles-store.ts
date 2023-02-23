@@ -90,8 +90,15 @@ export const useTilesStore = defineStore("tiles", {
         params: { auth: authStore.token },
       };
 
+      // public tiles for demonstration purpose
+      let entryPoint: string = `tiles.json`;
+      if (authStore.isAuthenticated) {
+        // private tiles of current user
+        entryPoint = `${authStore.userId}/tiles.json`;
+      }
+
       const { data, pending, error, refresh } =
-        await useFetch<FirebasePOSTResponse>(`tiles.json`, {
+        await useFetch<FirebasePOSTResponse>(entryPoint, {
           ...optionsRequest,
           async onRequest({ request, options }) {
             if (!authStore.isTokenValid) {
@@ -129,8 +136,15 @@ export const useTilesStore = defineStore("tiles", {
         params: { auth: authStore.token },
       };
 
+      // public tiles for demonstration purpose
+      let entryPoint: string = `tiles/${tile.id}.json`;
+      if (authStore.isAuthenticated) {
+        // private tiles of current user
+        entryPoint = `${authStore.userId}/tiles/${tile.id}.json`;
+      }
+
       const { data, pending, error, refresh } = await useFetch<Tile>(
-        `tiles/${tile.id}.json`,
+        entryPoint,
         {
           ...optionsRequest,
           async onRequest({ request, options }) {
@@ -165,8 +179,15 @@ export const useTilesStore = defineStore("tiles", {
         params: { auth: authStore.token },
       };
 
+      // public tiles for demonstration purpose
+      let entryPoint: string = `tiles/${tileId}.json`;
+      if (authStore.isAuthenticated) {
+        // private tiles of current user
+        entryPoint = `${authStore.userId}/tiles/${tileId}.json`;
+      }
+
       const { data, pending, error, refresh } = await useFetch<Tile>(
-        `tiles/${tileId}.json`,
+        entryPoint,
         {
           ...optionsRequest,
           async onRequest({ request, options }) {
@@ -199,12 +220,19 @@ export const useTilesStore = defineStore("tiles", {
       const config = useRuntimeConfig();
       const authStore = useAuthStore();
 
+      // public tiles for demonstration purpose
+      let entryPoint: string = `tiles.json`;
+      if (authStore.isAuthenticated) {
+        // private tiles of current user
+        entryPoint = `${authStore.userId}/tiles.json`;
+      }
+
       const {
         data: response,
         pending,
         error,
         refresh,
-      } = await useFetch<FirebaseGETResponse>(`tiles.json`, {
+      } = await useFetch<FirebaseGETResponse>(entryPoint, {
         baseURL: config.public.apiBase,
         params: { auth: authStore.token },
       });

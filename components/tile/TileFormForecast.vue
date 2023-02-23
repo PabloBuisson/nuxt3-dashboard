@@ -27,6 +27,7 @@
         </p>
       </div>
       <button
+        v-if="isWriteRequestAllowed"
         class="px-4 py-2 font-semibold bg-cyan-500 text-white rounded shadow-sm"
         type="submit"
       >
@@ -39,6 +40,7 @@
 <script setup lang="ts">
 import { Ref } from "vue";
 import { Tile, TileCategory } from "~~/models/tile";
+import { useAuthStore } from "~~/stores/auth-store";
 import {
   ForecastGETResponse,
   GeocodingGETResponse,
@@ -51,6 +53,8 @@ interface Props {
 }
 
 const props = defineProps<Props>();
+const authStore = useAuthStore();
+const isWriteRequestAllowed = computed(() => authStore.isAuthenticated);
 const tile: Tile = props.tile ?? {
   id: "",
   title: "",
@@ -102,6 +106,7 @@ async function selectCity(city: GeocodingGETResult) {
 }
 
 function onSubmit() {
+  if (!isWriteRequestAllowed) return;
   tile.content = selectedCityDTO;
   emit("submit", tile);
 }

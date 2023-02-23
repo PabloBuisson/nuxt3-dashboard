@@ -23,6 +23,7 @@
         >Preview Text</FormInput
       >
       <button
+        v-if="isWriteRequestAllowed"
         class="px-4 py-2 font-semibold bg-cyan-500 text-white rounded shadow-sm"
         type="submit"
       >
@@ -34,6 +35,7 @@
 
 <script setup lang="ts">
 import { Tile, TileCategory } from "~~/models/tile";
+import { useAuthStore } from "~~/stores/auth-store";
 
 interface Props {
   tile?: Tile;
@@ -54,6 +56,8 @@ interface Article {
 }
 
 const props = defineProps<Props>();
+const authStore = useAuthStore();
+const isWriteRequestAllowed = computed(() => authStore.isAuthenticated);
 const tile: Tile = props.tile ?? {
   id: "",
   title: "",
@@ -68,12 +72,12 @@ const formData: FormData = {
   title: {
     value: props?.tile?.title ?? "",
     isValid: true,
-    validators: ["required"]
+    validators: ["required"],
   },
   link: {
     value: props?.tile?.content?.link ?? "",
     isValid: true,
-    validators: ["required"]
+    validators: ["required"],
   },
   author: {
     value: props?.tile?.content?.author ?? "",
@@ -124,6 +128,7 @@ function onSubmit() {
   if (!formIsValid) {
     return;
   }
+  if (isWriteRequestAllowed) return;
   getFormData();
   emit("submit", tile);
 }

@@ -19,6 +19,7 @@
       </div>
       <button @click="addTodo" type="button">Add todo</button>
       <button
+        v-if="isWriteRequestAllowed"
         class="px-4 py-2 font-semibold bg-cyan-500 text-white rounded shadow-sm"
         type="submit"
       >
@@ -30,6 +31,7 @@
 
 <script setup lang="ts">
 import { Tile, TileCategory } from "~~/models/tile";
+import { useAuthStore } from "~~/stores/auth-store";
 
 interface Props {
   tile?: Tile;
@@ -42,6 +44,8 @@ interface Todo {
 }
 
 const props = defineProps<Props>();
+const authStore = useAuthStore();
+const isWriteRequestAllowed = computed(() => authStore.isAuthenticated);
 const emit = defineEmits(["submit"]);
 const tile: Tile = props.tile ?? {
   id: "",
@@ -62,6 +66,7 @@ const content = props.tile
     ]);
 
 function onSubmit() {
+  if (!isWriteRequestAllowed) return;
   tile.content = content.value;
   emit("submit", tile);
 }
