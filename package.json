@@ -8,6 +8,8 @@
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
+    "@iconify/vue": "^4.1.0",
+    "@tailvue/nuxt": "^0.1.68",
     "nuxt": "3.0.0"
   },
   "dependencies": {
