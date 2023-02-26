@@ -140,7 +140,7 @@ export const useTilesStore = defineStore("tiles", {
       let entryPoint: string = `tiles/${tile.id}.json`;
       if (authStore.isAuthenticated) {
         // private tiles of current user
-        entryPoint = `${authStore.userId}/tiles/${tile.id}.json`;
+        entryPoint = `${authStore.userId}/tiles/${tile.id}.jsonn`;
       }
 
       const { data, pending, error, refresh } = await useFetch<Tile>(
@@ -162,10 +162,11 @@ export const useTilesStore = defineStore("tiles", {
       );
 
       if (error.value) {
-        const errorMessage = new Error(
-          error.value.message || "Failed to modify tile !"
+        throw useErrorMessage(
+          error.value.status,
+          "the tile",
+          HttpRequestMethod.PUT
         );
-        throw errorMessage;
       }
 
       this.editTile(tile);

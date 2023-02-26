@@ -1,7 +1,12 @@
 <template>
   <div>
     <div v-if="tile">
-      <component :is="selectedForm" :tile="tile" @submit="onSubmitted" @delete="onDeleted" />
+      <component
+        :is="selectedForm"
+        :tile="tile"
+        @submit="onSubmitted"
+        @delete="onDeleted"
+      />
     </div>
     <div v-else>
       <p>Oops, tile not found !</p>
@@ -13,9 +18,11 @@
 import { useRoute } from "vue-router"; // workaround bug #6646
 import { Tile, TileCategory } from "~~/models/tile";
 import { useTilesStore } from "~~/stores/tiles-store";
+import { useToast } from "tailvue";
 
 const route = useRoute();
 const store = useTilesStore();
+const $toast = useToast();
 let selectedForm: any;
 const TileFormTodos = resolveComponent("TileFormTodos");
 const TileFormToRead = resolveComponent("TileFormToRead");
@@ -43,8 +50,13 @@ if (tileId) {
   }
 }
 
-function onSubmitted(tile: Tile) {
-  store.modifyTile(tile);
+async function onSubmitted(tile: Tile) {
+  try {
+    await store.modifyTile(tile);
+    $toast.show({ message: "Yay ! Tile updated.", type: "success" });
+  } catch (errorMessage) {
+    $toast.show({ message: `${errorMessage}`, type: "danger" });
+  }
 }
 
 function onDeleted(tileId: string) {
