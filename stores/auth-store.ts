@@ -1,3 +1,5 @@
+import { CookieRef } from "#app";
+
 interface State {
   _userId: string | null;
   _token: string | null;
@@ -51,7 +53,7 @@ export const useAuthStore = defineStore("auth", {
       const tokenExpiration =
         localStorage.getItem(ItemCache.tokenExpiration) ?? "0";
       const expiresIn = parseInt(tokenExpiration) - new Date().getTime();
-      
+
       return expiresIn > 0;
     },
     isAuthenticated(state): boolean {
@@ -123,14 +125,14 @@ export const useAuthStore = defineStore("auth", {
       const expirationDateJwt = new Date(
         new Date().getTime() + Number.parseInt(responseData.expiresIn) * 1000
       );
-      const tokenCookie = useCookie(ItemCache.token, {
-        expires: expirationDateJwt,
-        sameSite: "lax",
-      });
       const expirationDaysMax = 365;
       const expirationDateMax = new Date(
         Date.now() + expirationDaysMax * 24 * 60 * 60 * 1000
       );
+      const tokenCookie = useCookie(ItemCache.token, {
+        expires: expirationDateJwt,
+        sameSite: "lax",
+      });
       tokenCookie.value = responseData.idToken;
       const userIdCookie = useCookie(ItemCache.userId, {
         expires: expirationDateMax,
@@ -153,63 +155,55 @@ export const useAuthStore = defineStore("auth", {
       const expiresIn = +responseData.expires_in * 1000;
       const expirationDate = new Date().getTime() + expiresIn;
 
-      localStorage.setItem(ItemCache.token, responseData.id_token);
-      localStorage.setItem(ItemCache.userId, responseData.user_id);
-      localStorage.setItem(ItemCache.tokenExpiration, `${expirationDate}`);
-      localStorage.setItem(ItemCache.refreshToken, responseData.refresh_token);
-
-      // save tokens on server
-      const expirationDateJwt = new Date(
-        new Date().getTime() + Number.parseInt(responseData.expires_in) * 1000
-      );
-      const tokenCookie = useCookie(ItemCache.token, {
-        expires: expirationDateJwt,
-        sameSite: "lax",
-      });
-      tokenCookie.value = responseData.id_token;
-      const expirationDaysMax = 365;
-      const expirationDateMax = new Date(
-        Date.now() + expirationDaysMax * 24 * 60 * 60 * 1000
-      );
-      const userIdCookie = useCookie(ItemCache.userId, {
-        expires: expirationDateMax,
-        sameSite: "lax",
-      });
-      userIdCookie.value = responseData.user_id;
-      const refreshTokenCookie = useCookie(ItemCache.refreshToken, {
-        expires: expirationDateMax,
-        sameSite: "lax",
-      });
-      refreshTokenCookie.value = responseData.refresh_token;
+      if (process.client) {
+        // we only have access to localStorage on client side
+        localStorage.setItem(ItemCache.token, responseData.id_token);
+        localStorage.setItem(ItemCache.userId, responseData.user_id);
+        localStorage.setItem(ItemCache.tokenExpiration, `${expirationDate}`);
+        localStorage.setItem(
+          ItemCache.refreshToken,
+          responseData.refresh_token
+        );
+      }
 
       this.setUser({
         token: responseData.id_token,
         userId: responseData.user_id,
       });
     },
-    initSession() {
+    async initSession() {
       // Try to login at start of the app
       // or when a page is refreshed
-      if (process.server) {
-        const tokenCookie = useCookie(ItemCache.token);
-        const userIdCookie = useCookie(ItemCache.userId);
 
-        if (tokenCookie && userIdCookie) {
-          this.setUser({
-            token: tokenCookie.value,
-            userId: userIdCookie.value,
-          });
-        } else {
-          this.refreshToken();
-        }
+      // useCookie can be used by both client and server
+      const tokenCookie = useCookie(ItemCache.token);
+      const tokenExpirationCookie = useCookie(ItemCache.tokenExpiration);
+      const userIdCookie = useCookie(ItemCache.userId);
+      const expiresIn =
+        parseInt(tokenExpirationCookie?.value ?? "0") - new Date().getTime();
+
+      if (tokenCookie?.value && userIdCookie?.value && expiresIn > 0) {
+        this.setUser({
+          token: tokenCookie.value,
+          userId: userIdCookie.value,
+        });
+      } else {
+        await this.refreshToken();
       }
     },
     async refreshToken() {
-      const refreshToken = process.server
-        ? useCookie(ItemCache.refreshToken)?.value
-        : localStorage.getItem(ItemCache.refreshToken);
+      const refreshToken = useCookie(ItemCache.refreshToken)?.value;
+      if (!refreshToken) return;
+
       const config = useRuntimeConfig();
       const url = `${config.public.apiRefreshToken}${config.public.apiKey}`;
+
+      const [
+        tokenCookie,
+        tokenExpirationCookie,
+        userIdCookie,
+        refreshTokenCookie,
+      ] = this.initCookies();
 
       const {
         data: response,
@@ -234,9 +228,57 @@ export const useAuthStore = defineStore("auth", {
         throw errorMessage;
       }
 
+      const expirationDateToken: number =
+        new Date().getTime() + Number.parseInt(responseData!.expires_in) * 1000;
+      tokenCookie.value = responseData!.id_token;
+      tokenExpirationCookie.value = `${expirationDateToken}`;
+      userIdCookie.value = responseData!.user_id;
+      refreshTokenCookie.value = responseData!.refresh_token;
       this.saveDataAfterRefreshToken(responseData!);
     },
+    initCookies(): CookieRef<string>[] {
+      const expirationDaysMax = 365;
+      const expirationDateMax = new Date(
+        Date.now() + expirationDaysMax * 24 * 60 * 60 * 1000
+      );
+
+      // ⚠ useCookie an other composables doesn't work
+      // in async code
+      // therefore we have to declare the cookie BEFORE
+      // the async method
+
+      // Session cookie, no need for an expiration date ↓
+      const tokenCookie = useCookie(ItemCache.token, {
+        sameSite: "lax",
+      });
+      const tokenExpirationCookie = useCookie(ItemCache.tokenExpiration, {
+        sameSite: "lax",
+      });
+      const userIdCookie = useCookie(ItemCache.userId, {
+        expires: expirationDateMax,
+        sameSite: "lax",
+      });
+      const refreshTokenCookie = useCookie(ItemCache.refreshToken, {
+        expires: expirationDateMax,
+        sameSite: "lax",
+      });
+      return [
+        tokenCookie,
+        tokenExpirationCookie,
+        userIdCookie,
+        refreshTokenCookie,
+      ];
+    },
     logout() {
+      this.clearCookies();
+      this.clearLocalStorage();
+
+      this.setUser({
+        token: null,
+        userId: null,
+      });
+    },
+    clearCookies() {
       // delete cookies
       const tokenCookie = useCookie(ItemCache.token);
       tokenCookie.value = null;
@@ -244,6 +286,8 @@ export const useAuthStore = defineStore("auth", {
       refreshTokenCookie.value = null;
       const userIdCookie = useCookie(ItemCache.userId);
       userIdCookie.value = null;
+    },
+    clearLocalStorage() {
       // delete local storage
       if (process.client) {
         localStorage.removeItem(ItemCache.token);
@@ -251,11 +295,6 @@ export const useAuthStore = defineStore("auth", {
         localStorage.removeItem(ItemCache.userId);
         localStorage.removeItem(ItemCache.tokenExpiration);
       }
-
-      this.setUser({
-        token: null,
-        userId: null,
-      });
     },
     autoLogout() {
       this.logout();

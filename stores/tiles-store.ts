@@ -114,10 +114,11 @@ export const useTilesStore = defineStore("tiles", {
         });
 
       if (error.value) {
-        const errorMessage = new Error(
-          error.value.message || "Failed to register tile !"
+        throw useErrorMessage(
+          error.value.status,
+          "the tile",
+          HttpRequestMethod.POST
         );
-        throw errorMessage;
       }
 
       this.addTile({
@@ -140,7 +141,7 @@ export const useTilesStore = defineStore("tiles", {
       let entryPoint: string = `tiles/${tile.id}.json`;
       if (authStore.isAuthenticated) {
         // private tiles of current user
-        entryPoint = `${authStore.userId}/tiles/${tile.id}.jsonn`;
+        entryPoint = `${authStore.userId}/tiles/${tile.id}.json`;
       }
 
       const { data, pending, error, refresh } = await useFetch<Tile>(
@@ -206,10 +207,11 @@ export const useTilesStore = defineStore("tiles", {
       );
 
       if (error.value) {
-        const errorMessage = new Error(
-          error.value.message || "Failed to delete tile !"
+        throw useErrorMessage(
+          error.value.status,
+          "the tile",
+          HttpRequestMethod.DELETE
         );
-        throw errorMessage;
       }
 
       this.clearTile(tileId);
@@ -239,11 +241,13 @@ export const useTilesStore = defineStore("tiles", {
       });
 
       const responseData = response.value;
+
       if (error.value) {
-        const errorMessage = new Error(
-          error.value.message || "Failed to fetch!"
+        throw useErrorMessage(
+          error.value.status,
+          "the tiles",
+          HttpRequestMethod.GET
         );
-        throw errorMessage;
       }
 
       const tiles: Tile[] = [];
