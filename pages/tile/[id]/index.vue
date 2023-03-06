@@ -16,13 +16,12 @@
 
 <script setup lang="ts">
 import { useRoute } from "vue-router"; // workaround bug #6646
+import { useAppToaster } from "~~/composables/useAppToaster";
 import { Tile, TileCategory } from "~~/models/tile";
 import { useTilesStore } from "~~/stores/tiles-store";
-import { useToast } from "tailvue";
 
 const route = useRoute();
 const store = useTilesStore();
-const $toast = useToast();
 let selectedForm: any;
 const TileFormTodos = resolveComponent("TileFormTodos");
 const TileFormToRead = resolveComponent("TileFormToRead");
@@ -41,6 +40,11 @@ const categoryOptions = [
 const tileId = route.params.id;
 let tile: Tile;
 if (tileId) {
+  if (process.client) {
+    console.log("process client => fetch store");
+  } else if (process.server) {
+    console.log("process server => fecth Firebase");
+  }
   //TODO fetch to Firebase
   tile = store.tiles.find((tile) => tile.id === tileId) as Tile;
   if (tile != null) {
@@ -53,9 +57,9 @@ if (tileId) {
 async function onSubmitted(tile: Tile) {
   try {
     await store.modifyTile(tile);
-    $toast.show({ message: "Yay ! Tile updated.", type: "success" });
+    useAppToaster({ message: "Yay ! Tile updated.", type: "success" });
   } catch (errorMessage) {
-    $toast.show({ message: `${errorMessage}`, type: "danger" });
+    useAppToaster({ message: `${errorMessage}`, type: "danger" });
   }
 }
 
