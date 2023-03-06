@@ -41,11 +41,20 @@ const tileId = route.params.id;
 let tile: Tile;
 if (tileId) {
   if (process.client) {
-    console.log("process client => fetch store");
-  } else if (process.server) {
-    console.log("process server => fecth Firebase");
+    getTileFromStore();
   }
-  //TODO fetch to Firebase
+
+  if (process.server) {
+    try {
+      await store.fetchTile(tileId as string);
+      getTileFromStore();
+    } catch (errorMessage) {
+      useAppToaster({ message: `${errorMessage}`, type: "danger" });
+    }
+  }
+}
+
+function getTileFromStore() {
   tile = store.tiles.find((tile) => tile.id === tileId) as Tile;
   if (tile != null) {
     selectedForm = categoryOptions.find(

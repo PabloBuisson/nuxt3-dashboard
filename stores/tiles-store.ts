@@ -216,6 +216,54 @@ export const useTilesStore = defineStore("tiles", {
 
       this.clearTile(tileId);
     },
+    async fetchTile(tileId: string) {
+      const config = useRuntimeConfig();
+      const authStore = useAuthStore();
+
+      // public tiles for demonstration purpose
+      let entryPoint: string = `tiles/${tileId}.json`;
+      if (authStore.isAuthenticated) {
+        // private tiles of current user
+        entryPoint = `${authStore.userId}/tiles/${tileId}.json`;
+      }
+
+      const {
+        data: response,
+        pending,
+        error,
+        refresh,
+      } = await useFetch<Tile>(entryPoint, {
+        baseURL: config.public.apiBase,
+        params: { auth: authStore.token },
+      });
+
+      const responseData = response.value;
+
+      if (error.value) {
+        throw useErrorMessage(
+          error.value.status,
+          "the tile",
+          HttpRequestMethod.GET
+        );
+      }
+
+      const tiles: Tile[] = [];
+      const tile: Tile = {
+        id: tileId,
+        title: responseData!.title,
+        standalone: responseData!.standalone,
+        category: responseData!.category,
+        image: responseData!.image,
+        contentLink: responseData!.contentLink,
+        content: responseData!.content,
+        dateCreation: responseData!.dateCreation,
+        dateModification: responseData!.dateModification,
+      };
+      tiles.push(tile);
+      //TODO addTile instead
+      this.setTiles(tiles);
+      this.setFetchTimestamp();
+    },
     async loadTiles(data?: { forceRefresh: boolean }) {
       //   if (!data.forceRefresh && !this.shouldUpdate) {
       //     return;
@@ -252,7 +300,7 @@ export const useTilesStore = defineStore("tiles", {
 
       const tiles: Tile[] = [];
       for (const key in responseData) {
-        const partner: Tile = {
+        const tile: Tile = {
           id: key,
           title: responseData[key].title,
           standalone: responseData[key].standalone,
@@ -263,7 +311,7 @@ export const useTilesStore = defineStore("tiles", {
           dateCreation: responseData[key].dateCreation,
           dateModification: responseData[key].dateModification,
         };
-        tiles.push(partner);
+        tiles.push(tile);
       }
       this.setTiles(tiles);
       this.setFetchTimestamp();
@@ -271,6 +319,7 @@ export const useTilesStore = defineStore("tiles", {
     // mutations can now become actions,
     // instead of `state` as first argument use `this`
     addTile(data: Tile) {
+      //TODO check if tile not already in store
       this._tiles.push(data);
     },
     editTile(data: Tile) {
