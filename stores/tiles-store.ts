@@ -16,49 +16,49 @@ export const useTilesStore = defineStore("tiles", {
   state: (): State => ({
     _lastFetch: null,
     _tiles: [
-      {
-        id: "t1",
-        title: "Tile 1",
-        category: TileCategory.TODOS,
-        content: [
-          {
-            key: "Promener le chien",
-            value: true,
-            id: "promener-le-chien",
-          },
-          {
-            key: "Promener le chat",
-            value: false,
-            id: "promener-le-chat",
-          },
-        ],
-        dateCreation: new Date(),
-      },
-      {
-        id: "t2",
-        title: "Tile 2",
-        category: TileCategory.EVENT,
-        content: [
-          { "Promener le chien": new Date() },
-          { "Promener le chat": new Date() },
-        ],
-        dateCreation: new Date(),
-      },
-      {
-        id: "t3",
-        title: "Pinia with Nuxt.js",
-        standalone: true,
-        image: "https://pinia.vuejs.org/logo.svg",
-        category: TileCategory.TOREAD,
-        contentLink: "https://pinia.vuejs.org/ssr/nuxt.html",
-        content: [
-          {
-            previewText:
-              "Using Pinia with Nuxt.js is easier since Nuxt takes care of a lot of things when it comes to server side rendering.",
-          },
-        ],
-        dateCreation: new Date(),
-      },
+      // {
+      //   id: "t1",
+      //   title: "Tile 1",
+      //   category: TileCategory.TODOS,
+      //   content: [
+      //     {
+      //       key: "Promener le chien",
+      //       value: true,
+      //       id: "promener-le-chien",
+      //     },
+      //     {
+      //       key: "Promener le chat",
+      //       value: false,
+      //       id: "promener-le-chat",
+      //     },
+      //   ],
+      //   dateCreation: new Date(),
+      // },
+      // {
+      //   id: "t2",
+      //   title: "Tile 2",
+      //   category: TileCategory.EVENT,
+      //   content: [
+      //     { "Promener le chien": new Date() },
+      //     { "Promener le chat": new Date() },
+      //   ],
+      //   dateCreation: new Date(),
+      // },
+      // {
+      //   id: "t3",
+      //   title: "Pinia with Nuxt.js",
+      //   standalone: true,
+      //   image: "https://pinia.vuejs.org/logo.svg",
+      //   category: TileCategory.TOREAD,
+      //   contentLink: "https://pinia.vuejs.org/ssr/nuxt.html",
+      //   content: [
+      //     {
+      //       previewText:
+      //         "Using Pinia with Nuxt.js is easier since Nuxt takes care of a lot of things when it comes to server side rendering.",
+      //     },
+      //   ],
+      //   dateCreation: new Date(),
+      // },
     ],
   }),
   getters: {
@@ -247,7 +247,6 @@ export const useTilesStore = defineStore("tiles", {
         );
       }
 
-      const tiles: Tile[] = [];
       const tile: Tile = {
         id: tileId,
         title: responseData!.title,
@@ -259,15 +258,14 @@ export const useTilesStore = defineStore("tiles", {
         dateCreation: responseData!.dateCreation,
         dateModification: responseData!.dateModification,
       };
-      tiles.push(tile);
-      //TODO addTile instead
-      this.setTiles(tiles);
+      this.addTile(tile);
       this.setFetchTimestamp();
     },
-    async loadTiles(data?: { forceRefresh: boolean }) {
-      //   if (!data.forceRefresh && !this.shouldUpdate) {
-      //     return;
-      //   }
+    async loadTiles() {
+      if (!this.shouldUpdate) {
+        return;
+      }
+
       const config = useRuntimeConfig();
       const authStore = useAuthStore();
 
@@ -319,8 +317,16 @@ export const useTilesStore = defineStore("tiles", {
     // mutations can now become actions,
     // instead of `state` as first argument use `this`
     addTile(data: Tile) {
-      //TODO check if tile not already in store
-      this._tiles.push(data);
+      if (!this._tiles) return;
+
+      if (this._tiles.length === 0) {
+        this._tiles.push(data);
+      } else {
+        const tileIndex = this._tiles.findIndex((tile) => tile.id === data.id);
+        tileIndex != -1
+          ? (this._tiles[tileIndex] = data)
+          : this._tiles.push(data);
+      }
     },
     editTile(data: Tile) {
       const tileIndex = this._tiles.findIndex((tile) => tile.id === data.id);
