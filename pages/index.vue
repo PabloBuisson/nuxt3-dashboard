@@ -1,6 +1,8 @@
 <template>
   <section>
-    <DashboardGrid :tiles="tiles" />
+    <h1 class="text-4xl">Friday, 03 February 2023</h1>
+    <TileSummary />
+    <DashboardGrid />
     <NuxtLink to="tile/new">New tile</NuxtLink>
   </section>
 </template>
@@ -10,14 +12,10 @@ import { useTilesStore } from "~~/stores/tiles-store";
 
 definePageMeta({ title: "My Dashboard", layout: "default" });
 
-// Store
 const store = useTilesStore();
 try {
   await store.loadTiles();
 } catch (errorMessage) {
   useAppToaster({ message: `${errorMessage}`, type: "danger" });
 }
-
-// Data
-const tiles = computed(() => store.tiles);
 </script>

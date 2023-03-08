@@ -1,14 +1,12 @@
 <template>
   <section class="flex flex-wrap gap-4">
-    <TilePreview v-for="tile in props.tiles" :key="tile.id" :title="tile.title" :id="tile.id" />
+    <TilePreview v-for="tile in tiles" :key="tile.id" :id="tile.id" />
   </section>
 </template>
 
 <script setup lang="ts">
-import { PropType } from 'vue';
-import { Tile } from '~~/models/tile';
+import { useTilesStore } from '~~/stores/tiles-store';
 
-const props = defineProps({
-  tiles: Array as PropType<Array<Tile>>,
-})
+const store = useTilesStore();
+const tiles = computed(() => store.tiles);
 </script>
