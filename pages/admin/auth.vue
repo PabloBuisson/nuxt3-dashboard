@@ -101,7 +101,7 @@ async function onSubmit() {
     }
     // const redirectUrl = "/" + ($route.query.redirect || "partners");
     // $router.replace(redirectUrl);
-    router.push({ path: "/" });
+    router.replace({ path: "/" });
   } catch (err: any) {
     error = err.message || "Failed to authenticate, try later.";
   }
