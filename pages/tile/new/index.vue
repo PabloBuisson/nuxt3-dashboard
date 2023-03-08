@@ -20,30 +20,42 @@ import { Tile, TileCategory } from "~~/models/tile";
 import { useTilesStore } from "~~/stores/tiles-store";
 
 const store = useTilesStore();
+const router = useRouter();
 
-const TileFormTodos = resolveComponent('TileFormTodos');
-const TileFormToRead = resolveComponent('TileFormToRead');
-const TileFormBlogPost = resolveComponent('TileFormBlogPost');
-const TileFormForecast = resolveComponent('TileFormForecast');
-const TileFormAgenda = resolveComponent('TileFormAgenda');
+const TileFormTodos = resolveComponent("TileFormTodos");
+const TileFormToRead = resolveComponent("TileFormToRead");
+const TileFormBlogPost = resolveComponent("TileFormBlogPost");
+const TileFormForecast = resolveComponent("TileFormForecast");
+const TileFormAgenda = resolveComponent("TileFormAgenda");
 
 const categoryOptions = [
   { text: "Todos", value: TileCategory.TODOS, component: TileFormTodos },
   { text: "To read", value: TileCategory.TOREAD, component: TileFormToRead },
   { text: "Blog post", value: TileCategory.POST, component: TileFormBlogPost },
   { text: "Agenda", value: TileCategory.EVENT, component: TileFormAgenda },
-  { text: "Weather forecast", value: TileCategory.WEATHER, component: TileFormForecast },
+  {
+    text: "Weather forecast",
+    value: TileCategory.WEATHER,
+    component: TileFormForecast,
+  },
 ];
 const selectedCategory = ref("");
 const selectedForm = shallowRef();
 
 watch(selectedCategory, (newType) => {
-  selectedForm.value = categoryOptions.find(option => option.value === selectedCategory.value)?.component;
+  selectedForm.value = categoryOptions.find(
+    (option) => option.value === selectedCategory.value
+  )?.component;
 });
 
-function onSubmitted(tile: Tile) {
-  console.log(tile);
-  store.registerTile(tile);
+async function onSubmitted(tile: Tile) {
+  try {
+    const tileId = await store.registerTile(tile);
+    useAppToaster({ message: "Yay ! Tile created.", type: "success" });
+    router.replace({ path: `/tile/${tileId}` });
+  } catch (errorMessage) {
+    useAppToaster({ message: `${errorMessage}`, type: "danger" });
+  }
 }
 </script>
 

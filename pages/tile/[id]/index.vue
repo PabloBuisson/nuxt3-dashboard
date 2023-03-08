@@ -21,6 +21,7 @@ import { Tile, TileCategory } from "~~/models/tile";
 import { useTilesStore } from "~~/stores/tiles-store";
 
 const route = useRoute();
+const router = useRouter();
 const store = useTilesStore();
 let selectedForm: any;
 const TileFormTodos = resolveComponent("TileFormTodos");
@@ -67,13 +68,20 @@ async function onSubmitted(tile: Tile) {
   try {
     await store.modifyTile(tile);
     useAppToaster({ message: "Yay ! Tile updated.", type: "success" });
+    router.push({ path: "/" });
   } catch (errorMessage) {
     useAppToaster({ message: `${errorMessage}`, type: "danger" });
   }
 }
 
-function onDeleted(tileId: string) {
-  store.deleteTile(tileId);
+async function onDeleted(tileId: string) {
+  try {
+    await store.deleteTile(tileId);
+    useAppToaster({ message: "Tile deleted", type: "success" });
+    router.replace({ path: "/" });
+  } catch (errorMessage) {
+    useAppToaster({ message: `${errorMessage}`, type: "danger" });
+  }
 }
 </script>
 

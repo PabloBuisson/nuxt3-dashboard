@@ -125,6 +125,8 @@ export const useTilesStore = defineStore("tiles", {
         ...tile,
         id: data.value!.name,
       });
+
+      return data.value!.name;
     },
     async modifyTile(tile: Tile) {
       const config = useRuntimeConfig();
