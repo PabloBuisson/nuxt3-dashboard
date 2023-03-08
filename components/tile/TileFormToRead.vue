@@ -128,7 +128,7 @@ function onSubmit() {
   if (!formIsValid) {
     return;
   }
-  if (isWriteRequestAllowed) return;
+  if (!isWriteRequestAllowed) return;
   getFormData();
   emit("submit", tile);
 }
