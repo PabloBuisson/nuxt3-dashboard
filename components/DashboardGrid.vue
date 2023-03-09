@@ -5,8 +5,15 @@
 </template>
 
 <script setup lang="ts">
-import { useTilesStore } from '~~/stores/tiles-store';
+import { TileCategory } from "~~/models/tile";
+import { useTilesStore } from "~~/stores/tiles-store";
 
 const store = useTilesStore();
-const tiles = computed(() => store.tiles);
+const tiles = computed(() =>
+  store.tiles.filter(
+    (tile) =>
+      tile.category !== TileCategory.WEATHER &&
+      tile.category !== TileCategory.EVENT
+  )
+);
 </script>

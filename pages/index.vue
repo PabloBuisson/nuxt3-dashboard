@@ -2,12 +2,15 @@
   <section>
     <h1 class="text-4xl">Friday, 03 February 2023</h1>
     <TileSummary />
+    <TileUpcomingEvents />
     <DashboardGrid />
+    <DashboardSidebar />
     <NuxtLink to="tile/new">New tile</NuxtLink>
   </section>
 </template>
 
 <script setup lang="ts">
+import TileUpcomingEvents from "~~/components/Tile/TileUpcomingEvents.vue";
 import { useTilesStore } from "~~/stores/tiles-store";
 
 definePageMeta({ title: "My Dashboard", layout: "default" });
