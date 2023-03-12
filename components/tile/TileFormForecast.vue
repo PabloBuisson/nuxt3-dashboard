@@ -14,17 +14,17 @@
           {{ city.name }} ({{ city.country }})
         </li>
       </ul>
-      <div v-show="selectedCity">
+      <div v-if="selectedCity">
         <p>
-          Selected city : {{ selectedCity?.name }} ({{ selectedCity?.country }})
+          Selected city : {{ selectedCity.name }} ({{ selectedCity.country }})
         </p>
         <p>
-          Current temperature : {{ selectedCity?.current_weather?.temperature }}
+          Current temperature : {{ selectedCity.current_weather?.temperature }}
         </p>
-        <p>Current time : {{ selectedCity?.current_weather?.time }}</p>
-        <p>
-          Current weather : {{ selectedCity?.current_weather?.weathercode }}
-        </p>
+        <p>Current time : {{ selectedCity.current_weather?.time }}</p>
+        <p>Current weather : {{ selectedCity.current_weather?.weathercode }}</p>
+        <ForecastWeekSummary :daily="selectedCity.daily"
+        />
       </div>
       <button
         v-if="isWriteRequestAllowed"
@@ -72,7 +72,7 @@ const selectedCity: Ref<
 let selectedCityDTO: GeocodingGETResult;
 
 if (tile.content) {
-  selectCity(tile.content);
+  await selectCity(tile.content);
 }
 
 const emit = defineEmits(["submit"]);
@@ -88,8 +88,8 @@ watch(searchTerm, (newSearch) => {
 async function fetchCities() {
   try {
     searchCities.value = await store.fetchCities(searchTerm.value);
-  } catch (error) {
-    console.log(`fetchCities() error => ${error}`);
+  } catch (errorMessage) {
+    useAppToaster({ message: `${errorMessage}`, type: "danger" });
   }
 }
 
@@ -100,8 +100,8 @@ async function selectCity(city: GeocodingGETResult) {
     selectedCity.value = { ...city, ...response.value } as GeocodingGETResult &
       ForecastGETResponse;
     selectedCityDTO = city;
-  } catch (error) {
-    console.log(`selectCity() error => ${error}`);
+  } catch (errorMessage) {
+    useAppToaster({ message: `${errorMessage}`, type: "danger" });
   }
 }
 

@@ -1,12 +1,16 @@
 <template>
-  <section>
-    <h1 class="text-4xl">Friday, 03 February 2023</h1>
-    <TileSummary />
-    <TileUpcomingEvents />
-    <DashboardGrid />
-    <DashboardSidebar />
-    <NuxtLink to="tile/new">New tile</NuxtLink>
-  </section>
+  <div class="flex justify-between">
+    <section>
+      <h1 class="text-4xl">Friday, 03 February 2023</h1>
+      <TileSummary />
+      <TileUpcomingEvents />
+      <DashboardGrid />
+      <NuxtLink to="tile/new">New tile</NuxtLink>
+    </section>
+    <section>
+      <DashboardSidebar />
+    </section>
+  </div>
 </template>
 
 <script setup lang="ts">

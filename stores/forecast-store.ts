@@ -8,6 +8,31 @@ interface State {
   _selectedCity: (GeocodingGETResult & ForecastGETResponse) | undefined;
 }
 
+export interface ForecastCity {
+  id: number;
+  name: string;
+  latitude: number;
+  longitude: number;
+  country_code: string;
+  timezone: string;
+  timezone_abbreviation: string;
+  hourly: {
+    time: string[];
+    temperature_2m: number[];
+  };
+  daily: {
+    time: string[];
+    temperature_2m: number[];
+  };
+  current_weather: {
+    time: string;
+    temperature: number;
+    weathercode: number;
+    windspeed: number;
+    winddirection: number;
+  };
+}
+
 export interface GeocodingGETResult {
   id: number;
   name: string;
@@ -43,12 +68,11 @@ export interface ForecastGETResponse {
   utc_offset_seconds: number;
   timezone: string;
   timezone_abbreviation: string;
-  hourly: {
+  daily: {
     time: string[];
-    temperature_2m: number[];
-  };
-  hourly_units: {
-    temperature_2m: string;
+    weathercode: number[];
+    temperature_2m_max: string[];
+    temperature_2m_min: string[];
   };
   current_weather: {
     time: string;
@@ -106,6 +130,7 @@ export const useForecastStore = defineStore("forecast", {
           longitude: city.longitude,
           current_weather: true,
           timezone: city.timezone,
+          daily: "weathercode,temperature_2m_max,temperature_2m_min",
         },
       });
 
@@ -114,54 +139,9 @@ export const useForecastStore = defineStore("forecast", {
         ...response.value,
       } as GeocodingGETResult & ForecastGETResponse);
 
+      this.setFetchTimestamp();
+
       return response;
-    },
-    getWeatherLabel(weatherCode: number) {
-      switch (weatherCode) {
-        case 0:
-          return "Clear sky";
-        case 1:
-        case 2:
-        case 3:
-          return "Mainly clear, partly cloudy, and overcast";
-        case 45:
-        case 48:
-          return "Fog and depositing rime fog";
-        case 51:
-        case 53:
-        case 55:
-          return "Drizzle: Light, moderate, and dense intensity";
-        case 56:
-        case 57:
-          return "Freezing Drizzle: Light and dense intensity";
-        case 61:
-        case 63:
-        case 65:
-          return "Rain: Slight, moderate and heavy intensity";
-        case 66:
-        case 67:
-          return "Freezing Rain: Light and heavy intensity";
-        case 71:
-        case 73:
-        case 75:
-          return "Snow fall: Slight, moderate, and heavy intensity";
-        case 77:
-          return "Snow grains";
-        case 80:
-        case 81:
-        case 82:
-          return "Rain showers: Slight, moderate, and violent";
-        case 85:
-        case 86:
-          return "Snow showers slight and heavy";
-        case 95:
-          return "Thunderstorm: Slight or moderate";
-        case 96:
-        case 99:
-          return "Thunderstorm with slight and heavy hail";
-        default:
-          return "Unknown";
-      }
     },
     // async registerPartner(data: PartnerRegistration) {
     //   const authStore = useAuthStore();
@@ -188,6 +168,9 @@ export const useForecastStore = defineStore("forecast", {
     // instead of `state` as first argument use `this`
     addSelectedCity(data: GeocodingGETResult & ForecastGETResponse) {
       this._selectedCity = data;
+    },
+    setFetchTimestamp() {
+      this._lastFetch = new Date().getTime();
     },
     // easily reset state using `$reset`
     clearStore() {

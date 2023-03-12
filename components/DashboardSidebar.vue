@@ -1,21 +1,20 @@
 <template>
   <div class="inline-block bg-slate-400 p-4">
     <div v-if="selectedCity">
-      <h2 class="text-2xl">
+      <h2 class="text-2xl inline-block mr-4">
         {{ selectedCity.current_weather.temperature }} C°
       </h2>
-      <div class="bg-white shadow rounded border inline-block p-4">
-        <!-- TODO use a composable -->
+      <NuxtLink :to="'/tile/' + tileWeather.id">Modify</NuxtLink>
+      <div class="bg-white shadow rounded border block p-4">
         <p>
-          {{
-            forecastStore.getWeatherLabel(
-              selectedCity.current_weather.weathercode
-            )
-          }}
+          {{ useWeatherLabel(selectedCity.current_weather.weathercode) }}
         </p>
         <p>{{ selectedCity.name }}, {{ selectedCity.country_code }}</p>
       </div>
-      <h3>Week's forecast</h3>
+      <div v-if="selectedCity.daily?.time?.length > 0">
+        <h3>Week's forecast</h3>
+        <ForecastWeekSummary :daily="selectedCity.daily" />
+      </div>
     </div>
     <div v-if="tilesEvent">
       <h2 class="text-2xl">Events</h2>
@@ -46,7 +45,7 @@ const tileWeather = computed(
 );
 
 if (tileWeather) {
-  if (forecastStore.selectedCity == null) {
+  if (forecastStore.selectedCity == null || forecastStore.shouldUpdate) {
     forecastStore.selectCity(tileWeather.value.content);
   }
 }
