@@ -1,3 +1,8 @@
+/**
+ * Return the label of a weather code
+ * @param weathercode a code as number representing weather
+ * @returns the label
+ */
 export const useWeatherLabel = (
   weathercode: number,
 ): string => {

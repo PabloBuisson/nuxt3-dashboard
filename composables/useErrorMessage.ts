@@ -1,5 +1,5 @@
 /**
- *
+ * Return an explicit error message
  * @param error The status error of the request. 401, 500, etc.
  * @param entity The entity of the request. "the tile", "the tiles", etc.
  * @param method The METHOD of the request
