@@ -1,6 +1,10 @@
 <template>
   <div class="inline-block bg-slate-400 p-4">
     <div v-if="selectedCity">
+      <Icon
+        size="150"
+        :name="useWeatherIcon(selectedCity.current_weather.weathercode)"
+      />
       <h2 class="text-2xl inline-block mr-4">
         {{ selectedCity.current_weather.temperature }} C°
       </h2>
@@ -17,7 +21,8 @@
       </div>
     </div>
     <div v-if="tilesEvent">
-      <h2 class="text-2xl">Events</h2>
+      <h2 class="text-2xl inline-block">Events</h2>
+      <NuxtLink :to="'/tile/' + tilesEvent[0].id">Modify</NuxtLink>
       <div class="bg-white shadow rounded border inline-block p-4">
         <ul v-for="tile in tilesEvent" :key="tile.id">
           <li v-for="content in tile.content" :key="content">

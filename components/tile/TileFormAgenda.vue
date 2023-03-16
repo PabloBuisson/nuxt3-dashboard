@@ -17,7 +17,8 @@
         <button @click="deleteEvent(index)" type="button">Delete</button>
       </div>
       <button @click="addEvent" type="button">Add event</button>
-      <button v-if="isWriteRequestAllowed"
+      <button
+        v-if="isWriteRequestAllowed"
         class="px-4 py-2 font-semibold bg-cyan-500 text-white rounded shadow-sm"
         type="submit"
       >
@@ -93,7 +94,9 @@ const tile: Tile = props.tile ?? {
 
 if (props.tile && props.tile.content?.length > 0) {
   props.tile.content.sort(
-    (a: Event, b: Event) => dateStringToDate(a.value).getTime() - dateStringToDate(b.value).getTime()
+    (a: Event, b: Event) =>
+      useDateStringToDate(a.value).getTime() -
+      useDateStringToDate(b.value).getTime()
   );
 }
 
@@ -126,11 +129,6 @@ function addEvent() {
 function deleteEvent(index: number) {
   const todoToDelete = content.value[index];
   content.value = content.value.filter((todo) => todo.id !== todoToDelete.id);
-}
-
-function dateStringToDate(date: string) {
-  const dateElements = date.split("/");
-  return new Date(+dateElements[2], +dateElements[1] - 1, +dateElements[0]);
 }
 </script>
 

@@ -10,6 +10,12 @@ export interface Tile {
   dateModification?: Date;
 }
 
+export interface TileContentTodo {
+  id: string;
+  key: string;
+  value: boolean
+}
+
 export enum TileCategory {
   TODOS = "TODOS",
   TOREAD = "TOREAD",
