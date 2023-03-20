@@ -4,6 +4,7 @@ import { useAuthStore } from "./auth-store";
 interface State {
   _lastFetch: number | null;
   _tiles: Tile[];
+  _groupTiles: Tile[];
 }
 
 interface FirebasePOSTResponse {
@@ -60,11 +61,15 @@ export const useTilesStore = defineStore("tiles", {
       //   dateCreation: new Date(),
       // },
     ],
+    _groupTiles: [],
   }),
   getters: {
     // ⚠ A getter cannot have the same name as another state property.
     tiles(state): Tile[] {
       return state._tiles;
+    },
+    groupTiles(state): Tile[] {
+      return state._groupTiles;
     },
     hasTiles(state): boolean {
       return state._tiles && state._tiles.length > 0;
@@ -339,6 +344,20 @@ export const useTilesStore = defineStore("tiles", {
     },
     setTiles(data: Tile[]) {
       this._tiles = data;
+    },
+    addGroupTile(data: Tile) {
+      if (!this._groupTiles) return;
+
+      if (this._groupTiles.length === 0) {
+        this._groupTiles.push(data);
+      } else {
+        const tileIndex = this._groupTiles.findIndex(
+          (tile) => tile.id === data.id
+        );
+        tileIndex != -1
+          ? (this._groupTiles[tileIndex] = data)
+          : this._groupTiles.push(data);
+      }
     },
     setFetchTimestamp() {
       this._lastFetch = new Date().getTime();

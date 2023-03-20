@@ -12,13 +12,18 @@ import { useTilesStore } from "~~/stores/tiles-store";
 
 interface Props {
   id: string;
+  isGroup?: boolean;
+  urlGroup?: string;
 }
 
 const props = defineProps<Props>();
 const store = useTilesStore();
 
-const tile = computed(() => store.tiles.find((tile) => tile.id === props.id));
+const tile = props.isGroup
+  ? computed(() => store.groupTiles.find((tile) => tile.id === props.id))
+  : computed(() => store.tiles.find((tile) => tile.id === props.id));
+
 const tileLink = computed(() => {
-  return "/tile/" + props.id;
+  return props.isGroup ? "/tile?category=" + props.id : "/tile/" + props.id;
 });
 </script>

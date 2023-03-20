@@ -2,6 +2,7 @@ export interface Tile {
   id: string;
   title: string;
   standalone?: boolean;
+  isGroup?: boolean;
   category: TileCategory;
   image?: string;
   contentLink?: string;
