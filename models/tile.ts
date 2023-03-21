@@ -17,6 +17,12 @@ export interface TileContentTodo {
   value: boolean
 }
 
+export interface TileContentEvent {
+  id: string;
+  key: string;
+  value: string;
+}
+
 export enum TileCategory {
   TODOS = "TODOS",
   TOREAD = "TOREAD",
