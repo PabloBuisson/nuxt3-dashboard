@@ -67,8 +67,6 @@ const events = computed(() => {
     }
   }
 
-  console.log(upcomingEvents);
-
   return upcomingEvents;
 });
 </script>
