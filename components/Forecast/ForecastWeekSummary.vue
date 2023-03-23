@@ -2,7 +2,7 @@
   <div>
     <ul>
       <li class="flex justify-between" v-for="(day, index) in daily.time">
-        <span>{{ day }}</span>
+        <span>{{ useDateLabel(day, DateSeparator.Dash) }}</span>
         <span class="flex items-center gap-2">
           <div :title="useWeatherLabel(daily.weathercode[index])">
             <span class="sr-only">{{ useWeatherLabel(daily.weathercode[index]) }}</span>
@@ -32,6 +32,8 @@ interface Props {
 }
 
 const props = defineProps<Props>();
+
+const dateLabel = computed((day) => useDateLabel(day));
 </script>
 
 <style scoped></style>

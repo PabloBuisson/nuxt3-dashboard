@@ -24,10 +24,13 @@
       <div v-for="tileEvent in tilesEvent" :key="tileEvent.id">
         <h2 class="text-2xl inline-block">{{ tileEvent.title }}</h2>
         <NuxtLink :to="'/tile/' + tileEvent.id">Modify</NuxtLink>
-        <div class="bg-white shadow rounded border inline-block p-4">
+        <div
+          v-if="tileEvent.content?.length > 0"
+          class="bg-white shadow rounded border inline-block p-4"
+        >
           <ul>
             <li v-for="event in tileEvent.content" :key="event">
-              {{ event.key }} {{ event.value }}
+              {{ event.key }} {{ useDateLabel(event.value) }}
             </li>
           </ul>
         </div>

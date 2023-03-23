@@ -8,7 +8,7 @@
       <ul>
         <li v-for="event in events" :key="event.id">
           <NuxtLink :to="'/tile/' + event.tileId"
-            >{{ event.key }} = {{ event.value }}
+            >{{ event.key }} = {{ useDateLabel(event.value) }}
           </NuxtLink>
         </li>
       </ul>
