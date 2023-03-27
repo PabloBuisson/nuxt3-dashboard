@@ -268,8 +268,8 @@ export const useTilesStore = defineStore("tiles", {
       this.addTile(tile);
       this.setFetchTimestamp();
     },
-    async loadTiles() {
-      if (!this.shouldUpdate) {
+    async loadTiles(settings?: { forceRefresh?: boolean }) {
+      if (!settings?.forceRefresh && !this.shouldUpdate) {
         return;
       }
 

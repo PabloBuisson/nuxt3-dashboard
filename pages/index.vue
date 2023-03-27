@@ -21,7 +21,7 @@ definePageMeta({ title: "My Dashboard", layout: "default" });
 
 const store = useTilesStore();
 try {
-  await store.loadTiles();
+  await store.loadTiles({forceRefresh: true});
 } catch (errorMessage) {
   useAppToaster({ message: `${errorMessage}`, type: "danger" });
 }
