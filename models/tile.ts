@@ -1,7 +1,7 @@
 export interface Tile {
   id: string;
   title: string;
-  standalone?: boolean;
+  isPinned?: boolean;
   isGroup?: boolean;
   category: TileCategory;
   image?: string;
@@ -14,7 +14,7 @@ export interface Tile {
 export interface TileContentTodo {
   id: string;
   key: string;
-  value: boolean
+  value: boolean;
 }
 
 export interface TileContentEvent {

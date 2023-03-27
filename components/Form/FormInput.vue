@@ -6,6 +6,7 @@
       :id="id"
       :type="type"
       v-bind="$attrs"
+      :checked="type === 'checkbox' ? modelValue.value : undefined"
       :value="modelValue.value"
       @input="onFieldUpdate($event)"
       @focusin="clearValidity()"
@@ -35,7 +36,9 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   id: `${new Date().getTime()}`,
   controlType: "input",
+  type: "text",
 });
+
 let errorMessages: string[] = [];
 let isValid = ref(true);
 
@@ -47,7 +50,12 @@ function clearValidity() {
 }
 
 function onFieldUpdate(event: Event) {
-  const eventValue = (event.target as HTMLInputElement).value;
+  let eventValue;
+  if (!props.type) {
+    eventValue = (event.target as HTMLInputElement).value;
+  } else if (props.type === "checkbox") {
+    eventValue = (event.target as HTMLInputElement).checked;
+  }
 
   if (props.modelValue.validators?.includes("required")) {
     if (eventValue === "") {

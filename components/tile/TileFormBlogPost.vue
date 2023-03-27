@@ -24,6 +24,9 @@
         v-model="formData.preview"
         >Preview Text</FormInput
       >
+      <FormInput id="post-pin" type="checkbox" v-model="formData.isPinned"
+        >Pin this post in dashboard ?</FormInput
+      >
       <button
         v-if="isWriteRequestAllowed"
         class="px-4 py-2 font-semibold bg-cyan-500 text-white rounded shadow-sm"
@@ -62,6 +65,7 @@ interface Article {
   preview: string;
   keywords: string[];
   thumbnail: string;
+  isPinned: boolean;
 }
 
 const props = defineProps<Props>();
@@ -108,6 +112,10 @@ const formData: FormData = {
     value: props?.tile?.content?.thumbnail ?? "",
     isValid: true,
   },
+  isPinned: {
+    value: props?.tile?.isPinned ?? false,
+    isValid: true,
+  },
 };
 
 function validateForm() {
@@ -122,10 +130,13 @@ function validateForm() {
 
 function getFormData() {
   tile.title = formData.title.value;
+  tile.isPinned = formData.isPinned.value;
   let contentForm = {} as Article;
   for (const field in formData) {
-    contentForm[field as keyof Article] =
-      formData[field as keyof FormData].value;
+    if (field != "title" && field != "isPinned") {
+      (contentForm[field as keyof Article] as any) =
+        formData[field as keyof FormData].value;
+    }
   }
   tile.content = contentForm;
 }

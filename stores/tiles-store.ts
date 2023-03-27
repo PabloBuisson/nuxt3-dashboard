@@ -257,7 +257,7 @@ export const useTilesStore = defineStore("tiles", {
       const tile: Tile = {
         id: tileId,
         title: responseData!.title,
-        standalone: responseData!.standalone,
+        isPinned: responseData!.isPinned,
         category: responseData!.category,
         image: responseData!.image,
         contentLink: responseData!.contentLink,
@@ -308,7 +308,7 @@ export const useTilesStore = defineStore("tiles", {
         const tile: Tile = {
           id: key,
           title: responseData[key].title,
-          standalone: responseData[key].standalone,
+          isPinned: responseData[key].isPinned,
           category: responseData[key].category,
           image: responseData[key].image,
           contentLink: responseData[key].contentLink,
