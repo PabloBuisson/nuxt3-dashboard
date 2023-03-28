@@ -5,6 +5,7 @@ interface State {
   _lastFetch: number | null;
   _tiles: Tile[];
   _groupTiles: Tile[];
+  _allTilesLoaded: boolean;
 }
 
 interface FirebasePOSTResponse {
@@ -62,6 +63,7 @@ export const useTilesStore = defineStore("tiles", {
       // },
     ],
     _groupTiles: [],
+    _allTilesLoaded: false,
   }),
   getters: {
     // ⚠ A getter cannot have the same name as another state property.
@@ -70,6 +72,9 @@ export const useTilesStore = defineStore("tiles", {
     },
     groupTiles(state): Tile[] {
       return state._groupTiles;
+    },
+    hasAllTiles(state): boolean {
+      return state._allTilesLoaded && state._tiles && state._tiles.length > 0;
     },
     hasTiles(state): boolean {
       return state._tiles && state._tiles.length > 0;
@@ -268,8 +273,8 @@ export const useTilesStore = defineStore("tiles", {
       this.addTile(tile);
       this.setFetchTimestamp();
     },
-    async loadTiles(settings?: { forceRefresh?: boolean }) {
-      if (!settings?.forceRefresh && !this.shouldUpdate) {
+    async loadTiles() {
+      if (this.hasAllTiles && !this.shouldUpdate) {
         return;
       }
 
@@ -320,6 +325,7 @@ export const useTilesStore = defineStore("tiles", {
       }
       this.setTiles(tiles);
       this.setFetchTimestamp();
+      this.setAllTilesHasBeenLoaded();
     },
     // mutations can now become actions,
     // instead of `state` as first argument use `this`
@@ -335,16 +341,6 @@ export const useTilesStore = defineStore("tiles", {
           : this._tiles.push(data);
       }
     },
-    editTile(data: Tile) {
-      const tileIndex = this._tiles.findIndex((tile) => tile.id === data.id);
-      this._tiles[tileIndex] = data;
-    },
-    clearTile(tileId: string) {
-      this._tiles = this._tiles.filter((tile) => tile.id !== tileId);
-    },
-    setTiles(data: Tile[]) {
-      this._tiles = data;
-    },
     addGroupTile(data: Tile) {
       if (!this._groupTiles) return;
 
@@ -358,6 +354,19 @@ export const useTilesStore = defineStore("tiles", {
           ? (this._groupTiles[tileIndex] = data)
           : this._groupTiles.push(data);
       }
+    },
+    editTile(data: Tile) {
+      const tileIndex = this._tiles.findIndex((tile) => tile.id === data.id);
+      this._tiles[tileIndex] = data;
+    },
+    clearTile(tileId: string) {
+      this._tiles = this._tiles.filter((tile) => tile.id !== tileId);
+    },
+    setTiles(data: Tile[]) {
+      this._tiles = data;
+    },
+    setAllTilesHasBeenLoaded() {
+      this._allTilesLoaded = true;
     },
     setFetchTimestamp() {
       this._lastFetch = new Date().getTime();
