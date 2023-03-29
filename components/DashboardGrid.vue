@@ -18,7 +18,8 @@ const tiles = computed(() =>
   store.tiles.filter(
     (tile) =>
       tile.category !== TileCategory.WEATHER &&
-      tile.category !== TileCategory.EVENT
+      tile.category !== TileCategory.EVENT &&
+      (tile.category === TileCategory.TODOS || tile.isPinned)
   )
 );
 const tilesToDisplay = computed(() => [...tiles.value, ...getTileGroup()]);
@@ -46,8 +47,8 @@ function getTilesByCategory(
   category: TileCategory,
   title: string
 ): Tile | null {
-  const tileCategory = tiles.value
-    .filter((tile) => tile.category === category)
+  const tileCategory = store.tiles
+    .filter((tile) => tile.category === category && !tile.isPinned)
     ?.slice(0, 3);
 
   if (tileCategory && tileCategory.length > 0) {
