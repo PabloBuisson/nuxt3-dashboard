@@ -2,9 +2,16 @@
   <div>
     <h1>Todos Tile</h1>
     <form @submit.prevent="onSubmit">
-      <input v-model="tile.title" />
+      <FormInput id="todos-title" v-model="formData.title">Title</FormInput>
       <div v-for="(todo, index) in content">
-        <label :for="todo.id">
+        <FormInputTodo
+          v-model="formData.todos.value[index]"
+          :id-todo="todo.id"
+          :id-input="'input-todo' + todo.id"
+          :id-checkbox="'checkbox-todo' + todo.id"
+          @delete-todo="deleteTodo(index)"
+        />
+        <!-- <label :for="todo.id">
           <input v-model="todo.key" />
         </label>
         <input
@@ -15,15 +22,32 @@
         />
         <button v-if="index > 0" @click="deleteTodo(index)" type="button">
           Delete
-        </button>
+        </button> -->
       </div>
-      <button @click="addTodo" type="button">Add todo</button>
+      <button
+        class="px-4 py-2 font-semibold bg-green-700 text-white rounded shadow-sm"
+        @click="addTodo"
+        type="button"
+      >
+        Add todo
+      </button>
+      <FormInput id="post-pin" type="checkbox" v-model="formData.isPinned"
+        >Pin this post in dashboard ?</FormInput
+      >
       <button
         v-if="isWriteRequestAllowed"
         class="px-4 py-2 font-semibold bg-cyan-500 text-white rounded shadow-sm"
         type="submit"
       >
         Update
+      </button>
+      <button
+        class="px-4 py-2 font-semibold bg-red-700 text-white rounded shadow-sm"
+        v-if="isEditPage && isWriteRequestAllowed"
+        @click="onDelete"
+        type="button"
+      >
+        Delete
       </button>
     </form>
   </div>
@@ -37,16 +61,35 @@ interface Props {
   tile?: Tile;
 }
 
+type FormData = {
+  [propName in keyof Todos]: ModelValue;
+};
+
+interface Todos {
+  title: string;
+  content: Todo[];
+  todos: any;
+  isPinned: boolean;
+}
+
 interface Todo {
   key: string;
   value: boolean;
   id: string;
 }
 
+interface TodoModelValue {
+  id: string;
+  input: ModelValue;
+  checkbox: ModelValue;
+}
+
 const props = defineProps<Props>();
 const authStore = useAuthStore();
+
 const isWriteRequestAllowed = computed(() => authStore.isAuthenticated);
-const emit = defineEmits(["submit"]);
+const isEditPage = computed(() => tile.id !== "");
+let formIsValid = true;
 const tile: Tile = props.tile ?? {
   id: "",
   title: "",
@@ -65,25 +108,129 @@ const content = props.tile
       },
     ]);
 
-function onSubmit() {
-  if (!isWriteRequestAllowed) return;
-  tile.content = content.value;
-  emit("submit", tile);
+const todosModelValue: TodoModelValue[] = [];
+initTodoForm();
+
+function initTodoForm() {
+  for (const todo of content.value) {
+    const todoSaved: Todo = todo;
+    const todoModelValue: TodoModelValue = {
+      id: todoSaved.id,
+      input: {
+        value: todoSaved.key,
+        isValid: true,
+        validators: ["required"],
+      },
+      checkbox: {
+        value: todoSaved.value,
+        isValid: true,
+      },
+    };
+    todosModelValue.push(todoModelValue);
+  }
 }
+
+const formData: FormData = {
+  title: {
+    value: props?.tile?.title ?? "",
+    isValid: true,
+    validators: ["required"],
+  },
+  todos: {
+    value: todosModelValue,
+    isValid: true,
+  },
+  content: {
+    value: content,
+    isValid: true,
+  },
+  isPinned: {
+    value: props?.tile?.isPinned ?? false,
+    isValid: true,
+  },
+};
+
+console.log("FormInputTodo l.111", [
+  content.value,
+  todosModelValue,
+  formData.todos,
+]);
+
+const emit = defineEmits(["submit", "delete"]);
 
 function addTodo() {
   const todosLength = content.value.length;
   const lastTodoId = content.value[todosLength - 1].id;
-  content.value.push({
+  const newTodo: Todo = {
     key: `Todo${+lastTodoId + 1}`,
     value: false,
     id: `${+lastTodoId + 1}`,
-  });
+  };
+  content.value.push(newTodo);
+  addTodoToModelValue(newTodo);
+}
+
+function addTodoToModelValue(todo: Todo) {
+  const todoModelValue: TodoModelValue = {
+    id: todo.id,
+    input: {
+      value: todo.key,
+      isValid: true,
+      validators: ["required"],
+    },
+    checkbox: {
+      value: todo.value,
+      isValid: true,
+    },
+  };
+  formData.todos.value.push(todoModelValue);
 }
 
 function deleteTodo(index: number) {
   const todoToDelete = content.value[index];
-  content.value = content.value.filter((todo) => todo.id !== todoToDelete.id);
+  formData.todos.value = formData.todos.value.filter(
+    (todo: TodoModelValue) => todo.id != todoToDelete.id
+  );
+  content.value = content.value.filter(
+    (todo: Todo) => todo.id !== todoToDelete.id
+  );
+}
+
+function validateForm() {
+  formIsValid = true;
+  for (const field in formData) {
+    if (!formData[field as keyof FormData].isValid) {
+      formIsValid = false;
+      break;
+    }
+  }
+}
+
+function onSubmit() {
+  validateForm();
+  if (!formIsValid || !isWriteRequestAllowed) {
+    return;
+  }
+
+  const todosToSave = [];
+  for (const todo of formData.todos.value) {
+    const todoToSave: Todo = {
+      id: todo.id,
+      key: todo.input.value,
+      value: todo.checkbox.value,
+    };
+    todosToSave.push(todoToSave);
+  }
+  tile.title = formData.title.value;
+  tile.isPinned = formData.isPinned.value;
+  tile.content = todosToSave;
+
+  emit("submit", tile);
+}
+
+function onDelete() {
+  if (!isWriteRequestAllowed) return;
+  emit("delete", tile.id);
 }
 </script>
 

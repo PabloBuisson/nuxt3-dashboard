@@ -51,7 +51,7 @@ function clearValidity() {
 
 function onFieldUpdate(event: Event) {
   let eventValue;
-  if (!props.type) {
+  if (props.type === "text") {
     eventValue = (event.target as HTMLInputElement).value;
   } else if (props.type === "checkbox") {
     eventValue = (event.target as HTMLInputElement).checked;

@@ -144,10 +144,9 @@ function getFormData() {
 
 function onSubmit() {
   validateForm();
-  if (!formIsValid) {
+  if (!formIsValid || !isWriteRequestAllowed) {
     return;
   }
-  if (!isWriteRequestAllowed) return;
   getFormData();
   emit("submit", tile);
 }
