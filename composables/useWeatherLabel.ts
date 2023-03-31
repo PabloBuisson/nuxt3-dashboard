@@ -6,7 +6,7 @@
 export const useWeatherLabel = (
   weathercode: number,
 ): string => {
-  if (!weathercode) {
+  if (typeof weathercode != "number" && !weathercode) {
     return `Weather unknown`;
   }
   switch (weathercode) {

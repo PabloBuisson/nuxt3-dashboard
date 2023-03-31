@@ -4,7 +4,7 @@
  * @returns the name of the icon
  */
 export const useWeatherIcon = (weathercode: number): string => {
-  if (!weathercode) {
+  if (typeof weathercode != "number" && !weathercode) {
     return "fluent-mdl2:sun-question-mark";
   }
   switch (weathercode) {
