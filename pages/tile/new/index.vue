@@ -33,12 +33,18 @@ const categoryOptions = [
   { text: "To read", value: TileCategory.TOREAD, component: TileFormToRead },
   { text: "Blog post", value: TileCategory.POST, component: TileFormBlogPost },
   { text: "Agenda", value: TileCategory.EVENT, component: TileFormAgenda },
-  {
-    text: "Weather forecast",
-    value: TileCategory.WEATHER,
-    component: TileFormForecast,
-  },
 ];
+
+if (store.tiles && store.tiles.length > 0) {
+  if (!store.tiles.some((tile) => tile.category === TileCategory.WEATHER)) {
+    categoryOptions.push({
+      text: "Weather forecast",
+      value: TileCategory.WEATHER,
+      component: TileFormForecast,
+    });
+  }
+}
+
 const selectedCategory = ref("");
 const selectedForm = shallowRef();
 
