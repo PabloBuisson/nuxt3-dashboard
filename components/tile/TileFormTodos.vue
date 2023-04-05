@@ -67,7 +67,6 @@ type FormData = {
 
 interface Todos {
   title: string;
-  content: Todo[];
   todos: any;
   isPinned: boolean;
 }
@@ -140,17 +139,13 @@ const formData: FormData = {
     value: todosModelValue,
     isValid: true,
   },
-  content: {
-    value: content,
-    isValid: true,
-  },
   isPinned: {
     value: props?.tile?.isPinned ?? false,
     isValid: true,
   },
 };
 
-console.log("FormInputTodo l.111", [
+console.log("TileFormTodos l.111", [
   content.value,
   todosModelValue,
   formData.todos,

@@ -1,30 +1,33 @@
 <template>
-  <div class="input-control">
-    <label :for="idCheckbox">
+  <div>
+    <div v-once class="input-control">
+      <label :for="idCheckbox">
+        <input
+          :id="idInput"
+          type="text"
+          v-bind="$attrs"
+          :value="modelValue.input.value"
+          @paste="onFieldUpdate($event, 'text')"
+          @input="onFieldUpdate($event, 'text')"
+          @focusin="clearValidity()"
+        />
+      </label>
       <input
-        :id="idInput"
-        type="text"
+        :id="idCheckbox"
+        type="checkbox"
+        :value="modelValue.checkbox.value"
+        :checked="modelValue.checkbox.value"
         v-bind="$attrs"
-        :value="modelValue.input.value"
-        @input="onFieldUpdate($event, 'text')"
-        @focusin="clearValidity()"
+        @input="onFieldUpdate($event, 'checkbox')"
       />
-    </label>
-    <input
-      :id="idCheckbox"
-      type="checkbox"
-      :value="modelValue.checkbox.value"
-      :checked="modelValue.checkbox.value"
-      v-bind="$attrs"
-      @input="onFieldUpdate($event, 'checkbox')"
-    />
-    <button
-      class="px-4 py-2 font-semibold bg-red-700 text-white rounded shadow-sm"
-      @click="deleteTodo()"
-      type="button"
-    >
-      Delete
-    </button>
+      <button
+        class="px-4 py-2 font-semibold bg-red-700 text-white rounded shadow-sm"
+        @click="deleteTodo()"
+        type="button"
+      >
+        Delete
+      </button>
+    </div>
     <div v-if="!isValid">
       <p v-for="message of errorMessages">{{ message }}</p>
     </div>
@@ -80,6 +83,8 @@ function onFieldUpdate(event: Event, type: string) {
       checkbox: { value: eventValue, isValid: isValid.value },
     } as { id: string; input: ModelValue; checkbox: ModelValue };
   }
+
+  console.log("FormInputTodo l.84", modelValueUpdated);
 
   emit("update:modelValue", { ...modelValueUpdated });
 }

@@ -1,24 +1,26 @@
 <template>
-  <div class="input-control">
-    <label :for="id"><slot></slot></label>
-    <input
-      v-if="controlType === 'input'"
-      :id="id"
-      :type="type"
-      v-bind="$attrs"
-      :checked="type === 'checkbox' ? modelValue.value : undefined"
-      :value="modelValue.value"
-      @input="onFieldUpdate($event)"
-      @focusin="clearValidity()"
-    />
-    <textarea
-      v-if="controlType === 'textarea'"
-      rows="10"
-      :id="id"
-      :value="modelValue.value"
-      @input="onFieldUpdate($event)"
-      @focusin="clearValidity()"
-    ></textarea>
+  <div>
+    <div v-once class="input-control">
+      <label :for="id"><slot></slot></label>
+      <input
+        v-if="controlType === 'input'"
+        :id="id"
+        :type="type"
+        v-bind="$attrs"
+        :checked="type === 'checkbox' ? modelValue.value : undefined"
+        :value="modelValue.value"
+        @input="onFieldUpdate($event)"
+        @focusin="clearValidity()"
+      />
+      <textarea
+        v-if="controlType === 'textarea'"
+        rows="10"
+        :id="id"
+        :value="modelValue.value"
+        @input="onFieldUpdate($event)"
+        @focusin="clearValidity()"
+      ></textarea>
+    </div>
     <div v-if="!isValid">
       <p v-for="message of errorMessages">{{ message }}</p>
     </div>
