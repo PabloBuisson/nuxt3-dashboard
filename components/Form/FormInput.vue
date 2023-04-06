@@ -9,6 +9,7 @@
         v-bind="$attrs"
         :checked="type === 'checkbox' ? modelValue.value : undefined"
         :value="modelValue.value"
+        @paste="onFieldUpdate($event)"
         @input="onFieldUpdate($event)"
         @focusin="clearValidity()"
       />
@@ -17,6 +18,7 @@
         rows="10"
         :id="id"
         :value="modelValue.value"
+        @paste="onFieldUpdate($event)"
         @input="onFieldUpdate($event)"
         @focusin="clearValidity()"
       ></textarea>
@@ -53,10 +55,14 @@ function clearValidity() {
 
 function onFieldUpdate(event: Event) {
   let eventValue;
-  if (props.type === "text") {
-    eventValue = (event.target as HTMLInputElement).value;
-  } else if (props.type === "checkbox") {
-    eventValue = (event.target as HTMLInputElement).checked;
+  if (props.controlType === "input") {
+    if (props.type === "checkbox") {
+      eventValue = (event.target as HTMLInputElement).checked;
+    } else {
+      eventValue = (event.target as HTMLInputElement).value;
+    }
+  } else {
+    eventValue = (event.target as HTMLTextAreaElement).value;
   }
 
   if (props.modelValue.validators?.includes("required")) {

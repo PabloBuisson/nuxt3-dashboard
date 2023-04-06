@@ -83,28 +83,42 @@ async function onSubmit() {
   isLoading = true;
   validateForm();
   if (!formIsValid) {
-    console.log("formInvalid")
+    console.log("formInvalid");
     isLoading = false;
     return;
   }
-  console.log("formValid")
   getFormData();
   const actionPayload = {
     email: authForm.email,
     password: authForm.password,
   };
-  try {
-    if (mode.value === "login") {
+  console.log("formValid", actionPayload);
+
+  if (mode.value === "login") {
+    try {
       await authStore.login(actionPayload);
-    } else {
-      await authStore.signup(actionPayload);
+      useAppToaster({
+        message: "Yay ! Sucessfully logged in.",
+        type: "success",
+      });
+    } catch (error: any) {
+      const errorMessage =
+        error?.message || "Failed to authenticate, try later.";
+      useAppToaster({ message: `${errorMessage}`, type: "danger" });
     }
-    // const redirectUrl = "/" + ($route.query.redirect || "partners");
-    // $router.replace(redirectUrl);
-    router.replace({ path: "/" });
-  } catch (err: any) {
-    error = err.message || "Failed to authenticate, try later.";
+  } else {
+    try {
+      await authStore.signup(actionPayload);
+      useAppToaster({ message: "Yay ! Welcome.", type: "success" });
+    } catch (error: any) {
+      const errorMessage =
+        error?.message || "Failed to authenticate, try later.";
+      useAppToaster({ message: `${errorMessage}`, type: "danger" });
+    }
   }
+  // const redirectUrl = "/" + ($route.query.redirect || "partners");
+  // $router.replace(redirectUrl);
+  router.replace({ path: "/" });
   isLoading = false;
 }
 </script>
