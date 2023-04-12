@@ -78,7 +78,7 @@ async function onDeleted(tileId: string) {
   try {
     await store.deleteTile(tileId);
     useAppToaster({ message: "Tile deleted", type: "success" });
-    router.replace({ path: "/" });
+    navigateTo({ path: "/" }, { replace: true });
   } catch (errorMessage) {
     useAppToaster({ message: `${errorMessage}`, type: "danger" });
   }

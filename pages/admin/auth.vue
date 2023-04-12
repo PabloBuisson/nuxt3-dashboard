@@ -16,6 +16,7 @@
 </template>
 
 <script setup lang="ts">
+import { RouteRecordName } from "vue-router";
 import { useAuthStore } from "~~/stores/auth-store";
 
 type FormData = {
@@ -29,6 +30,7 @@ interface Auth {
 
 const authStore = useAuthStore();
 const router = useRouter();
+const route = useRoute();
 
 let isLoading = false;
 let formIsValid = true;
@@ -101,24 +103,29 @@ async function onSubmit() {
         message: "Yay ! Sucessfully logged in.",
         type: "success",
       });
-    } catch (error: any) {
-      const errorMessage =
-        error?.message || "Failed to authenticate, try later.";
+    } catch (errorMessage) {
       useAppToaster({ message: `${errorMessage}`, type: "danger" });
     }
   } else {
     try {
       await authStore.signup(actionPayload);
       useAppToaster({ message: "Yay ! Welcome.", type: "success" });
-    } catch (error: any) {
-      const errorMessage =
-        error?.message || "Failed to authenticate, try later.";
+    } catch (errorMessage) {
       useAppToaster({ message: `${errorMessage}`, type: "danger" });
     }
   }
-  // const redirectUrl = "/" + ($route.query.redirect || "partners");
+
+  const redirectUrl = "/" + (route.query.redirect ?? "");
+  const lastPath: string = router.options.history.state.back as string;
+  const path: string =
+    redirectUrl != "/" ? redirectUrl : lastPath ?? redirectUrl;
   // $router.replace(redirectUrl);
-  router.replace({ path: "/" });
+  navigateTo({ path: "/", query: { forcerefresh: "true" } }, { replace: true });
+  // router.getRoutes().forEach((route) => {
+  //   if (route.name && route.name != "/") {
+  //     router.removeRoute(route.name as RouteRecordName);
+  //   }
+  // });
   isLoading = false;
 }
 </script>

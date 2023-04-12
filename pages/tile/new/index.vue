@@ -58,7 +58,7 @@ async function onSubmitted(tile: Tile) {
   try {
     const tileId = await store.registerTile(tile);
     useAppToaster({ message: "Yay ! Tile created.", type: "success" });
-    router.replace({ path: `/tile/${tileId}` });
+    navigateTo({ path: `/tile/${tileId}` }, { replace: true });
   } catch (errorMessage) {
     useAppToaster({ message: `${errorMessage}`, type: "danger" });
   }

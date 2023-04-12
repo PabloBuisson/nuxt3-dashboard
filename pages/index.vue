@@ -20,9 +20,23 @@ import { useTilesStore } from "~~/stores/tiles-store";
 definePageMeta({ title: "My Dashboard", layout: "default" });
 
 const store = useTilesStore();
+const route = useRoute();
+const router = useRouter();
+const forceRefresh = route.query.forcerefresh == "true";
+
 try {
-  await store.loadTiles();
+  await store.loadTiles({ forceRefresh });
 } catch (errorMessage) {
   useAppToaster({ message: `${errorMessage}`, type: "danger" });
+}
+
+// Delete query params in url
+
+const emptyQuery = {
+  param: [],
+};
+
+if (forceRefresh) {
+  router.replace({ query: emptyQuery });
 }
 </script>

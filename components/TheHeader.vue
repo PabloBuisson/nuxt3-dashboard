@@ -17,15 +17,25 @@
 
 <script setup lang="ts">
 import { useAuthStore } from "~~/stores/auth-store";
+import { useTilesStore } from "~~/stores/tiles-store";
 
 const authStore = useAuthStore();
+const tileStore = useTilesStore();
 const router = useRouter();
+const route = useRoute();
 
 const isLoggedIn = computed(() => authStore.isAuthenticated);
 
 function logout() {
   authStore.logout();
-  router.replace("/");
+  if (route.path === "/") {
+    tileStore.loadTiles({ forceRefresh: true });
+  } else {
+    navigateTo(
+      { path: "/", query: { forcerefresh: "true" } },
+      { replace: true }
+    );
+  }
 }
 </script>
 
