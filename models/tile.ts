@@ -23,6 +23,15 @@ export interface TileContentEvent {
   value: string;
 }
 
+export interface TileContentPost {
+  subtitle: string;
+  author: string;
+  content: string;
+  preview: string;
+  keywords: string[];
+  thumbnail: string;
+}
+
 export enum TileCategory {
   TODOS = "TODOS",
   TOREAD = "TOREAD",

@@ -1,13 +1,56 @@
 <template>
-  <NuxtLink :to="tileLink" class="post-preview">
-    <div class="inline-block bg-white shadow rounded border p-4">
-      <h2>{{ tile?.title }}</h2>
-      <slot />
-    </div>
-  </NuxtLink>
+  <article>
+    <h1>{{ tile?.title }}</h1>
+    <NuxtLink :to="tileLink" class="inline-block post-preview">
+      <div class="inline-block bg-white shadow rounded border p-4">
+        <template v-if="isGroup">
+          <template
+            v-if="
+              tileCategory === TileCategory.POST ||
+              tileCategory === TileCategory.TOREAD
+            "
+          >
+            <ul>
+              <li v-for="article of tileContent">
+                <NuxtLink :to="'/tile/' + article.id">
+                  <div class="flex justify-between gap-2">
+                    <h2>{{ article.title }}</h2>
+                    <span aria-hidden="true">→</span>
+                  </div>
+                </NuxtLink>
+              </li>
+            </ul>
+          </template>
+        </template>
+        <template v-else>
+          <template v-if="tileCategory === TileCategory.TODOS">
+            <ul>
+              <li v-for="todo of tileContent">
+                <div class="flex gap-2">
+                  <label class="cursor-pointer">{{ todo.key }}</label>
+                  <input
+                    disabled
+                    type="checkbox"
+                    :value="todo.value"
+                    :checked="todo.value"
+                    class="cursor-pointer"
+                  />
+                </div>
+              </li>
+            </ul>
+          </template>
+          <template v-else>
+            <p>By {{ tileContent.author }}</p>
+            <p>{{ tileContent.preview }}</p>
+          </template>
+        </template>
+      </div>
+    </NuxtLink>
+  </article>
 </template>
 
 <script setup lang="ts">
+import { TileCategory } from "~~/models/tile";
 import { useTilesStore } from "~~/stores/tiles-store";
 
 interface Props {
@@ -19,9 +62,31 @@ interface Props {
 const props = defineProps<Props>();
 const store = useTilesStore();
 
+let tileContent: any;
+let tileCategory: TileCategory;
+
 const tile = props.isGroup
   ? computed(() => store.groupTiles.find((tile) => tile.id === props.id))
   : computed(() => store.tiles.find((tile) => tile.id === props.id));
+
+tileCategory = tile.value!.category;
+
+if (!props.isGroup) {
+  if (tileCategory === TileCategory.TODOS) {
+    tileContent = tile.value?.content.slice(0, 3);
+  } else {
+    tileContent = tile.value?.content;
+  }
+}
+
+if (props.isGroup) {
+  if (
+    tileCategory === TileCategory.POST ||
+    tileCategory === TileCategory.TOREAD
+  ) {
+    tileContent = tile.value?.content.slice(0, 3);
+  }
+}
 
 const tileLink = computed(() => {
   return props.isGroup ? "/tile?category=" + props.id : "/tile/" + props.id;
