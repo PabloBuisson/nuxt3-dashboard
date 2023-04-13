@@ -1,28 +1,27 @@
 <template>
   <article>
-    <h1>{{ tile?.title }}</h1>
-    <NuxtLink :to="tileLink" class="inline-block post-preview">
+    <template v-if="isGroup">
+      <div class="flex justify-between gap-4">
+        <h1>{{ tile?.title }}</h1>
+        <NuxtLink v-if="isGroup" :to="tileLink">See all</NuxtLink>
+      </div>
       <div class="inline-block bg-white shadow rounded border p-4">
-        <template v-if="isGroup">
-          <template
-            v-if="
-              tileCategory === TileCategory.POST ||
-              tileCategory === TileCategory.TOREAD
-            "
-          >
-            <ul>
-              <li v-for="article of tileContent">
-                <NuxtLink :to="'/tile/' + article.id">
-                  <div class="flex justify-between gap-2">
-                    <h2>{{ article.title }}</h2>
-                    <span aria-hidden="true">→</span>
-                  </div>
-                </NuxtLink>
-              </li>
-            </ul>
-          </template>
-        </template>
-        <template v-else>
+        <ul>
+          <li v-for="article of tileContent">
+            <NuxtLink :to="'/tile/' + article.id">
+              <div class="flex justify-between gap-2">
+                <h2>{{ article.title }}</h2>
+                <span aria-hidden="true">→</span>
+              </div>
+            </NuxtLink>
+          </li>
+        </ul>
+      </div>
+    </template>
+    <template v-else>
+      <h1>{{ tile?.title }}</h1>
+      <NuxtLink :to="tileLink" class="inline-block post-preview">
+        <div class="inline-block bg-white shadow rounded border p-4">
           <template v-if="tileCategory === TileCategory.TODOS">
             <ul>
               <li v-for="todo of tileContent">
@@ -43,9 +42,9 @@
             <p>By {{ tileContent.author }}</p>
             <p>{{ tileContent.preview }}</p>
           </template>
-        </template>
-      </div>
-    </NuxtLink>
+        </div>
+      </NuxtLink>
+    </template>
   </article>
 </template>
 
@@ -55,6 +54,7 @@ import { useTilesStore } from "~~/stores/tiles-store";
 
 interface Props {
   id: string;
+  index: number;
   isGroup?: boolean;
   urlGroup?: string;
 }
@@ -80,12 +80,7 @@ if (!props.isGroup) {
 }
 
 if (props.isGroup) {
-  if (
-    tileCategory === TileCategory.POST ||
-    tileCategory === TileCategory.TOREAD
-  ) {
-    tileContent = tile.value?.content.slice(0, 3);
-  }
+  tileContent = tile.value?.content;
 }
 
 const tileLink = computed(() => {

@@ -1,8 +1,9 @@
 <template>
   <section class="flex flex-wrap gap-4">
     <TilePreview
-      v-for="tile in tilesToDisplay"
+      v-for="(tile, index) in tilesToDisplay"
       :key="tile.id"
+      :index="index"
       :id="tile.id"
       :is-group="tile.isGroup"
     />
@@ -19,7 +20,7 @@ const tiles = computed(() =>
     (tile) =>
       tile.category !== TileCategory.WEATHER &&
       tile.category !== TileCategory.EVENT &&
-      (tile.category === TileCategory.TODOS || tile.isPinned)
+      tile.isPinned
   )
 );
 const tilesToDisplay = computed(() => [...tiles.value, ...getTileGroup()]);
@@ -38,6 +39,11 @@ function getTileGroup(): Tile[] {
   const tilePosts = getTilesByCategory(TileCategory.POST, "Last posts");
   if (tilePosts) {
     tilesGroup = [...tilesGroup, tilePosts];
+  }
+
+  const tileTodos = getTilesByCategory(TileCategory.TODOS, "Last todos");
+  if (tileTodos) {
+    tilesGroup = [...tilesGroup, tileTodos];
   }
 
   return tilesGroup;

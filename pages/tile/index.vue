@@ -4,9 +4,10 @@
     <NuxtPage />
     <section v-if="tiles && tiles.length > 0" class="flex flex-wrap gap-4">
       <TilePreview
-        v-for="tile in tiles"
+        v-for="(tile, index) in tiles"
         :key="tile.id"
         :id="tile.id"
+        :index="index"
         :is-group="tile.isGroup"
       />
     </section>
