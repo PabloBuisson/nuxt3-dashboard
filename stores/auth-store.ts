@@ -103,11 +103,13 @@ export const useAuthStore = defineStore("auth", {
       const responseData = response.value;
 
       if (error.value) {
-        const errorMessage = new Error(
-          error.value.message ||
-            "Failed to authenticate. Check your login data."
-        );
-        throw errorMessage;
+        throw useErrorMessage({
+          error: error.value.status,
+          entity: "auth",
+          method: HttpRequestMethod.POST,
+          isAboutAuth: true,
+          errorMessageAuth: error.value.data.error.message,
+        });
       }
 
       this.saveDataAfterAuth(responseData!);

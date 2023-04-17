@@ -124,11 +124,11 @@ export const useTilesStore = defineStore("tiles", {
         });
 
       if (error.value) {
-        throw useErrorMessage(
-          error.value.status,
-          "the tile",
-          HttpRequestMethod.POST
-        );
+        throw useErrorMessage({
+          error: error.value.status,
+          entity: "the tile",
+          method: HttpRequestMethod.POST,
+        });
       }
 
       this.addTile({
@@ -175,11 +175,11 @@ export const useTilesStore = defineStore("tiles", {
       );
 
       if (error.value) {
-        throw useErrorMessage(
-          error.value.status,
-          "the tile",
-          HttpRequestMethod.PUT
-        );
+        throw useErrorMessage({
+          error: error.value.status,
+          entity: "the tile",
+          method: HttpRequestMethod.PUT,
+        });
       }
 
       this.editTile(tile);
@@ -219,11 +219,11 @@ export const useTilesStore = defineStore("tiles", {
       );
 
       if (error.value) {
-        throw useErrorMessage(
-          error.value.status,
-          "the tile",
-          HttpRequestMethod.DELETE
-        );
+        throw useErrorMessage({
+          error: error.value.status,
+          entity: "the tile",
+          method: HttpRequestMethod.DELETE,
+        });
       }
 
       this.clearTile(tileId);
@@ -252,11 +252,11 @@ export const useTilesStore = defineStore("tiles", {
       const responseData = response.value;
 
       if (error.value) {
-        throw useErrorMessage(
-          error.value.status,
-          "the tile",
-          HttpRequestMethod.GET
-        );
+        throw useErrorMessage({
+          error: error.value.status,
+          entity: "the tile",
+          method: HttpRequestMethod.GET,
+        });
       }
 
       const tile: Tile = {
@@ -301,11 +301,11 @@ export const useTilesStore = defineStore("tiles", {
       const responseData = response.value;
 
       if (error.value) {
-        throw useErrorMessage(
-          error.value.status,
-          "the tiles",
-          HttpRequestMethod.GET
-        );
+        throw useErrorMessage({
+          error: error.value.status,
+          entity: "the tiles",
+          method: HttpRequestMethod.GET,
+        });
       }
 
       const tiles: Tile[] = [];

@@ -103,18 +103,24 @@ async function onSubmit() {
         message: "Yay ! Sucessfully logged in.",
         type: "success",
       });
+      redirectToHomePage();
     } catch (errorMessage) {
       useAppToaster({ message: `${errorMessage}`, type: "danger" });
+      isLoading = false;
     }
   } else {
     try {
       await authStore.signup(actionPayload);
       useAppToaster({ message: "Yay ! Welcome.", type: "success" });
+      redirectToHomePage();
     } catch (errorMessage) {
       useAppToaster({ message: `${errorMessage}`, type: "danger" });
+      isLoading = false;
     }
   }
+}
 
+function redirectToHomePage() {
   const redirectUrl = "/" + (route.query.redirect ?? "");
   const lastPath: string = router.options.history.state.back as string;
   const path: string =
