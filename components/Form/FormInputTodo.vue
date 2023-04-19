@@ -35,6 +35,8 @@
 </template>
 
 <script setup lang="ts">
+import { ModelValue } from "~~/models/model-value";
+
 interface Props {
   idTodo: string;
   idCheckbox: string;

@@ -9,18 +9,20 @@
         v-bind="$attrs"
         :checked="type === 'checkbox' ? modelValue.value : undefined"
         :value="modelValue.value"
-        @paste="onFieldUpdate($event)"
+        @paste="onPaste($event)"
         @input="onFieldUpdate($event)"
         @focusin="clearValidity()"
+        @focusout="checkValidity($event)"
       />
       <textarea
         v-if="controlType === 'textarea'"
         rows="10"
         :id="id"
         :value="modelValue.value"
-        @paste="onFieldUpdate($event)"
+        @paste="onPaste($event)"
         @input="onFieldUpdate($event)"
         @focusin="clearValidity()"
+        @focusout="checkValidity($event)"
       ></textarea>
     </div>
     <div v-if="!isValid">
@@ -30,6 +32,8 @@
 </template>
 
 <script setup lang="ts">
+import { ModelValue, errorMessageByValidatorName } from "~~/models/model-value";
+
 interface Props {
   id: string;
   type?: string;
@@ -53,26 +57,60 @@ function clearValidity() {
   isValid.value = true;
 }
 
-function onFieldUpdate(event: Event) {
-  let eventValue;
-  if (props.controlType === "input") {
-    if (props.type === "checkbox") {
-      eventValue = (event.target as HTMLInputElement).checked;
-    } else {
-      eventValue = (event.target as HTMLInputElement).value;
-    }
-  } else {
-    eventValue = (event.target as HTMLTextAreaElement).value;
-  }
+function checkValidity(event: Event) {
+  const eventValue = getEventValue(event);
 
-  if (props.modelValue.validators?.includes("required")) {
-    if (eventValue === "") {
-      errorMessages.push("This field is required");
-      console.log("error in the form");
-      isValid.value = false;
-    }
+  if (props.modelValue.validators?.includes("required") && eventValue === "") {
+    errorMessages = [errorMessageByValidatorName["required"]];
+    isValid.value = false;
+  }
+}
+
+function clearValidtyWithoutChecking() {
+  if (errorMessages?.length > 0) {
+    errorMessages = [];
+  }
+  if (!isValid.value) {
+    isValid.value = true;
+  }
+}
+
+function onPaste(event: ClipboardEvent) {
+  const eventValue = event.clipboardData?.getData("text/plain");
+  if (eventValue) {
+    checkValidators(eventValue);
   }
 
   emit("update:modelValue", { value: eventValue, isValid: isValid.value });
+}
+
+function onFieldUpdate(event: Event) {
+  const eventValue = getEventValue(event);
+  checkValidators(eventValue);
+
+  emit("update:modelValue", { value: eventValue, isValid: isValid.value });
+}
+
+function checkValidators(eventValue: string | boolean) {
+  if (props.modelValue.validators?.includes("required")) {
+    if (eventValue === "") {
+      errorMessages = [errorMessageByValidatorName["required"]];
+      isValid.value = false;
+    } else {
+      clearValidtyWithoutChecking();
+    }
+  }
+}
+
+function getEventValue(event: Event): string | boolean {
+  if (props.controlType === "input") {
+    if (props.type === "checkbox") {
+      return (event.target as HTMLInputElement).checked;
+    } else {
+      return (event.target as HTMLInputElement).value;
+    }
+  } else {
+    return (event.target as HTMLTextAreaElement).value;
+  }
 }
 </script>
