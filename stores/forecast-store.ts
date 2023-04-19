@@ -116,6 +116,14 @@ export const useForecastStore = defineStore("forecast", {
         params: { name: searchTerm },
       });
 
+      if (error.value) {
+        throw useErrorMessage({
+          error: error.value.status,
+          entity: "the cities",
+          method: HttpRequestMethod.GET,
+        });
+      }
+
       return response.value!.results;
     },
     async selectCity(city: GeocodingGETResult) {
@@ -133,6 +141,14 @@ export const useForecastStore = defineStore("forecast", {
           daily: "weathercode,temperature_2m_max,temperature_2m_min",
         },
       });
+
+      if (error.value) {
+        throw useErrorMessage({
+          error: error.value.status,
+          entity: "the selected city",
+          method: HttpRequestMethod.GET,
+        });
+      }
 
       this.addSelectedCity({
         ...city,
