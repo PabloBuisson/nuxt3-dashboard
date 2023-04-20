@@ -6,6 +6,7 @@
         :tile="tile"
         @submit="onSubmitted"
         @delete="onDeleted"
+        @error="onError"
       />
     </div>
     <div v-else>
@@ -72,6 +73,10 @@ async function onSubmitted(tile: Tile) {
   } catch (errorMessage) {
     useAppToaster({ message: `${errorMessage}`, type: "danger" });
   }
+}
+
+function onError(errorMessage: string) {
+  useAppToaster({ message: `${errorMessage}`, type: "danger" });
 }
 
 async function onDeleted(tileId: string) {

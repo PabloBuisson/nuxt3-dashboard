@@ -45,7 +45,7 @@ interface Event {
 const props = defineProps<Props>();
 const authStore = useAuthStore();
 const isWriteRequestAllowed = computed(() => authStore.isAuthenticated);
-const emit = defineEmits(["submit"]);
+const emit = defineEmits(["submit", "error"]);
 const vDate = {
   mounted: (element: HTMLInputElement) => {
     element.addEventListener("keypress", function (event) {

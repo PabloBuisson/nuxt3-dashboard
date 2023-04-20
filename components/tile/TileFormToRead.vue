@@ -45,6 +45,7 @@
 </template>
 
 <script setup lang="ts">
+import { ModelValue } from "~~/models/model-value";
 import { Tile, TileCategory } from "~~/models/tile";
 import { useAuthStore } from "~~/stores/auth-store";
 
@@ -117,7 +118,7 @@ const formData: FormData = {
   },
 };
 
-const emit = defineEmits(["submit", "delete"]);
+const emit = defineEmits(["submit", "delete", "error"]);
 
 function validateForm() {
   formIsValid = true;
@@ -145,6 +146,10 @@ function getFormData() {
 function onSubmit() {
   validateForm();
   if (!formIsValid || !isWriteRequestAllowed) {
+    emit(
+      "error",
+      "Oops form is invalid ! Please check all the fields and try again"
+    );
     return;
   }
   getFormData();

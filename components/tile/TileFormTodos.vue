@@ -54,6 +54,7 @@
 </template>
 
 <script setup lang="ts">
+import { ModelValue } from "~~/models/model-value";
 import { Tile, TileCategory } from "~~/models/tile";
 import { useAuthStore } from "~~/stores/auth-store";
 
@@ -151,7 +152,7 @@ console.log("TileFormTodos l.111", [
   formData.todos,
 ]);
 
-const emit = defineEmits(["submit", "delete"]);
+const emit = defineEmits(["submit", "delete", "error"]);
 
 function addTodo() {
   const todosLength = content.value.length;
@@ -193,6 +194,13 @@ function deleteTodo(index: number) {
 
 function validateForm() {
   formIsValid = true;
+  for (const todo of formData.todos.value as TodoModelValue[]) {
+    if (!todo.input.isValid) {
+      formIsValid = false;
+      return;
+    }
+  }
+
   for (const field in formData) {
     if (!formData[field as keyof FormData].isValid) {
       formIsValid = false;
@@ -204,11 +212,15 @@ function validateForm() {
 function onSubmit() {
   validateForm();
   if (!formIsValid || !isWriteRequestAllowed) {
+    emit(
+      "error",
+      "Oops form is invalid ! Please check all the fields and try again"
+    );
     return;
   }
 
   const todosToSave = [];
-  for (const todo of formData.todos.value) {
+  for (const todo of formData.todos.value as TodoModelValue[]) {
     const todoToSave: Todo = {
       id: todo.id,
       key: todo.input.value,

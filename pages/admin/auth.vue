@@ -17,6 +17,7 @@
 
 <script setup lang="ts">
 import { RouteRecordName } from "vue-router";
+import { ModelValue } from "~~/models/model-value";
 import { useAuthStore } from "~~/stores/auth-store";
 
 type FormData = {
