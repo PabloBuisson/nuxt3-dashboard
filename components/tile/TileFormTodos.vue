@@ -7,6 +7,7 @@
         <FormInputTodo
           v-model="formData.todos.value[index]"
           :id-todo="todo.id"
+          :key="todo.id"
           :id-input="'input-todo' + todo.id"
           :id-checkbox="'checkbox-todo' + todo.id"
           @delete-todo="deleteTodo(index)"
@@ -155,8 +156,12 @@ console.log("TileFormTodos l.111", [
 const emit = defineEmits(["submit", "delete", "error"]);
 
 function addTodo() {
-  const todosLength = content.value.length;
-  const lastTodoId = content.value[todosLength - 1].id;
+  let lastTodoId: number = 1;
+  for (const todo of content.value as Todo[]) {
+    if (typeof +todo.id === "number" && +todo.id > lastTodoId) {
+      lastTodoId = +todo.id;
+    }
+  }
   const newTodo: Todo = {
     key: `Todo${+lastTodoId + 1}`,
     value: false,

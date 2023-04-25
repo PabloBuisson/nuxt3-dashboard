@@ -29,13 +29,13 @@ const TileFormTodos = resolveComponent("TileFormTodos");
 const TileFormToRead = resolveComponent("TileFormToRead");
 const TileFormBlogPost = resolveComponent("TileFormBlogPost");
 const TileFormForecast = resolveComponent("TileFormForecast");
-const TileFormAgenda = resolveComponent("TileFormAgenda");
+const TileFormEvent = resolveComponent("TileFormEvent");
 
 const categoryOptions = [
   { value: TileCategory.TODOS, component: TileFormTodos },
   { value: TileCategory.TOREAD, component: TileFormToRead },
   { value: TileCategory.POST, component: TileFormBlogPost },
-  { value: TileCategory.EVENT, component: TileFormAgenda },
+  { value: TileCategory.EVENT, component: TileFormEvent },
   { value: TileCategory.WEATHER, component: TileFormForecast },
 ];
 
