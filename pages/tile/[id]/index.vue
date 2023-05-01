@@ -4,6 +4,7 @@
       <component
         :is="selectedForm"
         :tile="tile"
+        class="px-10 pb-12"
         @submit="onSubmitted"
         @delete="onDeleted"
         @error="onError"

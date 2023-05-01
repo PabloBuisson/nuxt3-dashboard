@@ -1,16 +1,12 @@
 <template>
-  <div id="app-layout" class="bg-slate-600 h-screen">
-    <TheHeader/>
+  <div id="app-layout" class="bg-purple-900 h-full min-h-screen">
+    <TheHeader />
     <main>
-        <slot />
+      <slot />
     </main>
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts"></script>
 
-</script>
-
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

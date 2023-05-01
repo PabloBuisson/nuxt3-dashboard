@@ -1,10 +1,12 @@
 <template>
   <div>
-    <h1>Agenda tile</h1>
+    <h1 class="text-xl bg-purple-300 text-purple-900 py-2 px-3 rounded w-max mb-8">Agenda tile</h1>
     <form @submit.prevent="onSubmit">
       <FormInput id="events-title" v-model="formData.title">Title</FormInput>
-      <div v-for="(event, index) in content">
+      <div class="flex flex-col gap-4">
+        <h2 class="font-semibold text-purple-100">Events</h2>
         <FormInputEvent
+          v-for="(event, index) in content"
           v-model="formData.events.value[index]"
           :id-event="event.id"
           :key="event.id"

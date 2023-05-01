@@ -1,14 +1,23 @@
 <template>
-  <div>
-    <form @submit.prevent="onSubmit">
+  <div class="flex justify-center">
+    <form @submit.prevent="onSubmit" class="flex flex-col gap-2">
       <FormInput id="auth-email" v-model="formData.email" type="email"
-        >E-Mail Address</FormInput
+        >E-Mail address</FormInput
       >
       <FormInput id="auth-password" v-model="formData.password" type="password"
         >Password</FormInput
       >
-      <button type="submit">{{ submitButtonCaption }}</button>
-      <button type="button" @click="switchAuthMode">
+      <button
+        type="submit"
+        class="px-6 py-2 font-semibold text-lg bg-orange-300 text-orange-900 rounded shadow-sm"
+      >
+        {{ submitButtonCaption }}
+      </button>
+      <button
+        type="button"
+        @click="switchAuthMode"
+        class="px-6 py-2 font-semibold text-lg bg-purple-300 text-purple-900 rounded shadow-sm"
+      >
         {{ switchModeButtonCaption }}
       </button>
     </form>
