@@ -53,7 +53,7 @@ interface Props {
   tile?: Tile;
 }
 
-type FormData = {
+type TileFormData = {
   [propName in keyof Article]: ModelValue;
 };
 
@@ -81,7 +81,7 @@ const tile: Tile = props.tile ?? {
 let formIsValid = true;
 const isEditPage = computed(() => tile.id !== "");
 
-const formData: FormData = {
+const formData: TileFormData = {
   title: {
     value: props?.tile?.title ?? "",
     isValid: true,
@@ -123,7 +123,7 @@ const emit = defineEmits(["submit", "delete", "error"]);
 function validateForm() {
   formIsValid = true;
   for (const field in formData) {
-    if (!formData[field as keyof FormData].isValid) {
+    if (!formData[field as keyof TileFormData].isValid) {
       formIsValid = false;
       break;
     }
@@ -137,7 +137,7 @@ function getFormData() {
   for (const field in formData) {
     if (field != "title" && field != "isPinned") {
       (contentForm[field as keyof Article] as any) =
-        formData[field as keyof FormData].value;
+        formData[field as keyof TileFormData].value;
     }
   }
   tile.content = contentForm;

@@ -63,7 +63,7 @@ interface Props {
   tile?: Tile;
 }
 
-type FormData = {
+type TileFormData = {
   [propName in keyof Todos]: ModelValue;
 };
 
@@ -131,7 +131,7 @@ function initTodoForm() {
   }
 }
 
-const formData: FormData = {
+const formData: TileFormData = {
   title: {
     value: props?.tile?.title ?? "",
     isValid: true,
@@ -207,7 +207,7 @@ function validateForm() {
   }
 
   for (const field in formData) {
-    if (!formData[field as keyof FormData].isValid) {
+    if (!formData[field as keyof TileFormData].isValid) {
       formIsValid = false;
       break;
     }

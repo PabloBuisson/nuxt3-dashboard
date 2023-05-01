@@ -41,7 +41,8 @@
 </template>
 
 <script setup lang="ts">
-import { ModelValue, errorMessageByValidatorName } from "~~/models/model-value";
+import { Ref } from "@vue/runtime-dom";
+import { ModelValue } from "~~/models/model-value";
 
 interface Props {
   idEvent: string;
@@ -93,21 +94,27 @@ const vDate = {
   },
 };
 
-let errorMessages: string[] = [];
+let errorMessages: Ref<string[]> = ref([]);
+const errorRequiredMessageMap: Record<"label" | "input", string> = {
+  label: "Please enter the name of the event",
+  input: "Please enter the date of the event",
+};
 const isLabelValid = ref(true);
 const isInputValid = ref(true);
 
 const emit = defineEmits(["update:modelValue", "deleteEvent"]);
 
 function clearValidity(role: "label" | "input") {
-  errorMessages = [];
+  errorMessages.value = errorMessages.value.filter(
+    (message) => message !== errorRequiredMessageMap[role]
+  );
   setValidity(role, true);
 }
 
 function clearValidtyWithoutChecking(role: "label" | "input") {
-  if (errorMessages?.length > 0) {
-    errorMessages = [];
-  }
+  errorMessages.value = errorMessages.value.filter(
+    (message) => message !== errorRequiredMessageMap[role]
+  );
   setValidity(role, true);
 }
 
@@ -123,7 +130,16 @@ function checkValidity(event: Event, role: "label" | "input") {
   const eventValue = (event.target as HTMLInputElement).value;
 
   if (eventValue === "") {
-    errorMessages = [errorMessageByValidatorName["required"]];
+    if (
+      errorMessages.value.findIndex(
+        (message) => message === errorRequiredMessageMap[role]
+      ) === -1
+    ) {
+      errorMessages.value = [
+        ...errorMessages.value,
+        errorRequiredMessageMap[role],
+      ];
+    }
     setValidity(role, false);
   }
 }
@@ -148,7 +164,16 @@ function checkValidators(
   eventValue: string | boolean | undefined
 ) {
   if (eventValue === "") {
-    errorMessages = [errorMessageByValidatorName["required"]];
+    if (
+      errorMessages.value.findIndex(
+        (message) => message === errorRequiredMessageMap[role]
+      ) === -1
+    ) {
+      errorMessages.value = [
+        ...errorMessages.value,
+        errorRequiredMessageMap[role],
+      ];
+    }
     console.log("error in the form");
     setValidity(role, false);
   } else {

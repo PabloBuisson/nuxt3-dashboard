@@ -20,7 +20,7 @@ import { RouteRecordName } from "vue-router";
 import { ModelValue } from "~~/models/model-value";
 import { useAuthStore } from "~~/stores/auth-store";
 
-type FormData = {
+type AuthFormData = {
   [propName in keyof Auth]: ModelValue;
 };
 
@@ -38,7 +38,7 @@ let formIsValid = true;
 let mode = ref("login");
 let authForm = {} as Auth;
 let error = "";
-const formData: FormData = {
+const formData: AuthFormData = {
   email: {
     value: "",
     isValid: true,
@@ -69,7 +69,7 @@ function switchAuthMode() {
 function validateForm() {
   formIsValid = true;
   for (const field in formData) {
-    if (!formData[field as keyof FormData].isValid) {
+    if (!formData[field as keyof AuthFormData].isValid) {
       formIsValid = false;
       break;
     }
@@ -78,7 +78,7 @@ function validateForm() {
 
 function getFormData() {
   for (const field in formData) {
-    authForm[field as keyof Auth] = formData[field as keyof FormData].value;
+    authForm[field as keyof Auth] = formData[field as keyof AuthFormData].value;
   }
 }
 
