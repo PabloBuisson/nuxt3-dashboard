@@ -1,5 +1,5 @@
 <template>
-  <div class="inline-block bg-purple-800 p-4">
+  <div class="inline-block bg-white bg-opacity-5 p-4">
     <div v-if="selectedCity">
       <Icon
         size="150"

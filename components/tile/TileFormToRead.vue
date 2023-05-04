@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1 class="text-xl bg-purple-300 text-purple-900 py-2 px-3 rounded w-max mb-8">
-      Tile Bookmark
+      Bookmark Tile
     </h1>
     <form @submit.prevent="onSubmit" class="flex flex-col gap-2">
       <FormInput id="post-title" v-model="formData.title">Title</FormInput>
@@ -27,16 +27,16 @@
       <FormInput id="post-pin" type="checkbox" v-model="formData.isPinned"
         >Pin this post in dashboard ?</FormInput
       >
-      <div class="flex flex-wrap gap-4">
+      <div class="flex flex-wrap gap-8">
         <button
           v-if="isWriteRequestAllowed"
-          class="px-6 py-2 font-semibold text-lg bg-orange-300 text-orange-900 rounded shadow-sm"
+          class="grow max-w-xs px-6 py-2 font-semibold text-lg bg-orange-300 text-orange-900 rounded shadow-sm"
           type="submit"
         >
           Update
         </button>
         <button
-          class="px-6 py-2 font-semibold text-lg bg-red-300 text-red-900 rounded shadow-sm"
+          class="grow max-w-xs px-6 py-2 font-semibold text-lg bg-red-300 text-red-900 rounded shadow-sm"
           v-if="isEditPage && isWriteRequestAllowed"
           @click="onDelete"
           type="button"

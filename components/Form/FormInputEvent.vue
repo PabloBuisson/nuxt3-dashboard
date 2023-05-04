@@ -1,13 +1,13 @@
 <template>
   <div>
-    <div v-once class="flex gap-4">
-      <label :for="idInput">
+    <div v-once class="flex justify-end flex-wrap items-center w-full gap-4">
+      <label :for="idInput" class="basis-1/3 grow min-w-[12rem]">
         <input
           :id="idLabel"
           type="text"
           v-bind="$attrs"
           :value="modelValue.label.value"
-          class="bg-purple-100 border border-purple-300 font-semibold text-purple-900 rounded focus:ring-purple-500 focus:border-purple-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500"
+          class="bg-purple-100 w-full border border-purple-300 font-semibold text-purple-900 rounded focus:ring-purple-500 focus:border-purple-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500"
           @paste="onPaste($event)"
           @input="onFieldUpdate($event, 'label')"
           @focusin="clearValidity('label')"
@@ -19,7 +19,7 @@
         type="text"
         placeholder="DD/MM/YYYY"
         maxlength="10"
-        class="bg-purple-100 border border-purple-300 text-purple-900 rounded focus:ring-purple-500 focus:border-purple-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500"
+        class="w-full min-w-[12rem] basis-1/3 grow bg-purple-100 border border-purple-300 text-purple-900 rounded focus:ring-purple-500 focus:border-purple-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500"
         v-date
         @paste.prevent
         :value="modelValue.input.value"
@@ -29,7 +29,7 @@
         @focusout="checkValidity($event, 'input')"
       />
       <button
-        class="px-6 py-2 font-semibold text-sm bg-black bg-opacity-20 text-red-400 rounded"
+        class="grow-0 px-6 py-2 font-semibold text-sm bg-black bg-opacity-20 text-red-400 rounded"
         @click="deleteEvent()"
         type="button"
       >

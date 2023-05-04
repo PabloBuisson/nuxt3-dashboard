@@ -1,28 +1,59 @@
 <template>
   <div>
-    <h1 class="text-xl bg-purple-300 text-purple-900 py-2 px-3 rounded w-max mb-8">Agenda tile</h1>
-    <form @submit.prevent="onSubmit">
+    <h1
+      class="text-xl bg-purple-300 text-purple-900 py-2 px-3 rounded w-max mb-8"
+    >
+      Tile Events
+    </h1>
+    <form @submit.prevent="onSubmit" class="max-w-[35rem]">
       <FormInput id="events-title" v-model="formData.title">Title</FormInput>
       <div class="flex flex-col gap-4">
-        <h2 class="font-semibold text-purple-100">Events</h2>
-        <FormInputEvent
-          v-for="(event, index) in content"
-          v-model="formData.events.value[index]"
-          :id-event="event.id"
-          :key="event.id"
-          :id-label="'label-event' + event.id"
-          :id-input="'input-event' + event.id"
-          @delete-event="deleteEvent(index)"
-        />
+        <div class="flex flex-wrap gap-8 justify-start items-center">
+          <h2 class="font-semibold text-purple-100">Events</h2>
+          <!-- <button
+            class="px-6 py-2 font-semibold text-base bg-orange-300 text-orange-900 rounded shadow-sm"
+            @click="addEvent"
+            type="button"
+          >
+            Add event
+          </button> -->
+        </div>
+        <div class="flex flex-col gap-8">
+          <FormInputEvent
+            v-for="(event, index) in content"
+            v-model="formData.events.value[index]"
+            :id-event="event.id"
+            :key="event.id"
+            :id-label="'label-event' + event.id"
+            :id-input="'input-event' + event.id"
+            @delete-event="deleteEvent(index)"
+          />
+          <button
+            class="px-6 py-2 mx-auto font-semibold text-base bg-orange-300 text-orange-900 rounded shadow-sm"
+            @click="addEvent"
+            type="button"
+          >
+            Add event
+          </button>
+        </div>
       </div>
-      <button @click="addEvent" type="button">Add event</button>
-      <button
-        v-if="isWriteRequestAllowed"
-        class="px-4 py-2 font-semibold bg-cyan-500 text-white rounded shadow-sm"
-        type="submit"
-      >
-        Update
-      </button>
+      <div class="flex flex-wrap gap-8 mt-12">
+        <button
+          v-if="isWriteRequestAllowed"
+          class="grow max-w-xs px-6 py-2 font-semibold text-lg bg-orange-300 text-orange-900 rounded shadow-sm"
+          type="submit"
+        >
+          Update
+        </button>
+        <button
+          class="grow max-w-xs px-6 py-2 font-semibold text-lg bg-red-300 text-red-900 rounded shadow-sm"
+          v-if="isEditPage && isWriteRequestAllowed"
+          @click="onDelete"
+          type="button"
+        >
+          Delete
+        </button>
+      </div>
     </form>
   </div>
 </template>
@@ -60,6 +91,7 @@ type TileFormData = {
 const props = defineProps<Props>();
 const authStore = useAuthStore();
 const isWriteRequestAllowed = computed(() => authStore.isAuthenticated);
+const isEditPage = computed(() => tile.id !== "");
 let formIsValid = true;
 
 const tile: Tile = props.tile ?? {
@@ -122,7 +154,7 @@ const formData: TileFormData = {
   },
 };
 
-const emit = defineEmits(["submit", "error"]);
+const emit = defineEmits(["submit", "delete", "error"]);
 
 function addEvent() {
   let lastEventId: number = 1;
@@ -209,6 +241,11 @@ function deleteEvent(index: number) {
   content.value = content.value.filter(
     (event: Event) => event.id !== eventToDelete.id
   );
+}
+
+function onDelete() {
+  if (!isWriteRequestAllowed) return;
+  emit("delete", tile.id);
 }
 </script>
 
