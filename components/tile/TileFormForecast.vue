@@ -3,17 +3,7 @@
     <h1>Weather Forecast Tile</h1>
     <form @submit.prevent="onSubmit">
       <input v-model="tile.title" />
-      <label for="autocomplete-city">How is the weather in your city ?</label>
-      <input type="text" id="autocomplete-city" v-model="searchTerm" />
-      <ul v-show="searchCities.length > 0">
-        <li
-          v-for="city in searchCities"
-          :key="city.id"
-          @click="selectCity(city)"
-        >
-          {{ city.name }} ({{ city.country }})
-        </li>
-      </ul>
+      <FormAutocomplete @selected="selectCity($event)" />
       <div v-if="selectedCity">
         <p>
           Selected city : {{ selectedCity.name }} ({{ selectedCity.country }})
@@ -23,8 +13,7 @@
         </p>
         <p>Current time : {{ selectedCity.current_weather?.time }}</p>
         <p>Current weather : {{ selectedCity.current_weather?.weathercode }}</p>
-        <ForecastWeekSummary :daily="selectedCity.daily"
-        />
+        <ForecastWeekSummary :daily="selectedCity.daily" />
       </div>
       <button
         v-if="isWriteRequestAllowed"
@@ -64,8 +53,6 @@ const tile: Tile = props.tile ?? {
 };
 
 const store = useForecastStore();
-const searchTerm = ref("");
-const searchCities: Ref<GeocodingGETResult[]> = ref([]);
 const selectedCity: Ref<
   (GeocodingGETResult & ForecastGETResponse) | undefined
 > = ref(tile.content);
@@ -77,24 +64,7 @@ if (tile.content) {
 
 const emit = defineEmits(["submit"]);
 
-watch(searchTerm, (newSearch) => {
-  if (searchTerm.value.length < 3) {
-    searchCities.value = [];
-  } else {
-    fetchCities();
-  }
-});
-
-async function fetchCities() {
-  try {
-    searchCities.value = await store.fetchCities(searchTerm.value);
-  } catch (errorMessage) {
-    useAppToaster({ message: `${errorMessage}`, type: "danger" });
-  }
-}
-
 async function selectCity(city: GeocodingGETResult) {
-  searchTerm.value = "";
   try {
     const response = await store.selectCity(city);
     selectedCity.value = { ...city, ...response.value } as GeocodingGETResult &
@@ -111,5 +81,3 @@ function onSubmit() {
   emit("submit", tile);
 }
 </script>
-
-<style lang="scss" scoped></style>
