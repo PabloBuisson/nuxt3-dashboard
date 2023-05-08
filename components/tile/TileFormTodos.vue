@@ -1,13 +1,19 @@
 <template>
   <div>
-    <h1>Todos Tile</h1>
-    <form @submit.prevent="onSubmit">
+    <h1
+      class="text-xl bg-purple-300 text-purple-900 py-2 px-3 rounded w-max mb-8"
+    >
+      Todos Tile
+    </h1>
+    <form @submit.prevent="onSubmit" class="max-w-xl">
       <FormInput id="todos-title" v-model="formData.title">Title</FormInput>
-      <div v-for="(todo, index) in content">
+      <h2 class="font-semibold text-purple-100 mb-4">Todos</h2>
+      <div class="flex flex-col gap-8 mb-16">
         <FormInputTodo
+          v-for="(todo, index) in content"
           v-model="formData.todos.value[index]"
           :id-todo="todo.id"
-          :key="todo.id"
+          :key="index"
           :id-input="'input-todo' + todo.id"
           :id-checkbox="'checkbox-todo' + todo.id"
           @delete-todo="deleteTodo(index)"
@@ -24,32 +30,35 @@
         <button v-if="index > 0" @click="deleteTodo(index)" type="button">
           Delete
         </button> -->
+        <button
+          class="px-6 py-2 mx-auto font-semibold text-base bg-orange-300 text-orange-900 rounded shadow-sm"
+          @click="addTodo"
+          type="button"
+        >
+          Add todo
+        </button>
       </div>
-      <button
-        class="px-4 py-2 font-semibold bg-green-700 text-white rounded shadow-sm"
-        @click="addTodo"
-        type="button"
-      >
-        Add todo
-      </button>
+
       <FormInput id="post-pin" type="checkbox" v-model="formData.isPinned"
         >Pin this post in dashboard ?</FormInput
       >
-      <button
-        v-if="isWriteRequestAllowed"
-        class="px-4 py-2 font-semibold bg-cyan-500 text-white rounded shadow-sm"
-        type="submit"
-      >
-        Update
-      </button>
-      <button
-        class="px-4 py-2 font-semibold bg-red-700 text-white rounded shadow-sm"
-        v-if="isEditPage && isWriteRequestAllowed"
-        @click="onDelete"
-        type="button"
-      >
-        Delete
-      </button>
+      <div class="flex flex-wrap gap-8 mt-8">
+        <button
+          v-if="isWriteRequestAllowed"
+          class="grow max-w-xs px-6 py-2 font-semibold text-lg bg-orange-300 text-orange-900 rounded shadow-sm"
+          type="submit"
+        >
+          Update
+        </button>
+        <button
+          class="grow max-w-xs px-6 py-2 font-semibold text-lg bg-red-300 text-red-900 rounded shadow-sm"
+          v-if="isEditPage && isWriteRequestAllowed"
+          @click="onDelete"
+          type="button"
+        >
+          Delete
+        </button>
+      </div>
     </form>
   </div>
 </template>

@@ -1,36 +1,49 @@
 <template>
   <div>
-    <div v-once class="input-control">
-      <label :for="idCheckbox">
+    <div class="flex justify-start flex-wrap items-center w-full gap-3">
+      <div class="flex items-start gap-2 grow">
         <input
-          :id="idInput"
-          type="text"
+          :id="idCheckbox"
+          type="checkbox"
+          class="w-6 h-6 shrink-0 mt-3 accent-purple-500"
+          :value="modelValue.checkbox.value"
+          :checked="modelValue.checkbox.value"
           v-bind="$attrs"
-          :value="modelValue.input.value"
-          @paste="onPaste($event)"
-          @input="onFieldUpdate($event, 'text')"
-          @focusin="clearValidity()"
-          @focusout="checkValidity($event)"
+          @input="onFieldUpdate($event, 'checkbox')"
         />
-      </label>
-      <input
-        :id="idCheckbox"
-        type="checkbox"
-        :value="modelValue.checkbox.value"
-        :checked="modelValue.checkbox.value"
-        v-bind="$attrs"
-        @input="onFieldUpdate($event, 'checkbox')"
-      />
+        <div class="flex flex-col">
+          <label :for="idCheckbox" class="basis-1/2 grow min-w-[10rem] mx-auto">
+            <input
+              v-once
+              :id="idInput"
+              type="text"
+              v-bind="$attrs"
+              class="bg-purple-900 w-full border border-purple-900 text-purple-100 rounded focus-visible:outline-none focus:ring-purple-700 focus:border-purple-700 invalid:border-red-400 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500"
+              :value="modelValue.input.value"
+              required
+              @paste="onPaste($event)"
+              @input="onFieldUpdate($event, 'text')"
+              @focusin="clearValidity()"
+              @focusout="checkValidity($event)"
+            />
+          </label>
+          <div
+            v-if="!isFieldValid"
+            class="mt-1 min-h-[2.5rem] bg-red-300 rounded p-2.5"
+          >
+            <p class="text-red-900 text-sm" v-for="message of errorMessages">
+              {{ message }}
+            </p>
+          </div>
+        </div>
+      </div>
       <button
-        class="px-4 py-2 font-semibold bg-red-700 text-white rounded shadow-sm"
+        class="grow-0 ml-8 px-6 py-2 font-semibold text-sm bg-black bg-opacity-20 text-red-400 rounded"
         @click="deleteTodo()"
         type="button"
       >
         Delete
       </button>
-    </div>
-    <div v-if="!isValid">
-      <p v-for="message of errorMessages">{{ message }}</p>
     </div>
   </div>
 </template>
@@ -51,21 +64,21 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 let errorMessages: string[] = [];
-let isValid = ref(true);
+let isFieldValid = ref(true);
 
 const emit = defineEmits(["update:modelValue", "deleteTodo"]);
 
 function clearValidity() {
   errorMessages = [];
-  isValid.value = true;
+  isFieldValid.value = true;
 }
 
 function clearValidtyWithoutChecking() {
   if (errorMessages?.length > 0) {
     errorMessages = [];
   }
-  if (!isValid.value) {
-    isValid.value = true;
+  if (!isFieldValid.value) {
+    isFieldValid.value = true;
   }
 }
 
@@ -74,7 +87,7 @@ function checkValidity(event: Event) {
 
   if (eventValue === "") {
     errorMessages = [errorMessageByValidatorName["required"]];
-    isValid.value = false;
+    isFieldValid.value = false;
   }
 }
 
@@ -102,7 +115,7 @@ function checkValidators(
     if (eventValue === "") {
       errorMessages = [errorMessageByValidatorName["required"]];
       console.log("error in the form");
-      isValid.value = false;
+      isFieldValid.value = false;
     } else {
       clearValidtyWithoutChecking();
     }
@@ -121,7 +134,7 @@ function updateModelValue(
     modelValueUpdated = {
       id: props.modelValue.id,
       checkbox: { value: checkboxValue, isValid: true },
-      input: { value: eventValue, isValid: isValid.value },
+      input: { value: eventValue, isValid: isFieldValid.value },
     } as { id: string; input: ModelValue; checkbox: ModelValue };
   } else if (type === "checkbox") {
     const inputValue = (
@@ -129,7 +142,7 @@ function updateModelValue(
     )?.value;
     modelValueUpdated = {
       id: props.modelValue.id,
-      input: { value: inputValue, isValid: isValid.value },
+      input: { value: inputValue, isValid: isFieldValid.value },
       checkbox: { value: eventValue, isValid: true },
     } as { id: string; input: ModelValue; checkbox: ModelValue };
   }

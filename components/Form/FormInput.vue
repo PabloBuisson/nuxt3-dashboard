@@ -13,7 +13,7 @@
       ></label>
       <input
         v-if="controlType === 'input'"
-        class="bg-purple-100 border border-purple-300 text-purple-900 rounded focus:ring-purple-500 focus:border-purple-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500"
+        class="bg-purple-100 border border-purple-300 text-purple-900 rounded focus:ring-purple-500 focus:border-purple-500 invalid:border-red-400 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500"
         :class="{
           'w-full': type !== 'checkbox',
           'mb-2 w-4 h-4 accent-purple-500': type === 'checkbox',
@@ -23,6 +23,7 @@
         v-bind="$attrs"
         :checked="type === 'checkbox' ? modelValue.value : undefined"
         :value="modelValue.value"
+        :required="isRequired"
         @paste="onPaste($event)"
         @input="onFieldUpdate($event)"
         @focusin="clearValidity()"
@@ -30,10 +31,11 @@
       />
       <textarea
         v-if="controlType === 'textarea'"
-        class="bg-purple-100 border border-purple-300 text-purple-900 rounded focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500"
+        class="bg-purple-100 border border-purple-300 text-purple-900 rounded focus:ring-purple-500 focus:border-purple-500 invalid:border-red-400 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500"
         rows="2"
         :id="id"
         :value="modelValue.value"
+        :required="isRequired"
         @paste="onPaste($event)"
         @input="onFieldUpdate($event)"
         @focusin="clearValidity()"
@@ -69,6 +71,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 let errorMessages: string[] = [];
 let isValid = ref(true);
+const isRequired = computed(() => props.modelValue.validators?.includes("required"));
 
 const emit = defineEmits(["update:modelValue"]);
 
