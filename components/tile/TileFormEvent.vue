@@ -191,8 +191,8 @@ function addEventToModelValue(event: Event) {
 
 function validateForm() {
   formIsValid = true;
-  for (const todo of formData.events.value as EventModelValue[]) {
-    if (!todo.label.isValid || !todo.input.isValid) {
+  for (const event of formData.events.value as EventModelValue[]) {
+    if (!event.label.isValid || !event.input.isValid) {
       formIsValid = false;
       return;
     }

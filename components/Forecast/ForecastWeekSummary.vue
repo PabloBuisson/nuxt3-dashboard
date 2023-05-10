@@ -5,13 +5,15 @@
         <span>{{ useDateLabel(day, DateSeparator.Dash) }}</span>
         <span class="flex items-center gap-2">
           <div :title="useWeatherLabel(daily.weathercode[index])">
-            <span class="sr-only">{{ useWeatherLabel(daily.weathercode[index]) }}</span>
-            <Icon size="30" :name="useWeatherIcon(daily.weathercode[index])" />
+            <span class="sr-only">{{
+              useWeatherLabel(daily.weathercode[index])
+            }}</span>
+            <Icon size="30" class="text-orange-200" :name="useWeatherIcon(daily.weathercode[index])" />
           </div>
-          <span
-            >{{ daily.temperature_2m_max[index] }}/{{
+          <span>
+            {{ daily.temperature_2m_max[index] }}/{{
               daily.temperature_2m_min[index]
-            }}
+            }} °C
           </span>
         </span>
       </li>

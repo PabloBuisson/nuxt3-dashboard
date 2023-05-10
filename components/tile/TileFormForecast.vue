@@ -1,33 +1,57 @@
 <template>
-  <div>
-    <h1>Weather Forecast Tile</h1>
+  <div class="max-w-4xl">
+    <h1
+      class="text-xl bg-purple-300 text-purple-900 py-2 px-3 rounded w-max mb-8"
+    >
+      Weather Forecast Tile
+    </h1>
     <form @submit.prevent="onSubmit">
-      <input v-model="tile.title" />
+      <FormInput id="forecast-title" v-model="formData.title">Title</FormInput>
       <FormAutocomplete @selected="selectCity($event)" />
-      <div v-if="selectedCity">
-        <p>
-          Selected city : {{ selectedCity.name }} ({{ selectedCity.country }})
-        </p>
-        <p>
-          Current temperature : {{ selectedCity.current_weather?.temperature }}
-        </p>
-        <p>Current time : {{ selectedCity.current_weather?.time }}</p>
-        <p>Current weather : {{ selectedCity.current_weather?.weathercode }}</p>
-        <ForecastWeekSummary :daily="selectedCity.daily" />
+      <template v-if="selectedCity">
+        <div class="rounded mt-8 px-4 pt-4 pb-2 bg-purple-300 text-purple-900">
+          <h2 class="font-bold text-xl mb-4">
+            Selected city : {{ selectedCity.name }} ({{ selectedCity.country }})
+          </h2>
+
+          <h3 class="font-semibold text-lg mb-1">Main informations</h3>
+          <ul class="list-disc list-inside mb-4">
+            <li>Current temperature : {{ selectedCity.current_weather?.temperature }} °C</li>
+            <li>Current time : {{ selectedCity.current_weather?.time }}</li>
+            <li>Current weather : {{ useWeatherLabel(selectedCity.current_weather?.weathercode) }}</li>
+          </ul>
+        </div>
+        <div
+          class="rounded mt-2 p-4 text-purple-100 border-2 border-purple-400"
+        >
+          <h3 class="font-semibold text-lg mb-2">Week summary</h3>
+          <ForecastWeekSummary class="max-w-xs" :daily="selectedCity.daily" />
+        </div>
+      </template>
+      <div class="flex flex-wrap gap-8 mt-12">
+        <button
+          v-if="isWriteRequestAllowed"
+          class="grow max-w-xs px-6 py-2 font-semibold text-lg bg-orange-300 text-orange-900 rounded shadow-sm"
+          type="submit"
+        >
+          Update
+        </button>
+        <button
+          class="grow max-w-xs px-6 py-2 font-semibold text-lg bg-red-300 text-red-900 rounded shadow-sm"
+          v-if="isEditPage && isWriteRequestAllowed"
+          @click="onDelete"
+          type="button"
+        >
+          Delete
+        </button>
       </div>
-      <button
-        v-if="isWriteRequestAllowed"
-        class="px-4 py-2 font-semibold bg-cyan-500 text-white rounded shadow-sm"
-        type="submit"
-      >
-        Update
-      </button>
     </form>
   </div>
 </template>
 
 <script setup lang="ts">
 import { Ref } from "vue";
+import { ModelValue } from "~~/models/model-value";
 import { Tile, TileCategory } from "~~/models/tile";
 import { useAuthStore } from "~~/stores/auth-store";
 import {
@@ -41,9 +65,21 @@ interface Props {
   tile?: Tile;
 }
 
-const props = defineProps<Props>();
+interface Forecast {
+  title: string;
+  city: any;
+}
+
+type TileFormData = {
+  [propName in keyof Forecast]: ModelValue;
+};
+
 const authStore = useAuthStore();
+const store = useForecastStore();
+
+const props = defineProps<Props>();
 const isWriteRequestAllowed = computed(() => authStore.isAuthenticated);
+const isEditPage = computed(() => tile.id !== "");
 const tile: Tile = props.tile ?? {
   id: "",
   title: "",
@@ -51,18 +87,29 @@ const tile: Tile = props.tile ?? {
   content: undefined,
   dateCreation: new Date(),
 };
-
-const store = useForecastStore();
 const selectedCity: Ref<
   (GeocodingGETResult & ForecastGETResponse) | undefined
 > = ref(tile.content);
 let selectedCityDTO: GeocodingGETResult;
+let formIsValid = true;
 
 if (tile.content) {
   await selectCity(tile.content);
 }
 
-const emit = defineEmits(["submit"]);
+const formData: TileFormData = {
+  title: {
+    value: props?.tile?.title ?? "",
+    isValid: true,
+    validators: ["required"],
+  },
+  city: {
+    value: props?.tile?.content ?? null,
+    isValid: true,
+  },
+};
+
+const emit = defineEmits(["submit", "delete", "error"]);
 
 async function selectCity(city: GeocodingGETResult) {
   try {
@@ -75,9 +122,32 @@ async function selectCity(city: GeocodingGETResult) {
   }
 }
 
+function validateForm() {
+  for (const field in formData) {
+    if (!formData[field as keyof TileFormData].isValid) {
+      formIsValid = false;
+      break;
+    }
+  }
+}
+
 function onSubmit() {
-  if (!isWriteRequestAllowed) return;
+  validateForm();
+  if (!formIsValid || !isWriteRequestAllowed) {
+    emit(
+      "error",
+      "Oops form is invalid ! Please check all the fields and try again"
+    );
+    return;
+  }
+
+  tile.title = formData.title.value;
   tile.content = selectedCityDTO;
   emit("submit", tile);
+}
+
+function onDelete() {
+  if (!isWriteRequestAllowed) return;
+  emit("delete", tile.id);
 }
 </script>

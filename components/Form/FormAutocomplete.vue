@@ -1,7 +1,9 @@
 <template>
-  <div>
-    <label class="block text-purple-100 font-semibold mb-2" for="autocomplete-city"
-      >How is the weather in your city ?</label
+  <div class="relative">
+    <label
+      class="block text-purple-100 font-semibold mb-2"
+      for="autocomplete-city"
+      >From which city you want to display forecast informations ?</label
     >
     <input
       type="text"
@@ -11,7 +13,7 @@
     />
     <div
       v-show="searchCities.length > 0"
-      class="bg-purple-50 mt-2 text-purple-900 rounded"
+      class="bg-purple-50 mt-2 text-purple-900 rounded absolute w-full"
     >
       <ul class="divide-y divide-purple-200 cursor-pointer rounded">
         <li
@@ -52,7 +54,8 @@ watch(searchTerm, (newSearch) => {
 
 async function fetchCities() {
   try {
-    searchCities.value = await store.fetchCities(searchTerm.value);
+    const cities = await store.fetchCities(searchTerm.value);
+    searchCities.value = cities.slice(0, 5);
   } catch (errorMessage) {
     useAppToaster({ message: `${errorMessage}`, type: "danger" });
   }

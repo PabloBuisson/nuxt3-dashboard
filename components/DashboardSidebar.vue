@@ -6,7 +6,7 @@
         :name="useWeatherIcon(selectedCity.current_weather.weathercode)"
       />
       <h2 class="text-2xl inline-block mr-4">
-        {{ selectedCity.current_weather.temperature }} C°
+        {{ selectedCity.current_weather.temperature }} °C
       </h2>
       <NuxtLink :to="'/tile/' + tileWeather.id">Modify</NuxtLink>
       <div class="bg-white shadow rounded border block p-4">
