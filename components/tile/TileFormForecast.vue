@@ -14,11 +14,11 @@
             Selected city : {{ selectedCity.name }} ({{ selectedCity.country }})
           </h2>
 
-          <h3 class="font-semibold text-lg mb-1">Main informations</h3>
+          <h3 class="font-semibold text-lg mb-1">Current weather</h3>
           <ul class="list-disc list-inside mb-4">
-            <li>Current temperature : {{ selectedCity.current_weather?.temperature }} °C</li>
-            <li>Current time : {{ selectedCity.current_weather?.time }}</li>
-            <li>Current weather : {{ useWeatherLabel(selectedCity.current_weather?.weathercode) }}</li>
+            <li>Current temperature : {{ currentTemperature }}</li>
+            <li>Current weather : <span class="italic">{{ currentWeather }}</span></li>
+            <li>Last update : {{ lastUpdateDate }}</li>
           </ul>
         </div>
         <div
@@ -78,6 +78,24 @@ const authStore = useAuthStore();
 const store = useForecastStore();
 
 const props = defineProps<Props>();
+const dateFormat = "dddd DD MMMM hh:mm:ss";
+const lastUpdateDate = computed(() => {
+  if (selectedCity.value) {
+    return useDateFormat(selectedCity.value.current_weather?.time, dateFormat, {
+      locales: "en-US",
+    }).value;
+  }
+});
+const currentWeather = computed(() => {
+  if (selectedCity.value) {
+    return useWeatherLabel(selectedCity.value.current_weather?.weathercode);
+  }
+});
+const currentTemperature = computed(() => {
+  if (selectedCity.value) {
+    return `${selectedCity.value.current_weather?.temperature} °C`;
+  }
+});
 const isWriteRequestAllowed = computed(() => authStore.isAuthenticated);
 const isEditPage = computed(() => tile.id !== "");
 const tile: Tile = props.tile ?? {
