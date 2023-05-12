@@ -20,11 +20,14 @@
 import { useRoute } from "vue-router"; // workaround bug #6646
 import { useAppToaster } from "~~/composables/useAppToaster";
 import { Tile, TileCategory } from "~~/models/tile";
+import { useForecastStore } from "~~/stores/forecast-store";
 import { useTilesStore } from "~~/stores/tiles-store";
 
 const route = useRoute();
 const router = useRouter();
-const store = useTilesStore();
+const tilesStore = useTilesStore();
+const forecastStore = useForecastStore();
+
 let selectedForm: any;
 const TileFormTodos = resolveComponent("TileFormTodos");
 const TileFormToRead = resolveComponent("TileFormToRead");
@@ -49,7 +52,7 @@ if (tileId) {
 
   if (process.server) {
     try {
-      await store.fetchTile(tileId as string);
+      await tilesStore.fetchTile(tileId as string);
       getTileFromStore();
     } catch (errorMessage) {
       useAppToaster({ message: `${errorMessage}`, type: "danger" });
@@ -58,7 +61,7 @@ if (tileId) {
 }
 
 function getTileFromStore() {
-  tile = store.tiles.find((tile) => tile.id === tileId) as Tile;
+  tile = tilesStore.tiles.find((tile) => tile.id === tileId) as Tile;
   if (tile != null) {
     selectedForm = categoryOptions.find(
       (option) => option.value === tile.category
@@ -68,7 +71,7 @@ function getTileFromStore() {
 
 async function onSubmitted(tile: Tile) {
   try {
-    await store.modifyTile(tile);
+    await tilesStore.modifyTile(tile);
     useAppToaster({ message: "Yay ! Tile updated.", type: "success" });
     router.push({ path: "/" });
   } catch (errorMessage) {
@@ -80,10 +83,13 @@ function onError(errorMessage: string) {
   useAppToaster({ message: `${errorMessage}`, type: "danger" });
 }
 
-async function onDeleted(tileId: string) {
+async function onDeleted(tileId: string, settings: { isWeatherTile: boolean }) {
   try {
-    await store.deleteTile(tileId);
+    await tilesStore.deleteTile(tileId);
     useAppToaster({ message: "Tile deleted", type: "success" });
+    if (settings?.isWeatherTile) {
+      forecastStore.clearStore();
+    }
     navigateTo({ path: "/" }, { replace: true });
   } catch (errorMessage) {
     useAppToaster({ message: `${errorMessage}`, type: "danger" });

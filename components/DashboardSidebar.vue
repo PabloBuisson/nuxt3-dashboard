@@ -1,6 +1,6 @@
 <template>
   <div class="inline-block bg-white bg-opacity-5 p-4">
-    <div v-if="selectedCity">
+    <div v-if="selectedCity && tileWeather">
       <Icon
         size="150"
         :name="useWeatherIcon(selectedCity.current_weather.weathercode)"

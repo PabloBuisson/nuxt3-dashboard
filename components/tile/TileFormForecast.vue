@@ -17,7 +17,9 @@
           <h3 class="font-semibold text-lg mb-1">Current weather</h3>
           <ul class="list-disc list-inside mb-4">
             <li>Current temperature : {{ currentTemperature }}</li>
-            <li>Current weather : <span class="italic">{{ currentWeather }}</span></li>
+            <li>
+              Current weather : <span class="italic">{{ currentWeather }}</span>
+            </li>
             <li>Last update : {{ lastUpdateDate }}</li>
           </ul>
         </div>
@@ -166,6 +168,6 @@ function onSubmit() {
 
 function onDelete() {
   if (!isWriteRequestAllowed) return;
-  emit("delete", tile.id);
+  emit("delete", tile.id, { isWeatherTile: true });
 }
 </script>
