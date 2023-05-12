@@ -1,16 +1,26 @@
 <template>
-  <div>
-    <h1>My new tile</h1>
-    <label for="select-type">What type of tile you want to create ?</label>
-    <select id="select-type" v-model="selectedCategory">
-      <option
+  <div class="px-10 pb-12">
+    <h1 class="text-2xl font-semibold text-purple-300 mb-8">New tile</h1>
+    <label class="text-purple-100 font-semibold block mb-2" for="select-type"
+      >What type of tile you want to create ?</label
+    >
+    <div class="flex flex-wrap gap-4 mb-12">
+      <button
+        @click="onClickCategory(option.value)"
+        class="bg-orange-200 text-orange-900 px-4 py-2 rounded flex gap-2"
         v-for="option in categoryOptions"
-        :key="option.value"
-        :value="option.value"
       >
-        {{ option.text }}
-      </option>
-    </select>
+        <input
+          type="radio"
+          class="accent-orange-600"
+          :id="option.text"
+          :value="option.value"
+          v-model="selectedCategory"
+        />
+        <label class="cursor-pointer" :for="option.text">{{ option.text }}</label>
+      </button>
+    </div>
+
     <component :is="selectedForm" @submit="onSubmitted" />
   </div>
 </template>
@@ -53,6 +63,10 @@ watch(selectedCategory, (newType) => {
     (option) => option.value === selectedCategory.value
   )?.component;
 });
+
+function onClickCategory(optionValue: string) {
+  selectedCategory.value = optionValue;
+}
 
 async function onSubmitted(tile: Tile) {
   try {
