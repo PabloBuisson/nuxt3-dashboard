@@ -3,7 +3,7 @@
     <h1
       class="text-xl bg-purple-300 text-purple-900 py-2 px-3 rounded w-max mb-8"
     >
-      Tile Events
+      Events Tile
     </h1>
     <form @submit.prevent="onSubmit" class="max-w-[35rem]">
       <FormInput id="events-title" v-model="formData.title">Title</FormInput>

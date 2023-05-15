@@ -7,17 +7,19 @@
     <div class="flex flex-wrap gap-4 mb-12">
       <button
         @click="onClickCategory(option.value)"
-        class="bg-orange-200 text-orange-900 px-4 py-2 rounded flex gap-2"
+        class="bg-orange-200 w-[10rem] shadow-sm text-orange-900 px-4 pt-3 pb-4 rounded flex flex-col gap-2"
         v-for="option in categoryOptions"
       >
+        <label class="cursor-pointer" :for="option.text">{{
+          option.text
+        }}</label>
         <input
           type="radio"
-          class="accent-orange-600"
+          class="accent-orange-600 cursor-pointer"
           :id="option.text"
           :value="option.value"
           v-model="selectedCategory"
         />
-        <label class="cursor-pointer" :for="option.text">{{ option.text }}</label>
       </button>
     </div>
 
@@ -42,7 +44,7 @@ const categoryOptions = [
   { text: "Todos", value: TileCategory.TODOS, component: TileFormTodos },
   { text: "To read", value: TileCategory.TOREAD, component: TileFormToRead },
   { text: "Blog post", value: TileCategory.POST, component: TileFormBlogPost },
-  { text: "Agenda", value: TileCategory.EVENT, component: TileFormEvent },
+  { text: "Events", value: TileCategory.EVENT, component: TileFormEvent },
 ];
 
 if (store.tiles && store.tiles.length > 0) {
