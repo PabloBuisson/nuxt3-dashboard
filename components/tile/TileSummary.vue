@@ -1,6 +1,6 @@
 <template>
-  <div class="bg-white shadow rounded border inline-block p-4">
-    <ul>
+  <div class="bg-purple-800 shadow text-purple-200 rounded inline-block py-4 px-6">
+    <ul class="list-disc list-inside">
       <li>{{ eventsTodayMessage }}</li>
       <li>{{ todoDoneMessage }}</li>
       <li>{{ articlesToReadMessage }}</li>

@@ -1,14 +1,22 @@
 <template>
   <div class="inline-block">
-    <h2 class="text-2xl">Upcoming events</h2>
-    <div
-      v-if="events && events.length > 0"
-      class="bg-white shadow rounded border inline-block p-4"
-    >
+    <h2 class="text-xl text-purple-200 mb-4">Upcoming events</h2>
+    <div v-if="events && events.length > 0">
       <ul>
-        <li v-for="event in events" :key="event.id">
-          <NuxtLink :to="'/tile/' + event.tileId"
-            >{{ event.key }} = {{ useDateLabel(event.value) }}
+        <li
+          class="rounded border-l-4 border-orange-300 pl-4 mb-2 text-purple-100"
+          v-for="event in events"
+          :key="event.id"
+        >
+          <NuxtLink :to="'/tile/' + event.tileId">
+            <div class="flex items-center gap-4 justify-between">
+              <span>
+                {{ event.key }}
+              </span>
+              <span>
+                {{ useDateLabel(event.value) }}
+              </span>
+            </div>
           </NuxtLink>
         </li>
       </ul>

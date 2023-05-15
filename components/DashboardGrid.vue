@@ -1,11 +1,12 @@
 <template>
-  <section class="flex flex-wrap gap-4">
+  <section class="flex flex-wrap gap-8">
     <TilePreview
       v-for="(tile, index) in tilesToDisplay"
       :key="tile.id"
       :index="index"
       :id="tile.id"
       :is-group="tile.isGroup"
+      class="basis-1/3 grow"
     />
   </section>
 </template>

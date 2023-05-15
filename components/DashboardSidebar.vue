@@ -1,5 +1,5 @@
 <template>
-  <div class="inline-block bg-white bg-opacity-5 p-4">
+  <div class="inline-block bg-purple-800 rounded p-4">
     <div v-if="selectedCity && tileWeather">
       <Icon
         size="150"

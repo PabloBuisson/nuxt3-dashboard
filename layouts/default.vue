@@ -1,5 +1,5 @@
 <template>
-  <div id="app-layout" class="bg-purple-900 h-full min-h-screen">
+  <div id="app-layout" class="bg-purple-900 h-full min-h-screen pb-16">
     <TheHeader />
     <main>
       <slot />

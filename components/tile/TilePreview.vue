@@ -1,11 +1,13 @@
 <template>
   <article>
     <template v-if="isGroup">
-      <div class="flex justify-between gap-4">
-        <h1>{{ tile?.title }}</h1>
-        <NuxtLink v-if="isGroup" :to="tileLink">See all</NuxtLink>
+      <div class="flex justify-between w-full gap-4">
+        <h1 class="text-purple-200 font-semibold mb-2">{{ tile?.title }}</h1>
+        <NuxtLink class="text-orange-200" v-if="isGroup" :to="tileLink"
+          >see all</NuxtLink
+        >
       </div>
-      <div class="inline-block bg-white shadow rounded border p-4">
+      <div class="inline-block bg-purple-800 text-purple-200 w-full shadow rounded p-4">
         <ul>
           <li v-for="article of tileContent">
             <NuxtLink :to="'/tile/' + article.id">
@@ -19,27 +21,26 @@
       </div>
     </template>
     <template v-else>
-      <h1>{{ tile?.title }}</h1>
-      <NuxtLink :to="tileLink" class="inline-block post-preview">
-        <div class="inline-block bg-white shadow rounded border p-4">
+      <h1 class="text-purple-200 font-semibold mb-2">{{ tile?.title }}</h1>
+      <NuxtLink :to="tileLink" class="inline-block w-full post-preview">
+        <div class="inline-block bg-purple-800 text-purple-200 w-full shadow rounded p-4">
           <template v-if="tileCategory === TileCategory.TODOS">
             <ul>
               <li v-for="todo of tileContent">
                 <div class="flex gap-2">
                   <label class="cursor-pointer">{{ todo.key }}</label>
                   <input
-                    disabled
                     type="checkbox"
                     :value="todo.value"
                     :checked="todo.value"
-                    class="cursor-pointer"
+                    class="cursor-pointer accent-purple-900 default:bg-purple-900 default:ring-0"
                   />
                 </div>
               </li>
             </ul>
           </template>
           <template v-else>
-            <p>By {{ tileContent.author }}</p>
+            <p class="font-semibold">By {{ tileContent.author }}</p>
             <p>{{ tileContent.preview }}</p>
           </template>
         </div>

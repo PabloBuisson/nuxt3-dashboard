@@ -1,14 +1,14 @@
 <template>
-  <header class="p-5 mb-10">
+  <header class="p-8 mb-10 bg-purple-800">
     <nav>
-      <ul class="flex gap-5">
-        <NuxtLink to="/"><h1 class="text-4xl">My Dashboard</h1></NuxtLink>
+      <ul class="flex flex-wrap items-center gap-5">
+        <NuxtLink to="/"><h1 class="text-2xl">DASHBOARD</h1></NuxtLink>
         <template v-if="!isLoggedIn">
           <li><NuxtLink to="/admin/auth"> LogIn </NuxtLink></li>
           <li><NuxtLink to="/admin/auth"> SignUp </NuxtLink></li>
         </template>
         <template v-else>
-          <li><button type="button" @click="logout">Log Out</button></li>
+          <li><button class="bg-purple-400 rounded px-4 py-2" type="button" @click="logout">Log Out</button></li>
         </template>
       </ul>
     </nav>
