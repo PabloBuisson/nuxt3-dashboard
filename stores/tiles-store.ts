@@ -332,7 +332,6 @@ export const useTilesStore = defineStore("tiles", {
       const responseData = response.value;
 
       if (error.value) {
-        console.log(error.value)
         throw useErrorMessage({
           error: error.value.status,
           entity: "the tiles",

@@ -39,9 +39,15 @@ interface DailyProp {
 
 interface Props {
   daily: DailyProp;
+  count?: number;
 }
 
 const props = defineProps<Props>();
+
+if (props.daily && props.count) {
+  props.daily.time = props.daily.time.slice(0, props.count);
+  props.daily.weathercode = props.daily.weathercode.slice(0, props.count);
+}
 
 const dateLabel = computed((day) => useDateLabel(day));
 </script>

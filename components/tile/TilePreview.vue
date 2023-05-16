@@ -40,7 +40,7 @@
             </ul>
           </template>
           <template v-else>
-            <p class="font-semibold">By {{ tileContent.author }}</p>
+            <p class="font-semibold mb-1">By {{ tileContent.author }}</p>
             <p>{{ tileContent.preview }}</p>
           </template>
         </div>

@@ -2,7 +2,7 @@
   <header class="p-8 mb-10 bg-purple-800">
     <nav>
       <ul class="flex flex-wrap items-center gap-5">
-        <NuxtLink to="/"><h1 class="text-2xl">DASHBOARD</h1></NuxtLink>
+        <NuxtLink to="/"><h1 class="text-2xl text-purple-300 uppercase">Dashboard</h1></NuxtLink>
         <template v-if="!isLoggedIn">
           <li><NuxtLink to="/admin/auth"> LogIn </NuxtLink></li>
           <li><NuxtLink to="/admin/auth"> SignUp </NuxtLink></li>

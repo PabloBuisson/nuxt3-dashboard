@@ -4,8 +4,9 @@
     <div v-if="events && events.length > 0">
       <ul>
         <li
-          class="rounded border-l-4 border-orange-300 pl-4 mb-2 text-purple-100"
-          v-for="event in events"
+          class="relative pl-4 text-purple-100 mb-2 before:content[''] before:top-0 before:left-0 before:right-0 before:absolute before:h-full before:w-1 before:rounded"
+          :class="getColorBorder(index)"
+          v-for="(event, index) in events"
           :key="event.id"
         >
           <NuxtLink :to="'/tile/' + event.tileId">
@@ -13,7 +14,7 @@
               <span>
                 {{ event.key }}
               </span>
-              <span>
+              <span class="text-sm">
                 {{ useDateLabel(event.value) }}
               </span>
             </div>
@@ -22,7 +23,11 @@
       </ul>
     </div>
     <div v-else>
-      <p>No upcoming event !</p>
+      <p
+        class="relative pl-4 text-purple-100 before:content[''] before:top-0 before:left-0 before:right-0 before:absolute before:h-full before:w-1 before:rounded before:bg-purple-600"
+      >
+        No upcoming event !
+      </p>
     </div>
   </div>
 </template>
@@ -77,6 +82,19 @@ const events = computed(() => {
 
   return upcomingEvents;
 });
+
+function getColorBorder(index: number): string {
+  switch (index) {
+    case 0:
+      return "before:bg-purple-600";
+    case 1:
+      return "before:bg-orange-400";
+    case 2:
+      return "before:bg-blue-500";
+    default:
+      return "before:bg-purple-600";
+  }
+}
 </script>
 
 <style scoped></style>

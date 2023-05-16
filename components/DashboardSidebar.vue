@@ -1,39 +1,68 @@
 <template>
-  <div class="inline-block bg-purple-800 rounded p-4">
-    <div v-if="selectedCity && tileWeather">
+  <div class="relative inline-block bg-purple-800 rounded p-4">
+    <div class="mt-[20px]" v-if="selectedCity && tileWeather">
       <Icon
-        size="150"
+        size="200"
+        class="absolute top-[-140px] left-0 right-0 mx-auto text-orange-200"
         :name="useWeatherIcon(selectedCity.current_weather.weathercode)"
       />
-      <h2 class="text-2xl inline-block mr-4">
-        {{ selectedCity.current_weather.temperature }} °C
-      </h2>
-      <NuxtLink :to="'/tile/' + tileWeather.id">Modify</NuxtLink>
-      <div class="bg-white shadow rounded border block p-4">
-        <p>
+      <div class="flex items-center justify-center flex-wrap gap-2 mb-4">
+        <h2 class="text-2xl text-purple-200 font-bold inline-block mr-4">
+          {{ selectedCity.current_weather.temperature }} °C
+        </h2>
+        <NuxtLink class="text-orange-200" :to="'/tile/' + tileWeather.id"
+          >Modify</NuxtLink
+        >
+      </div>
+      <div class="text-center">
+        <p class="text-purple-100 font-light">
           {{ useWeatherLabel(selectedCity.current_weather.weathercode) }}
         </p>
-        <p>{{ selectedCity.name }}, {{ selectedCity.country_code }}</p>
+        <p class="text-purple-200 font-semibold">
+          {{ selectedCity.name }}, {{ selectedCity.country_code }}
+        </p>
       </div>
-      <div v-if="selectedCity.daily?.time?.length > 0">
-        <h3>Week's forecast</h3>
-        <ForecastWeekSummary :daily="selectedCity.daily" />
+      <div class="mt-8 mb-8" v-if="selectedCity.daily?.time?.length > 0">
+        <div class="flex justify-between gap-2">
+          <h3 class="text-purple-200 font-semibold text-lg mb-2">
+            Week's forecast
+          </h3>
+          <NuxtLink class="text-orange-200" :to="tileForecastLink"
+            >see all</NuxtLink
+          >
+        </div>
+        <ForecastWeekSummary
+          class="text-purple-100"
+          :count="3"
+          :daily="selectedCity.daily"
+        />
       </div>
     </div>
     <template v-if="tilesEvent && tilesEvent.length > 0">
       <div v-for="tileEvent in tilesEvent" :key="tileEvent.id">
-        <h2 class="text-2xl inline-block">{{ tileEvent.title }}</h2>
-        <NuxtLink :to="'/tile/' + tileEvent.id">Modify</NuxtLink>
-        <div
-          v-if="tileEvent.content?.length > 0"
-          class="bg-white shadow rounded border inline-block p-4"
-        >
-          <ul>
-            <li v-for="event in tileEvent.content" :key="event">
-              {{ event.key }} {{ useDateLabel(event.value) }}
-            </li>
-          </ul>
+        <div class="flex items-center flex-wrap gap-4 mt-4 mb-2">
+          <h3 class="text-purple-200 font-semibold text-lg">
+            {{ tileEvent.title }}
+          </h3>
+          <NuxtLink class="text-orange-200" :to="'/tile/' + tileEvent.id"
+            >Modify</NuxtLink
+          >
         </div>
+        <ul v-if="tileEvent.content?.length > 0">
+          <li
+            v-for="(event, index) in tileEvent.content"
+            class="relative flex items-center gap-4 justify-between pl-4 text-purple-100 mb-2 before:content[''] before:top-0 before:left-0 before:right-0 before:absolute before:h-full before:w-1 before:rounded"
+            :class="getColorBorder(index)"
+            :key="event"
+          >
+            <span>
+              {{ event.key }}
+            </span>
+            <span class="text-sm">
+              {{ useDateLabel(event.value) }}
+            </span>
+          </li>
+        </ul>
       </div>
     </template>
   </div>
@@ -92,4 +121,22 @@ const tilesEvent = computed(() => {
 
   return futureEventTiles;
 });
+
+const tileForecastLink = computed(() => {
+  if (!tileWeather) return "";
+  return "/tile/" + tileWeather.value.id;
+});
+
+function getColorBorder(index: number): string {
+  switch (index) {
+    case 0:
+      return "before:bg-purple-600";
+    case 1:
+      return "before:bg-orange-400";
+    case 2:
+      return "before:bg-blue-500";
+    default:
+      return "before:bg-purple-600";
+  }
+}
 </script>
