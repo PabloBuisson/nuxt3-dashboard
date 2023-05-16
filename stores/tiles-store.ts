@@ -232,6 +232,12 @@ export const useTilesStore = defineStore("tiles", {
       const config = useRuntimeConfig();
       const authStore = useAuthStore();
 
+      const optionsRequest = {
+        method: "GET",
+        baseURL: config.public.apiBase,
+        params: { auth: authStore.token },
+      };
+
       // public tiles for demonstration purpose
       let entryPoint: string = `tiles/${tileId}.json`;
       if (authStore.isAuthenticated) {
@@ -245,8 +251,18 @@ export const useTilesStore = defineStore("tiles", {
         error,
         refresh,
       } = await useFetch<Tile>(entryPoint, {
-        baseURL: config.public.apiBase,
-        params: { auth: authStore.token },
+        ...optionsRequest,
+        async onRequest({ request, options }) {
+          if (!authStore.isTokenValid) {
+            await authStore.refreshToken();
+            options.params = { auth: authStore.token };
+          }
+        },
+        async onResponseError({ request, response, options }) {
+          if (response.status === 401) {
+            await authStore.refreshToken();
+          }
+        },
       });
 
       const responseData = response.value;
@@ -280,6 +296,11 @@ export const useTilesStore = defineStore("tiles", {
 
       const config = useRuntimeConfig();
       const authStore = useAuthStore();
+      const optionsRequest = {
+        method: "GET",
+        baseURL: config.public.apiBase,
+        params: { auth: authStore.token },
+      };
 
       // public tiles for demonstration purpose
       let entryPoint: string = `tiles.json`;
@@ -294,13 +315,24 @@ export const useTilesStore = defineStore("tiles", {
         error,
         refresh,
       } = await useFetch<FirebaseGETResponse>(entryPoint, {
-        baseURL: config.public.apiBase,
-        params: { auth: authStore.token },
+        ...optionsRequest,
+        async onRequest({ request, options }) {
+          if (!authStore.isTokenValid) {
+            await authStore.refreshToken();
+            options.params = { auth: authStore.token };
+          }
+        },
+        async onResponseError({ request, response, options }) {
+          if (response.status === 401) {
+            await authStore.refreshToken();
+          }
+        },
       });
 
       const responseData = response.value;
 
       if (error.value) {
+        console.log(error.value)
         throw useErrorMessage({
           error: error.value.status,
           entity: "the tiles",

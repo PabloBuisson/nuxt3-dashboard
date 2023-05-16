@@ -1,6 +1,8 @@
 import { useToast, ToastType } from "tailvue";
 
 export const useAppToaster = (props: AppToasterProps) => {
+  if (process.server) return;
+
   const $toast = useToast();
   const commonParameters = {
     message: props.message,

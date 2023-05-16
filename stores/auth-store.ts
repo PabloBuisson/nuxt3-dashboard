@@ -50,8 +50,9 @@ export const useAuthStore = defineStore("auth", {
       return state._token;
     },
     isTokenValid(_): boolean {
-      const tokenExpiration =
-        localStorage.getItem(ItemCache.tokenExpiration) ?? "0";
+      const tokenExpiration = process.client
+        ? localStorage.getItem(ItemCache.tokenExpiration) ?? "0"
+        : "0";
       const expiresIn = parseInt(tokenExpiration) - new Date().getTime();
 
       return expiresIn > 0;
