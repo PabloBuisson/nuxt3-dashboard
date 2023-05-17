@@ -3,7 +3,7 @@
     <section class="basis-2/4">
       <h1 class="text-3xl text-purple-200 mb-4">{{ today }}</h1>
       <div class="flex flex-wrap gap-8 items-start mb-8">
-        <TileSummary />
+        <TileSummary class="basis-1/2" />
         <TileUpcomingEvents />
       </div>
       <DashboardGrid />
@@ -17,7 +17,7 @@
         </div>
       </NuxtLink>
     </section>
-    <section class="grow min-w-[18rem]">
+    <section class="grow min-w-[18rem] mt-[80px]">
       <DashboardSidebar />
     </section>
   </div>

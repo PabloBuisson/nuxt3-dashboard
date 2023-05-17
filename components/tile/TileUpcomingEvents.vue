@@ -1,10 +1,10 @@
 <template>
-  <div class="inline-block">
+  <div class="inline-block min-w-[10rem]">
     <h2 class="text-xl text-purple-200 mb-4">Upcoming events</h2>
     <div v-if="events && events.length > 0">
       <ul>
         <li
-          class="relative pl-4 text-purple-100 mb-2 before:content[''] before:top-0 before:left-0 before:right-0 before:absolute before:h-full before:w-1 before:rounded"
+          class="relative pl-4 text-purple-100 mb-1 before:content[''] before:top-0 before:left-0 before:right-0 before:absolute before:h-full before:w-1 before:rounded"
           :class="getColorBorder(index)"
           v-for="(event, index) in events"
           :key="event.id"

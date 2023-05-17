@@ -1,5 +1,5 @@
 <template>
-  <section class="flex flex-wrap gap-8">
+  <section class="flex flex-wrap gap-16">
     <TilePreview
       v-for="(tile, index) in tilesToDisplay"
       :key="tile.id"

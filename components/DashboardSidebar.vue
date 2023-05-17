@@ -1,9 +1,9 @@
 <template>
   <div class="relative inline-block bg-purple-800 rounded p-4">
-    <div class="mt-[20px]" v-if="selectedCity && tileWeather">
+    <div class="mt-[80px]" v-if="selectedCity && tileWeather">
       <Icon
         size="200"
-        class="absolute top-[-140px] left-0 right-0 mx-auto text-orange-200"
+        class="absolute top-[-100px] left-0 right-0 mx-auto text-orange-200"
         :name="useWeatherIcon(selectedCity.current_weather.weathercode)"
       />
       <div class="flex items-center justify-center flex-wrap gap-2 mb-4">
@@ -51,7 +51,7 @@
         <ul v-if="tileEvent.content?.length > 0">
           <li
             v-for="(event, index) in tileEvent.content"
-            class="relative flex items-center gap-4 justify-between pl-4 text-purple-100 mb-2 before:content[''] before:top-0 before:left-0 before:right-0 before:absolute before:h-full before:w-1 before:rounded"
+            class="relative flex items-center gap-4 justify-between pl-4 text-purple-100 mb-1 before:content[''] before:top-0 before:left-0 before:right-0 before:absolute before:h-full before:w-1 before:rounded"
             :class="getColorBorder(index)"
             :key="event"
           >

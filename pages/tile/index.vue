@@ -1,6 +1,8 @@
 <template>
-  <div>
-    <h1>My tiles</h1>
+  <div class="px-10 pb-12">
+    <h1 class="text-2xl font-semibold text-purple-300 mb-8">
+      {{ tilesTitle }}
+    </h1>
     <NuxtPage />
     <section v-if="tiles && tiles.length > 0" class="flex flex-wrap gap-4">
       <TilePreview
@@ -15,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-import { Tile } from "~~/models/tile";
+import { Tile, TileCategory } from "~~/models/tile";
 import { useTilesStore } from "~~/stores/tiles-store";
 
 definePageMeta({ title: "My tiles", middleware: ["auth"] });
@@ -24,6 +26,19 @@ const route = useRoute();
 const store = useTilesStore();
 
 const tilesCategory = route.query.category;
+const tilesTitle = computed(() => {
+  if (!tilesCategory) return "";
+  switch (tilesCategory) {
+    case TileCategory.TODOS:
+      return "Todos tiles";
+    case TileCategory.POST:
+      return "Blog post tiles";
+    case TileCategory.TOREAD:
+      return "Bookmark tiles";
+    default:
+      return "Tiles";
+  }
+});
 let tiles: Tile[];
 
 if (tilesCategory) {
@@ -37,6 +52,8 @@ if (tilesCategory) {
       useAppToaster({ message: `${errorMessage}`, type: "danger" });
     }
   }
+} else {
+  navigateTo({ path: "/" }, { replace: true });
 }
 
 function getTilesFromStore() {
