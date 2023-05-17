@@ -2,7 +2,7 @@
   <article class="w-full min-w-[10rem]">
     <template v-if="isGroup">
       <div class="flex justify-between w-full gap-4">
-        <h1 class="text-purple-200 font-semibold mb-2">{{ tile?.title }}</h1>
+        <h1 class="text-purple-200 text-lg mb-2">{{ tile?.title }}</h1>
         <NuxtLink class="text-orange-200" v-if="isGroup" :to="tileLink"
           >see all</NuxtLink
         >
@@ -21,7 +21,7 @@
       </div>
     </template>
     <template v-else>
-      <h1 class="text-purple-200 font-semibold mb-2">{{ tile?.title }}</h1>
+      <h1 class="text-purple-200 text-lg mb-2">{{ tile?.title }}</h1>
       <NuxtLink :to="tileLink" class="inline-block w-full h-full post-preview">
         <div class="inline-block h-full bg-purple-800 text-purple-200 w-full shadow rounded p-4">
           <template v-if="tileCategory === TileCategory.TODOS">

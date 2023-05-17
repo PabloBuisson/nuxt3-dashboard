@@ -8,6 +8,15 @@
       :is-group="tile.isGroup"
       class="basis-1/3 grow"
     />
+    <NuxtLink
+      class="inline-block basis-1/3 grow min-w-[10rem] mt-8 p-8 border-4 border-dashed border-purple-300 text-purple-300"
+      to="tile/new"
+    >
+      <div class="flex flex-col items-center justify-center gap-4">
+        <span class="aria-hidden:true text-4xl">+</span>
+        <span class="font-semibold text-lg">Add a tile</span>
+      </div>
+    </NuxtLink>
   </section>
 </template>
 

@@ -1,5 +1,7 @@
 <template>
-  <div class="relative inline-block bg-purple-800 rounded p-4">
+  <div
+    class="relative inline-block w-full max-w-xl h-max bg-purple-800 rounded px-4 pb-6 pt-4"
+  >
     <div class="mt-[80px]" v-if="selectedCity && tileWeather">
       <Icon
         size="200"
@@ -39,7 +41,11 @@
       </div>
     </div>
     <template v-if="tilesEvent && tilesEvent.length > 0">
-      <div v-for="tileEvent in tilesEvent" :key="tileEvent.id">
+      <div
+        class="[&:not(:last-child)]:mb-8"
+        v-for="tileEvent in tilesEvent"
+        :key="tileEvent.id"
+      >
         <div class="flex items-center flex-wrap gap-4 mt-4 mb-2">
           <h3 class="text-purple-200 font-semibold text-lg">
             {{ tileEvent.title }}
@@ -97,9 +103,8 @@ const tilesEvent = computed(() => {
   const futureEventTiles: Tile[] = [];
 
   if (eventTiles && eventTiles.length > 0) {
-    const eventsToDisplay = [];
-
     for (const tile of eventTiles) {
+      const eventsToDisplay = [];
       if (tile.content && tile.content.length > 0) {
         for (const event of tile.content) {
           // only keep future dates and today dates
@@ -111,11 +116,11 @@ const tilesEvent = computed(() => {
             eventsToDisplay.push(event);
           }
         }
-        futureEventTiles.push({
-          ...tile,
-          content: eventsToDisplay,
-        });
       }
+      futureEventTiles.push({
+        ...tile,
+        content: eventsToDisplay,
+      });
     }
   }
 

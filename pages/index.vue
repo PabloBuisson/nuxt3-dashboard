@@ -1,23 +1,14 @@
 <template>
-  <div class="flex flex-wrap justify-between gap-8 pr-4 pl-8">
-    <section class="basis-2/4">
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16 pr-4 pl-8">
+    <section class="col-span-2">
       <h1 class="text-3xl text-purple-200 mb-4">{{ today }}</h1>
-      <div class="flex flex-wrap gap-8 items-start mb-8">
-        <TileSummary class="basis-1/2" />
-        <TileUpcomingEvents />
+      <div class="flex flex-wrap gap-16 items-start mb-8">
+        <TileSummary class="basis-1/3 grow" />
+        <TileUpcomingEvents class="basis-1/3 grow" />
       </div>
       <DashboardGrid />
-      <NuxtLink
-        class="inline-block mt-8 p-8 border-4 border-dashed border-purple-300 text-purple-300"
-        to="tile/new"
-      >
-        <div class="flex flex-col items-center justify-center gap-4">
-          <span class="aria-hidden:true text-4xl">+</span>
-          <span>Add a tile</span>
-        </div>
-      </NuxtLink>
     </section>
-    <section class="grow min-w-[18rem] mt-[80px]">
+    <section class="grow min-w-[18rem] mt-[80px] col-span-1 flex justify-end">
       <DashboardSidebar />
     </section>
   </div>

@@ -1,5 +1,5 @@
 <template>
-  <div class="min-w-[10rem] bg-purple-800 shadow text-purple-200 rounded inline-block py-4 px-6">
+  <div class="min-w-[10rem] bg-purple-800 shadow text-purple-200 rounded inline-block pt-4 pb-5 px-6">
     <ul>
       <li class="relative pl-6 text-purple-100 before:content[''] before:top-0 before:bottom-0 before:my-auto before:left-0 before:right-0 before:absolute before:h-2 before:w-2 before:rounded-full before:border-2 before:border-purple-400">{{ eventsTodayMessage }}</li>
       <li class="relative pl-6 text-purple-100 before:content[''] before:top-0 before:bottom-0 before:my-auto before:left-0 before:right-0 before:absolute before:h-2 before:w-2 before:rounded-full before:border-2 before:border-blue-400">{{ todoDoneMessage }}</li>
