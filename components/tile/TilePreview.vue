@@ -1,19 +1,30 @@
 <template>
-  <article class="w-full min-w-[10rem]">
+  <article class="w-full min-w-[10rem] max-w-xl">
     <template v-if="isGroup">
       <div class="flex justify-between w-full gap-4">
         <h1 class="text-purple-200 text-lg mb-2">{{ tile?.title }}</h1>
-        <NuxtLink class="text-orange-200" v-if="isGroup" :to="tileLink"
+        <NuxtLink class="text-orange-300" v-if="isGroup" :to="tileLink"
           >see all</NuxtLink
         >
       </div>
-      <div class="inline-block h-full bg-purple-800 text-purple-200 w-full shadow rounded p-4">
+      <div
+        class="inline-block h-[9.75rem] overflow-hidden bg-purple-800 text-purple-200 w-full shadow rounded p-3"
+      >
         <ul>
-          <li v-for="article of tileContent">
+          <li
+            class="bg-purple-700 [&:not(:last-child)]:mb-[0.375rem] rounded"
+            v-for="article of tileContent"
+          >
             <NuxtLink :to="'/tile/' + article.id">
-              <div class="flex justify-between gap-2">
-                <h2>{{ article.title }}</h2>
-                <span aria-hidden="true">→</span>
+              <div class="flex justify-between items-stretch gap-2">
+                <h2 class="px-3 py-2">{{ article.title }}</h2>
+                <div class="flex items-center justify-center px-2 bg-purple-900 rounded-r">
+                  <Icon
+                    aria-hidden="true"
+                    size="20"
+                    name="fluent:arrow-right-24-filled"
+                  />
+                </div>
               </div>
             </NuxtLink>
           </li>
@@ -21,27 +32,43 @@
       </div>
     </template>
     <template v-else>
-      <h1 class="text-purple-200 text-lg mb-2">{{ tile?.title }}</h1>
+      <div class="flex items-center gap-2 mb-2">
+        <h1 class="text-purple-200 text-lg">{{ tile?.title }}</h1>
+        <AppIconLink
+          :link="tileLink"
+          link-label="Modify"
+          icon-size="14"
+          icon-name="fluent:edit-24-filled"
+        />
+      </div>
       <NuxtLink :to="tileLink" class="inline-block w-full h-full post-preview">
-        <div class="inline-block h-full bg-purple-800 text-purple-200 w-full shadow rounded p-4">
+        <div
+          class="inline-block h-[9.75rem] overflow-hidden bg-purple-800 text-purple-200 w-full shadow rounded p-3"
+        >
           <template v-if="tileCategory === TileCategory.TODOS">
             <ul>
-              <li v-for="todo of tileContent">
-                <div class="flex justify-between items-center gap-2 bg-purple-700 px-2 py-1 mb-1 rounded">
-                  <label class="max-w-[12ch] text-ellipsis overflow-hidden cursor-pointer">{{ todo.key }}</label>
-                  <input
-                    type="checkbox"
-                    :value="todo.value"
-                    :checked="todo.value"
-                    class="w-4 h-4 cursor-pointer accent-purple-900 default:bg-purple-900 default:ring-0"
-                  />
-                </div>
+              <li
+                v-for="todo of tileContent"
+                class="flex justify-between items-center gap-2 bg-purple-700 px-3 py-2 [&:not(:last-child)]:mb-[0.375rem] rounded"
+              >
+                <label
+                  class="max-w-[12ch] text-ellipsis overflow-hidden cursor-pointer"
+                  >{{ todo.key }}</label
+                >
+                <input
+                  type="checkbox"
+                  :value="todo.value"
+                  :checked="todo.value"
+                  class="w-5 h-5 cursor-pointer accent-purple-900 default:bg-purple-900 default:ring-0"
+                />
               </li>
             </ul>
           </template>
           <template v-else>
-            <p class="font-semibold mb-1">By {{ tileContent.author }}</p>
-            <p>{{ tileContent.preview }}</p>
+            <div class="px-1">
+              <p class="font-semibold mb-1">By {{ tileContent.author }}</p>
+              <p class="line-clamp-4">{{ tileContent.preview }}</p>
+            </div>
           </template>
         </div>
       </NuxtLink>

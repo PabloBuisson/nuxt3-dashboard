@@ -12,9 +12,12 @@
         <h2 class="text-2xl text-purple-200 font-bold inline-block mr-4">
           {{ selectedCity.current_weather.temperature }} °C
         </h2>
-        <NuxtLink class="text-orange-200" :to="'/tile/' + tileWeather.id"
-          >Modify</NuxtLink
-        >
+        <AppIconLink
+          :link="'/tile/' + tileWeather.id"
+          link-label="Modify"
+          icon-size="16"
+          icon-name="fluent:edit-24-filled"
+        />
       </div>
       <div class="text-center">
         <p class="text-purple-100 font-light">
@@ -29,7 +32,7 @@
           <h3 class="text-purple-200 font-semibold text-lg mb-2">
             Week's forecast
           </h3>
-          <NuxtLink class="text-orange-200" :to="tileForecastLink"
+          <NuxtLink class="text-orange-300" :to="tileForecastLink"
             >see all</NuxtLink
           >
         </div>
@@ -50,9 +53,12 @@
           <h3 class="text-purple-200 font-semibold text-lg">
             {{ tileEvent.title }}
           </h3>
-          <NuxtLink class="text-orange-200" :to="'/tile/' + tileEvent.id"
-            >Modify</NuxtLink
-          >
+          <AppIconLink
+            :link="'/tile/' + tileEvent.id"
+            link-label="Modify"
+            icon-size="14"
+            icon-name="fluent:edit-24-filled"
+          />
         </div>
         <ul v-if="tileEvent.content?.length > 0">
           <li

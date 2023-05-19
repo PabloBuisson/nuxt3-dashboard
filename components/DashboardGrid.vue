@@ -1,5 +1,5 @@
 <template>
-  <section class="flex flex-wrap gap-16">
+  <section class="flex flex-wrap gap-8">
     <TilePreview
       v-for="(tile, index) in tilesToDisplay"
       :key="tile.id"
@@ -13,7 +13,7 @@
       to="tile/new"
     >
       <div class="flex flex-col items-center justify-center gap-4">
-        <span class="aria-hidden:true text-4xl">+</span>
+        <Icon aria-hidden="true" size="40" name="fluent:add-24-filled" />
         <span class="font-semibold text-lg">Add a tile</span>
       </div>
     </NuxtLink>

@@ -2,7 +2,7 @@
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16 pr-4 pl-8">
     <section class="col-span-2">
       <h1 class="text-3xl text-purple-200 mb-4">{{ today }}</h1>
-      <div class="flex flex-wrap gap-16 items-start mb-8">
+      <div class="flex flex-wrap gap-8 items-start mb-8">
         <TileSummary class="basis-1/3 grow" />
         <TileUpcomingEvents class="basis-1/3 grow" />
       </div>
