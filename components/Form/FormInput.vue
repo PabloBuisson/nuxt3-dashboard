@@ -46,8 +46,11 @@
       class="mt-1 min-h-[2.5rem] bg-red-300 rounded p-2.5"
       :class="{ invisible: isValid, visible: !isValid }"
     >
-      <p class="text-red-900 text-sm" v-for="message of errorMessages">
-        {{ message }}
+      <p
+        class="text-red-900 flex items-center gap-2 text-sm"
+        v-for="message of errorMessages"
+      >
+        <Icon size="20" name="fluent:warning-24-regular" />{{ message }}
       </p>
     </div>
   </div>
@@ -71,7 +74,9 @@ const props = withDefaults(defineProps<Props>(), {
 
 let errorMessages: string[] = [];
 let isValid = ref(true);
-const isRequired = computed(() => props.modelValue.validators?.includes("required"));
+const isRequired = computed(() =>
+  props.modelValue.validators?.includes("required")
+);
 
 const emit = defineEmits(["update:modelValue"]);
 

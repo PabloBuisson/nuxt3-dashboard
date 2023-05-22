@@ -31,8 +31,8 @@
             v-if="!isFieldValid"
             class="mt-1 min-h-[2.5rem] bg-red-300 rounded p-2.5"
           >
-            <p class="text-red-900 text-sm" v-for="message of errorMessages">
-              {{ message }}
+            <p class="text-red-900 flex items-center gap-2 text-sm" v-for="message of errorMessages">
+              <Icon size="20" name="fluent:warning-24-regular" />{{ message }}
             </p>
           </div>
         </div>
