@@ -44,7 +44,8 @@ const route = useRoute();
 
 let isLoading = false;
 let formIsValid = true;
-let mode = ref("login");
+const modeQuery = route.query.mode;
+let mode = ref(modeQuery ?? "login");
 let authForm = {} as Auth;
 let error = "";
 const formData: AuthFormData = {
