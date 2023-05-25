@@ -40,6 +40,7 @@
           class="text-purple-100"
           :count="3"
           :daily="selectedCity.daily"
+          :key="selectedCity.id"
         />
       </div>
     </div>
