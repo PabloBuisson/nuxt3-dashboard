@@ -1,5 +1,5 @@
 <template>
-  <header class="p-8 mb-10 bg-purple-800">
+  <header class="p-8 mb-10 bg-purple-900">
     <nav>
       <ul class="flex flex-wrap items-center justify-between gap-5">
         <li>
@@ -24,7 +24,7 @@
         <template v-else>
           <li>
             <button
-              class="bg-purple-400 rounded px-4 py-2"
+              class="bg-purple-600 inline-block font-semibold text-center text-purple-100 min-w-[11ch] rounded px-4 py-2"
               type="button"
               @click="logout"
             >
@@ -39,19 +39,22 @@
 
 <script setup lang="ts">
 import { useAuthStore } from "~~/stores/auth-store";
+import { useForecastStore } from "~~/stores/forecast-store";
 import { useTilesStore } from "~~/stores/tiles-store";
 
 const authStore = useAuthStore();
 const tileStore = useTilesStore();
+const forecastStore = useForecastStore();
 const router = useRouter();
 const route = useRoute();
 
 const isLoggedIn = computed(() => authStore.isAuthenticated);
 
-function logout() {
+async function logout() {
   authStore.logout();
   if (route.path === "/") {
-    tileStore.loadTiles({ forceRefresh: true });
+    await tileStore.loadTiles({ forceRefresh: true });
+    forecastStore.tryFetchCity();
   } else {
     navigateTo(
       { path: "/", query: { forcerefresh: "true" } },

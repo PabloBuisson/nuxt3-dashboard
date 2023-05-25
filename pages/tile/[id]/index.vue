@@ -10,8 +10,18 @@
         @error="onError"
       />
     </div>
-    <div v-else>
-      <p>Oops, tile not found !</p>
+    <div class="px-10 pb-12" v-else>
+      <div class="bg-purple-900 p-4 rounded text-purple-200 ">
+        <div class="flex gap-2 items-center mb-8">
+          <Icon size="24" class="text-red-400" name="fluent:warning-24-regular" />
+          <p>Oops, tile not found !</p>
+        </div>
+        <NuxtLink
+          class="underline underline-offset-4 decoration-orange-400"
+          to="/"
+          >Go back to dashboard</NuxtLink
+        >
+      </div>
     </div>
   </div>
 </template>

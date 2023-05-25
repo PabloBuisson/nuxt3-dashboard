@@ -8,17 +8,17 @@
         >
       </div>
       <div
-        class="inline-block h-[9.75rem] overflow-hidden bg-purple-800 text-purple-200 w-full shadow rounded p-3"
+        class="inline-block h-[9.75rem] overflow-hidden bg-purple-900 text-purple-200 w-full shadow rounded p-3"
       >
         <ul>
           <li
-            class="bg-purple-700 [&:not(:last-child)]:mb-[0.375rem] rounded"
+            class="bg-purple-800 [&:not(:last-child)]:mb-[0.375rem] rounded"
             v-for="article of tileContent"
           >
             <NuxtLink :to="'/tile/' + article.id">
               <div class="flex justify-between items-stretch gap-2">
                 <h2 class="px-3 py-2">{{ article.title }}</h2>
-                <div class="flex items-center justify-center px-2 bg-purple-900 rounded-r">
+                <div class="flex items-center justify-center px-2 bg-purple-950 rounded-r">
                   <Icon
                     aria-hidden="true"
                     size="20"
@@ -43,13 +43,13 @@
       </div>
       <NuxtLink :to="tileLink" class="inline-block w-full h-full post-preview">
         <div
-          class="inline-block h-[9.75rem] overflow-hidden bg-purple-800 text-purple-200 w-full shadow rounded p-3"
+          class="inline-block h-[9.75rem] overflow-hidden bg-purple-900 text-purple-200 w-full shadow rounded p-3"
         >
           <template v-if="tileCategory === TileCategory.TODOS">
             <ul>
               <li
                 v-for="todo of tileContent"
-                class="flex justify-between items-center gap-2 bg-purple-700 px-3 py-2 [&:not(:last-child)]:mb-[0.375rem] rounded"
+                class="flex justify-between items-center gap-2 bg-purple-800 px-3 py-2 [&:not(:last-child)]:mb-[0.375rem] rounded"
               >
                 <label
                   class="max-w-[12ch] text-ellipsis overflow-hidden cursor-pointer"

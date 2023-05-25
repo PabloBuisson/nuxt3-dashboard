@@ -1,6 +1,6 @@
 <template>
   <div
-    class="relative inline-block w-full max-w-xl h-max bg-purple-800 rounded px-4 pb-6 pt-4"
+    class="relative inline-block w-full max-w-xl h-max bg-purple-900 rounded px-4 pb-6 pt-4"
   >
     <div class="mt-[80px]" v-if="selectedCity && tileWeather">
       <Icon

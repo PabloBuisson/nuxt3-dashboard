@@ -4,7 +4,7 @@
     <div v-if="events && events.length > 0">
       <ul>
         <li
-          class="relative pl-4 text-purple-100 mb-1 before:content[''] before:top-0 before:left-0 before:right-0 before:absolute before:h-full before:w-1 before:rounded"
+          class="relative pl-4 text-purple-200 mb-1 before:content[''] before:top-0 before:left-0 before:right-0 before:absolute before:h-full before:w-1 before:rounded"
           :class="getColorBorder(index)"
           v-for="(event, index) in events"
           :key="event.id"
