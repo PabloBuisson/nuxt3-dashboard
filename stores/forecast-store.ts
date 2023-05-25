@@ -1,4 +1,5 @@
 import { Tile, TileCategory } from "~~/models/tile";
+import { useTilesStore } from "./tiles-store";
 
 const urlGeocoding = "https://geocoding-api.open-meteo.com/v1/search";
 const urlForecast = "https://api.open-meteo.com/v1/forecast";
@@ -159,27 +160,49 @@ export const useForecastStore = defineStore("forecast", {
 
       return response;
     },
-    // async registerPartner(data: PartnerRegistration) {
-    //   const authStore = useAuthStore();
-    //   const partnerId = authStore.userId;
-    //   const token = authStore.token;
-    //   const partnerData = data;
+    // try to fetch the selected city if the information is available in store
+    async tryFetchCity() {
+      const tilesStore = useTilesStore();
 
-    //   const response = await fetch(
-    //     `${
-    //       import.meta.env.VITE_FIREBASE_URL
-    //     }/partners/${partnerId}.json?auth=${token}`,
-    //     {
-    //       method: "PUT",
-    //       body: JSON.stringify(partnerData),
-    //     }
-    //   );
+      const tileWeather = tilesStore.tiles.filter(
+        (tile) => tile.category === TileCategory.WEATHER
+      )[0];
+      if (!tileWeather) return;
 
-    //   this.registerPartnerMutation({
-    //     ...partnerData,
-    //     id: partnerId ?? 0,
-    //   });
-    // },
+      const city: GeocodingGETResult = tileWeather.content;
+
+      const {
+        data: response,
+        pending,
+        error,
+        refresh,
+      } = await useFetch<ForecastGETResponse>(urlForecast, {
+        params: {
+          latitude: city.latitude,
+          longitude: city.longitude,
+          current_weather: true,
+          timezone: city.timezone,
+          daily: "weathercode,temperature_2m_max,temperature_2m_min",
+        },
+      });
+
+      if (error.value) {
+        throw useErrorMessage({
+          error: error.value.status,
+          entity: "the selected city",
+          method: HttpRequestMethod.GET,
+        });
+      }
+
+      this.addSelectedCity({
+        ...city,
+        ...response.value,
+      } as GeocodingGETResult & ForecastGETResponse);
+
+      this.setFetchTimestamp();
+
+      return response;
+    },
     // mutations can now become actions,
     // instead of `state` as first argument use `this`
     addSelectedCity(data: GeocodingGETResult & ForecastGETResponse) {

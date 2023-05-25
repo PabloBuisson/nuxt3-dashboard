@@ -2,7 +2,7 @@
   <section class="flex flex-wrap gap-8">
     <TilePreview
       v-for="(tile, index) in tilesToDisplay"
-      :key="tile.id"
+      :key="tile.content"
       :index="index"
       :id="tile.id"
       :is-group="tile.isGroup"
@@ -63,18 +63,20 @@ function getTilesByCategory(
   category: TileCategory,
   title: string
 ): Tile | null {
-  const tileCategory = store.tiles
-    .filter((tile) => tile.category === category && !tile.isPinned)
-    ?.slice(0, 3);
+  const tileCategory = computed(() =>
+    store.tiles
+      .filter((tile) => tile.category === category && !tile.isPinned)
+      ?.slice(0, 3)
+  );
 
-  if (tileCategory && tileCategory.length > 0) {
+  if (tileCategory && tileCategory.value.length > 0) {
     const tileToDisplay: Tile = {
       id: category,
       title: title,
       isGroup: true,
       category: category,
       dateCreation: new Date(),
-      content: tileCategory,
+      content: tileCategory.value,
     };
     store.addGroupTile(tileToDisplay);
     return tileToDisplay;

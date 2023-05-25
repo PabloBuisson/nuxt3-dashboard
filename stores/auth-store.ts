@@ -223,9 +223,9 @@ export const useAuthStore = defineStore("auth", {
 
       const responseData = response.value;
 
-      if (error.value) {
+      if (error.value || !responseData) {
         const errorMessage = new Error(
-          error.value.message || "Failed to refresh token"
+          error.value?.message || "Failed to refresh token"
         );
         this.logout();
         throw errorMessage;

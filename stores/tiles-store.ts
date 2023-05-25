@@ -357,6 +357,8 @@ export const useTilesStore = defineStore("tiles", {
       this.setTiles(tiles);
       this.setFetchTimestamp();
       this.setAllTilesHasBeenLoaded();
+
+      return tiles;
     },
     // mutations can now become actions,
     // instead of `state` as first argument use `this`

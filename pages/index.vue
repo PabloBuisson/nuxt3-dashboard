@@ -16,11 +16,13 @@
 
 <script setup lang="ts">
 import TileUpcomingEvents from "~~/components/Tile/TileUpcomingEvents.vue";
+import { useForecastStore } from "~~/stores/forecast-store";
 import { useTilesStore } from "~~/stores/tiles-store";
 
 definePageMeta({ title: "My Dashboard", layout: "default" });
 
-const store = useTilesStore();
+const tilesStore = useTilesStore();
+const forecastStore = useForecastStore();
 const route = useRoute();
 const router = useRouter();
 const forceRefresh = route.query.forcerefresh == "true";
@@ -29,7 +31,10 @@ const today = useDateFormat(useNow(), "dddd DD MMMM", {
 }).value;
 
 try {
-  await store.loadTiles({ forceRefresh });
+  await tilesStore.loadTiles({ forceRefresh });
+  if (forceRefresh) {
+    forecastStore.tryFetchCity();
+  }
 } catch (errorMessage) {
   useAppToaster({ message: `${errorMessage}`, type: "danger" });
 }
