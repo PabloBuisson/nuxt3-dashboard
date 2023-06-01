@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --hue-purple: 273;
+  --purple-950: 274deg 75% 26%;
+  --purple-900: 274deg 66% 30%;
+  --purple-850: 274deg 60% 36%;
+  --purple-800: 274deg 56% 39%;
+  --hue-orange: 25;
+  --hue-blue: 248;
+  --purple-base: hsl(273, 64%, 57%);
+  --orange-base: hsl(25, 100%, 51%);
+  --blue-base: hsl(248, 77%, 63%);
+  --hue-red: 1;
+  /* ... */
+}

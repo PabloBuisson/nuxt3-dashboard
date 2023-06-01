@@ -18,7 +18,7 @@
             <NuxtLink :to="'/tile/' + article.id">
               <div class="flex justify-between items-stretch gap-2">
                 <h2 class="px-3 py-2">{{ article.title }}</h2>
-                <div class="flex items-center justify-center px-2 bg-purple-950 rounded-r">
+                <div class="flex items-center justify-center px-2 bg-purple-850 rounded-r">
                   <Icon
                     aria-hidden="true"
                     size="20"
