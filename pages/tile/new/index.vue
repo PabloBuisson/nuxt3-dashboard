@@ -7,15 +7,15 @@
     <div class="flex flex-wrap gap-4 mb-12">
       <button
         @click="onClickCategory(option.value)"
-        class="bg-orange-200 w-[10rem] shadow-sm text-orange-900 px-4 pt-3 pb-4 rounded flex flex-col gap-2"
+        class="bg-orange-300 w-[10rem] shadow-sm text-orange-900 font-semibold px-4 pt-3 pb-4 rounded flex flex-col gap-2"
         v-for="option in categoryOptions"
       >
-        <label class="cursor-pointer" :for="option.text">{{
+        <label class="cursor-pointer text-lg" :for="option.text">{{
           option.text
         }}</label>
         <input
           type="radio"
-          class="accent-orange-600 cursor-pointer"
+          class="accent-orange-700 cursor-pointer w-4 h-4 mx-auto"
           :id="option.text"
           :value="option.value"
           v-model="selectedCategory"

@@ -2,12 +2,21 @@
   <div
     class="relative inline-block w-full max-w-xl h-max bg-purple-900 rounded px-4 pb-6 pt-4"
   >
-    <div class="mt-[80px]" v-if="selectedCity && tileWeather">
-      <Icon
-        size="200"
-        class="absolute top-[-100px] left-0 right-0 mx-auto text-orange-200"
-        :name="useWeatherIcon(selectedCity.current_weather.weathercode)"
-      />
+    <div class="mt-0 lg:mt-[80px]" v-if="selectedCity && tileWeather">
+      <div class="hidden lg:block">
+        <Icon
+          size="200"
+          class="absolute top-[-100px] left-0 right-0 mx-auto text-orange-200"
+          :name="useWeatherIcon(selectedCity.current_weather.weathercode)"
+        />
+      </div>
+      <div class="flex lg:hidden mb-2">
+        <Icon
+          size="100"
+          class="mx-auto text-orange-200"
+          :name="useWeatherIcon(selectedCity.current_weather.weathercode)"
+        />
+      </div>
       <div class="flex items-center justify-center flex-wrap gap-2 mb-4">
         <h2 class="text-2xl text-purple-200 font-bold inline-block mr-4">
           {{ selectedCity.current_weather.temperature }} °C

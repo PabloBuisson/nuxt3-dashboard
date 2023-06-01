@@ -1,5 +1,5 @@
 <template>
-  <section class="flex flex-wrap gap-8">
+  <section class="flex flex-col sm:flex-row flex-wrap gap-8">
     <TilePreview
       v-for="(tile, index) in tilesToDisplay"
       :key="tile.content"
@@ -9,7 +9,7 @@
       class="basis-1/3 grow"
     />
     <NuxtLink
-      class="inline-block basis-1/3 grow min-w-[10rem] mt-8 p-8 border-2 border-dashed border-purple-500 rounded text-purple-300"
+      class="inline-block basis-auto sm:basis-[48%] min-w-[10rem] mt-8 p-8 border-2 border-dashed border-purple-500 rounded text-purple-300"
       to="tile/new"
     >
       <div class="flex flex-col items-center justify-center gap-4">

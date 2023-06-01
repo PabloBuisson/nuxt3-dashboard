@@ -3,12 +3,15 @@
     <section class="col-span-2">
       <h1 class="text-3xl text-purple-200 mb-4">{{ today }}</h1>
       <div class="flex flex-wrap gap-8 items-start mb-8">
-        <TileSummary class="basis-1/3 grow" />
-        <TileUpcomingEvents class="basis-1/3 grow" />
+        <TileSummary class="min-w-[12rem] basis-1/3 grow" />
+        <TileUpcomingEvents class="min-w-[14rem] basis-1/3 grow" />
+      </div>
+      <div class="flex justify-center lg:hidden mb-8">
+        <DashboardSidebar />
       </div>
       <DashboardGrid />
     </section>
-    <section class="grow min-w-[18rem] mt-[80px] col-span-1 flex justify-end">
+    <section class="hidden lg:flex grow min-w-[18rem] mt-[80px] col-span-1 justify-end">
       <DashboardSidebar />
     </section>
   </div>
