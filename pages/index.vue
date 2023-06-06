@@ -3,8 +3,8 @@
     <section class="col-span-2">
       <h1 class="text-3xl text-purple-200 mb-4">{{ today }}</h1>
       <div class="flex flex-wrap gap-8 items-start mb-8">
-        <TileSummary class="min-w-[12rem] basis-1/3 grow" />
-        <TileUpcomingEvents class="min-w-[14rem] basis-1/3 grow" />
+        <TileSummary class="min-w-[12rem] max-w-xl basis-1/3 grow" />
+        <TileUpcomingEvents class="min-w-[14rem] max-w-xl basis-1/3 grow" />
       </div>
       <div class="flex justify-center lg:hidden mb-8">
         <DashboardSidebar />

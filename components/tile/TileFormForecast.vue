@@ -30,16 +30,16 @@
           <ForecastWeekSummary class="max-w-xs" :daily="selectedCity.daily" />
         </div>
       </template>
-      <div class="flex flex-wrap gap-8 mt-12">
+      <div class="flex flex-col items-center gap-16 mt-12">
         <button
           v-if="isWriteRequestAllowed"
-          class="grow max-w-xs px-6 py-2 font-semibold text-lg bg-orange-300 text-orange-900 rounded shadow-sm"
+          class="w-full max-w-xs px-6 py-2 font-semibold text-lg bg-orange-300 text-orange-900 rounded shadow-sm"
           type="submit"
         >
           Update
         </button>
         <button
-          class="grow max-w-xs px-6 py-2 font-semibold text-lg bg-red-300 text-red-900 rounded shadow-sm"
+          class="w-full max-w-xs px-6 py-2 font-semibold text-lg bg-red-300 text-red-900 rounded shadow-sm"
           v-if="isEditPage && isWriteRequestAllowed"
           @click="onDelete"
           type="button"

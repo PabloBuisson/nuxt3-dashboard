@@ -38,7 +38,7 @@
     </div>
     <div
       v-if="!isLabelValid || !isInputValid"
-      class="mt-1 min-h-[2.5rem] bg-red-300 rounded p-2.5"
+      class="mt-1 min-h-[1.875rem] bg-red-300 rounded px-1.5 py-1"
     >
       <p
         class="text-red-900 flex items-center gap-2 text-sm"

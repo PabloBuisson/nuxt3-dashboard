@@ -18,7 +18,7 @@
               :id="idInput"
               type="text"
               v-bind="$attrs"
-              class="bg-purple-900 w-full border border-purple-900 text-purple-100 rounded focus-visible:outline-none focus:ring-purple-700 focus:border-purple-700 invalid:border-red-400 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500"
+              class="bg-purple-900 w-full border border-purple-900 text-purple-100 rounded focus-visible:outline-none focus:ring-purple-700 focus:border-purple-700 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500"
               :value="modelValue.input.value"
               required
               @paste="onPaste($event)"
@@ -29,7 +29,7 @@
           </label>
           <div
             v-if="!isFieldValid"
-            class="mt-1 min-h-[2.5rem] bg-red-300 rounded p-2.5"
+            class="mt-1 min-h-[1.875rem] bg-red-300 rounded px-1.5 py-1"
           >
             <p class="text-red-900 flex items-center gap-2 text-sm" v-for="message of errorMessages">
               <Icon size="20" name="fluent:warning-24-regular" />{{ message }}

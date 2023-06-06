@@ -7,7 +7,7 @@
     <div class="flex flex-wrap gap-4 mb-12">
       <button
         @click="onClickCategory(option.value)"
-        class="bg-orange-300 w-[10rem] shadow-sm text-orange-900 font-semibold px-4 pt-3 pb-4 rounded flex flex-col gap-2"
+        class="bg-orange-200 border-4 border-orange-300 w-[10rem] shadow-sm text-orange-800 font-semibold px-4 pt-3 pb-4 rounded flex flex-col gap-2"
         v-for="option in categoryOptions"
       >
         <label class="cursor-pointer text-lg" :for="option.text">{{

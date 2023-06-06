@@ -1,6 +1,6 @@
 <template>
   <div class="flex justify-center">
-    <form @submit.prevent="onSubmit" class="flex flex-col gap-2">
+    <form @submit.prevent="onSubmit" class="flex flex-col mt-4">
       <FormInput id="auth-email" v-model="formData.email" type="email"
         >E-Mail address</FormInput
       >
@@ -9,7 +9,7 @@
       >
       <button
         type="submit"
-        class="px-6 py-2 font-semibold text-lg bg-orange-300 text-orange-900 rounded shadow-sm"
+        class="mt-4 px-6 py-2 font-semibold text-lg bg-orange-300 text-orange-900 rounded shadow-sm mb-4"
       >
         {{ submitButtonCaption }}
       </button>
@@ -25,7 +25,6 @@
 </template>
 
 <script setup lang="ts">
-import { RouteRecordName } from "vue-router";
 import { ModelValue } from "~~/models/model-value";
 import { useAuthStore } from "~~/stores/auth-store";
 

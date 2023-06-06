@@ -9,7 +9,7 @@
       type="text"
       id="autocomplete-city"
       v-model="searchTerm"
-      class="w-full bg-purple-100 border border-purple-300 text-purple-900 rounded focus:ring-purple-500 focus:border-purple-500 invalid:border-red-400 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500"
+      class="w-full bg-purple-100 border border-purple-300 text-purple-900 rounded focus:ring-purple-500 focus:border-purple-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500"
     />
     <div
       v-show="searchCities.length > 0"
