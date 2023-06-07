@@ -1,6 +1,7 @@
 <template>
   <div
-    class="relative inline-block w-full max-w-xl h-max bg-purple-900 rounded px-4 pb-6 pt-4"
+    class="relative inline-block w-full max-w-xl h-max bg-purple-900 rounded"
+    :class="!tileWeather ? 'p-4 sm:p-6 lg:mt-[-30px]' : 'px-4 pt-4 pb-6'"
   >
     <div class="mt-0 lg:mt-[80px]" v-if="selectedCity && tileWeather">
       <div class="hidden lg:block">
@@ -53,6 +54,16 @@
         />
       </div>
     </div>
+    <NuxtLink
+      v-if="!tileWeather"
+      class="inline-block w-full max-w-xl p-8 border-2 border-dashed border-purple-500 rounded text-purple-300"
+      to="tile/new?category=WEATHER"
+    >
+      <div class="flex flex-col items-center justify-center gap-4">
+        <Icon aria-hidden="true" size="40" name="fluent:add-24-filled" />
+        <span class="font-semibold text-lg">Add a forecast tile</span>
+      </div>
+    </NuxtLink>
     <template v-if="tilesEvent && tilesEvent.length > 0">
       <div
         class="[&:not(:last-child)]:mb-8"

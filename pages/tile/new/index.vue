@@ -32,7 +32,7 @@ import { Tile, TileCategory } from "~~/models/tile";
 import { useTilesStore } from "~~/stores/tiles-store";
 
 const store = useTilesStore();
-const router = useRouter();
+const route = useRoute();
 
 const TileFormTodos = resolveComponent("TileFormTodos");
 const TileFormToRead = resolveComponent("TileFormToRead");
@@ -42,29 +42,34 @@ const TileFormEvent = resolveComponent("TileFormEvent");
 
 const categoryOptions = [
   { text: "Todos", value: TileCategory.TODOS, component: TileFormTodos },
-  { text: "To read", value: TileCategory.TOREAD, component: TileFormToRead },
+  { text: "Bookmark", value: TileCategory.TOREAD, component: TileFormToRead },
   { text: "Blog post", value: TileCategory.POST, component: TileFormBlogPost },
   { text: "Events", value: TileCategory.EVENT, component: TileFormEvent },
 ];
 
-if (store.tiles && store.tiles.length > 0) {
+if (store.tiles) {
   if (!store.tiles.some((tile) => tile.category === TileCategory.WEATHER)) {
     categoryOptions.push({
-      text: "Weather forecast",
+      text: "Forecast",
       value: TileCategory.WEATHER,
       component: TileFormForecast,
     });
   }
 }
 
+const categoryQuery = route.query.category;
 const selectedCategory = ref("");
 const selectedForm = shallowRef();
 
-watch(selectedCategory, (newType) => {
+watch(selectedCategory, (_) => {
   selectedForm.value = categoryOptions.find(
     (option) => option.value === selectedCategory.value
   )?.component;
 });
+
+if (typeof categoryQuery === "string") {
+  selectedCategory.value = categoryQuery;
+}
 
 function onClickCategory(optionValue: string) {
   selectedCategory.value = optionValue;
