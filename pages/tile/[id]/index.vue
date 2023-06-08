@@ -33,6 +33,9 @@ import { Tile, TileCategory } from "~~/models/tile";
 import { useForecastStore } from "~~/stores/forecast-store";
 import { useTilesStore } from "~~/stores/tiles-store";
 
+useHead({
+  title: "Modify a tile",
+});
 const route = useRoute();
 const router = useRouter();
 const tilesStore = useTilesStore();

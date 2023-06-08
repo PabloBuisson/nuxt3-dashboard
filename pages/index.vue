@@ -11,7 +11,9 @@
       </div>
       <DashboardGrid />
     </section>
-    <section class="hidden lg:flex grow min-w-[18rem] mt-[80px] col-span-1 justify-end">
+    <section
+      class="hidden lg:flex grow min-w-[18rem] mt-[80px] col-span-1 justify-end"
+    >
       <DashboardSidebar />
     </section>
   </div>
@@ -22,8 +24,6 @@ import TileUpcomingEvents from "~~/components/Tile/TileUpcomingEvents.vue";
 import { useForecastStore } from "~~/stores/forecast-store";
 import { useTilesStore } from "~~/stores/tiles-store";
 
-definePageMeta({ title: "My Dashboard", layout: "default" });
-
 const tilesStore = useTilesStore();
 const forecastStore = useForecastStore();
 const route = useRoute();
@@ -32,6 +32,42 @@ const forceRefresh = route.query.forcerefresh == "true";
 const today = useDateFormat(useNow(), "dddd DD MMMM", {
   locales: "en-US",
 }).value;
+
+definePageMeta({ title: "My Dashboard", layout: "default" });
+useHead({
+  title: "My Dashboard",
+  meta: [
+    {
+      name: "description",
+      content:
+        "Customize your own dashboard by adding todos, bookmarks, events, weather forecast and more !",
+    },
+    { name: "og:type", content: "website" },
+    { name: "og:url", content: "TODO_URL" },
+    { name: "og:title", content: "My Dashboard" },
+    {
+      name: "og:description",
+      content:
+        "Customize your own dashboard by adding todos, bookmarks, events, weather forecast and more !",
+    },
+    {
+      name: "og:image",
+      content: "TODO_IMAGE",
+    },
+    { name: "twitter:card", content: "TODO_BIG_IMAGE" },
+    { name: "twitter:url", content: "TODO_URL" },
+    { name: "twitter:title", content: "My Dashboard" },
+    {
+      name: "twitter:description",
+      content:
+        "Customize your own dashboard by adding todos, bookmarks, events, weather forecast and more !",
+    },
+    {
+      name: "twitter:image",
+      content: "TODO_IMAGE",
+    },
+  ],
+});
 
 try {
   await tilesStore.loadTiles({ forceRefresh });

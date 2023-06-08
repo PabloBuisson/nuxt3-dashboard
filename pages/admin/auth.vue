@@ -37,6 +37,9 @@ interface Auth {
   password: string;
 }
 
+useHead({
+  title: "Log in or Sign up",
+});
 const authStore = useAuthStore();
 const router = useRouter();
 const route = useRoute();

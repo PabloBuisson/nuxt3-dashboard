@@ -31,6 +31,9 @@
 import { Tile, TileCategory } from "~~/models/tile";
 import { useTilesStore } from "~~/stores/tiles-store";
 
+useHead({
+  title: "Create a tile",
+});
 const store = useTilesStore();
 const route = useRoute();
 

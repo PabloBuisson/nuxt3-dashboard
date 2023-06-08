@@ -21,7 +21,9 @@ import { Tile, TileCategory } from "~~/models/tile";
 import { useTilesStore } from "~~/stores/tiles-store";
 
 definePageMeta({ title: "My tiles", middleware: ["auth"] });
-
+useHead({
+  title: "My tiles",
+});
 const route = useRoute();
 const store = useTilesStore();
 
