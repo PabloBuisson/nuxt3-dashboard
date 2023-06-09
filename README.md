@@ -1,11 +1,48 @@
-# Nuxt 3 Minimal Starter
+# MY DASHBOARD
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+A Nuxt application which show how to handle **HTTP requests**, **routing**, **authentication**, **state management** and more.
 
-## Setup
+## :rocket: Goals of the project
 
-Make sure to install the dependencies:
+* Create a **dark theme**
+* Be familiar with **Nuxt 3**
+* Be familiar with **Vue Composition API**
+* Be familiar with **Vite** (env variables)
+* Be familiar with **Pinia** to manage data
+* Add **authentication**
+* Create custom **Form Validation**
+* Learn **TailwindCSS**
 
+## :dart: Presentation of the project
+
+* **My Dashboard** is an application to help you customize your very personal dashboard.
+* The application is built around the core concepts of *Nuxt.js* : pages, composables, middleware, HTTP requests, form validation, authentication, state management, routing and many more.
+
+## :white_check_mark: TODOS
+
+* Add a loader ?
+* Customize the toaster
+* Add ```tags`` to depict of topics a tile
+* Add scroll animations
+* Refactoring
+* Deploy online
+  
+## :iphone: Images
+
+TODO
+
+## 🏍 Run the project
+1. Clone the repo
+2. Create a ``.env`` file at the root of the project
+3. Add your variables :
+```sh
+NUXT_FIREBASE_URL=""
+NUXT_FIREBASE_AUTH_SIGNUP_ENTRYPOINT=""
+NUXT_FIREBASE_AUTH_LOGIN_ENTRYPOINT=""
+NUXT_FIREBASE_REFRESH_TOKEN_ENTRYPOINT=""
+NUXT_FIREBASE_API_KEY=""
+```
+4. Install the dependencies
 ```bash
 # yarn
 yarn install
@@ -16,27 +53,20 @@ npm install
 # pnpm
 pnpm install --shamefully-hoist
 ```
-
-## Development Server
-
-Start the development server on http://localhost:3000
-
+5. Start the development server on http://localhost:3000
 ```bash
 npm run dev
 ```
 
-## Production
+## :package: Packages
 
-Build the application for production:
+* **VueUse** to handle dates gracefully
+* **NuxtIcon** for the icons of the application
+* **Pinia** for state management
+* **TailwindCSS** for the design
+* **Tailvue** for the toaster
 
-```bash
-npm run build
-```
+## :pushpin: Technologies
 
-Locally preview production build:
-
-```bash
-npm run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+* Node v16.13.2
+* Nuxt 3.0.0
