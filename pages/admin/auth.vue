@@ -1,6 +1,10 @@
 <template>
   <div class="flex justify-center">
-    <form @submit.prevent="onSubmit" class="flex flex-col mt-4">
+    <form
+      v-if="withAuthentication"
+      @submit.prevent="onSubmit"
+      class="flex flex-col mt-4"
+    >
       <FormInput id="auth-email" v-model="formData.email" type="email"
         >E-Mail address</FormInput
       >
@@ -21,6 +25,15 @@
         {{ switchModeButtonCaption }}
       </button>
     </form>
+    <div
+      class="mt-4 rounded bg-red-200 text-red-900 p-8 flex flex-col items-center justify-center gap-4"
+      v-else
+    >
+      <Icon size="36" name="fluent:warning-24-regular" />
+      <p class="text-center">
+        Registrations are closed for now, but will be opened in the near future.
+      </p>
+    </div>
   </div>
 </template>
 
@@ -43,7 +56,9 @@ useHead({
 const authStore = useAuthStore();
 const router = useRouter();
 const route = useRoute();
+const config = useRuntimeConfig();
 
+const withAuthentication: boolean = config.public.withAuthentication;
 let isLoading = false;
 let formIsValid = true;
 const modeQuery = route.query.mode;

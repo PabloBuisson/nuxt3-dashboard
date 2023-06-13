@@ -33,6 +33,7 @@ export default defineNuxtConfig({
       apiAuthSignup: process.env.NUXT_FIREBASE_AUTH_SIGNUP_ENTRYPOINT,
       apiAuthLogin: process.env.NUXT_FIREBASE_AUTH_LOGIN_ENTRYPOINT,
       apiRefreshToken: process.env.NUXT_FIREBASE_REFRESH_TOKEN_ENTRYPOINT,
+      withAuthentication: false,
     },
   },
 });

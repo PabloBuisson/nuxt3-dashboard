@@ -23,7 +23,7 @@ A Nuxt application which show how to handle **HTTP requests**, **routing**, **au
 * Add images to README
 * Add gif to README
 * Add a loader ?
-* Add ``tags`` to depict of topics a tile
+* Add ``tags`` to depict topics of a tile
 * Add scroll animations
 * Refactoring
 * Deploy online
