@@ -18,11 +18,12 @@ A Nuxt application which show how to handle **HTTP requests**, **routing**, **au
 * **My Dashboard** is an application to help you customize your very personal dashboard.
 * The application is built around the core concepts of *Nuxt.js* : pages, composables, middleware, HTTP requests, form validation, authentication, state management, routing and many more.
 
-## :white_check_mark: TODOS
+## :white_check_mark: Todos
 
+* Add images to README
+* Add gif to README
 * Add a loader ?
-* Customize the toaster
-* Add ```tags`` to depict of topics a tile
+* Add ``tags`` to depict of topics a tile
 * Add scroll animations
 * Refactoring
 * Deploy online
@@ -57,6 +58,7 @@ pnpm install --shamefully-hoist
 ```bash
 npm run dev
 ```
+6. Add meta properties to the meta object ``useHead`` in pages/index.vue
 
 ## :package: Packages
 

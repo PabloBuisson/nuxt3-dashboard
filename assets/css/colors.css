@@ -3,16 +3,46 @@
 @tailwind utilities;
 
 :root {
-  --hue-purple: 273;
-  --purple-950: 274deg 75% 26%;
-  --purple-900: 274deg 66% 30%;
-  --purple-850: 274deg 60% 36%;
-  --purple-800: 274deg 56% 39%;
-  --hue-orange: 25;
-  --hue-blue: 248;
-  --purple-base: hsl(273, 64%, 57%);
-  --orange-base: hsl(25, 100%, 51%);
-  --blue-base: hsl(248, 77%, 63%);
+  --hue-purple: 274deg;
+  --hue-orange: 25deg;
+  --hue-blue: 248deg;
   --hue-red: 1;
+  --purple-950: var(--hue-purple) 75% 26%;
+  --purple-900: var(--hue-purple) 66% 30%;
+  --purple-850: var(--hue-purple) 60% 36%;
+  --purple-800: var(--hue-purple) 56% 39%;
+  --purple-base: hsl(var(--hue-purple, 274), 64%, 57%);
+  --orange-base: hsl(var(--hue-orange, 25), 100%, 51%);
+  --blue-base: hsl(var(--hue-blue, 248), 77%, 63%);
   /* ... */
+}
+
+/* Tailvue Toaster */
+
+#toasts p {
+  @apply text-base;
+}
+
+#toasts button {
+  @apply text-purple-300;
+}
+
+#toasts button svg {
+  @apply w-5 h-5;
+}
+
+#toasts > div > div > div {
+  @apply bg-purple-950 text-purple-200 text-lg;
+}
+
+#toasts > div > div > div > div > div {
+  @apply p-6;
+}
+
+#toasts > div > div > div > div > div > div {
+  @apply items-center;
+}
+
+#toasts > div > div > div > div > div > div > div:nth-child(2) {
+  @apply ml-4;
 }
