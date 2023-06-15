@@ -2,6 +2,8 @@
 
 A Nuxt application which show how to handle **HTTP requests**, **routing**, **authentication**, **state management** and more.
 
+Online demo : [Nuxt3 Dashboard](https://nuxt3-dashboard-f3dd0.web.app/)
+
 ## :rocket: Goals of the project
 
 * Create a **dark theme**
@@ -26,7 +28,7 @@ A Nuxt application which show how to handle **HTTP requests**, **routing**, **au
 * Add ``tags`` to depict topics of a tile
 * Add scroll animations
 * Refactoring
-* Deploy online
+* Deploy online with server
   
 ## :iphone: Images
 
