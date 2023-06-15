@@ -4,6 +4,8 @@ A Nuxt application which show how to handle **HTTP requests**, **routing**, **au
 
 Online demo : [Nuxt3 Dashboard](https://nuxt3-dashboard-f3dd0.web.app/)
 
+:bulb: The demo is *not built with SSR* (yet). The main idea of the demo is to show how the project looks like.
+
 ## :rocket: Goals of the project
 
 * Create a **dark theme**
@@ -74,3 +76,4 @@ npm run dev
 
 * Node v16.13.2
 * Nuxt 3.0.0
+* Firebase
