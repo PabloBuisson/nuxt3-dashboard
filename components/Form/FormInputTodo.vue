@@ -114,7 +114,6 @@ function checkValidators(
   if (type === "text") {
     if (eventValue === "") {
       errorMessages = [errorMessageByValidatorName["required"]];
-      console.log("error in the form");
       isFieldValid.value = false;
     } else {
       clearValidtyWithoutChecking();
@@ -146,8 +145,6 @@ function updateModelValue(
       checkbox: { value: eventValue, isValid: true },
     } as { id: string; input: ModelValue; checkbox: ModelValue };
   }
-
-  console.log("FormInputTodo l.84", modelValueUpdated);
 
   emit("update:modelValue", { ...modelValueUpdated });
 }

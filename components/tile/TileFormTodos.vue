@@ -156,12 +156,6 @@ const formData: TileFormData = {
   },
 };
 
-console.log("TileFormTodos l.111", [
-  content.value,
-  todosModelValue,
-  formData.todos,
-]);
-
 const emit = defineEmits(["submit", "delete", "error"]);
 
 function addTodo() {

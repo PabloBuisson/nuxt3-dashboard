@@ -113,7 +113,6 @@ async function onSubmit() {
   isLoading = true;
   validateForm();
   if (!formIsValid) {
-    console.log("formInvalid");
     isLoading = false;
     return;
   }
@@ -122,7 +121,6 @@ async function onSubmit() {
     email: authForm.email,
     password: authForm.password,
   };
-  console.log("formValid", actionPayload);
 
   if (mode.value === "login") {
     try {

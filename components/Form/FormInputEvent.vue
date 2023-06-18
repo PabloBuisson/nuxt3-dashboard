@@ -184,7 +184,6 @@ function checkValidators(
         errorRequiredMessageMap[role],
       ];
     }
-    console.log("error in the form");
     setValidity(role, false);
   } else {
     clearValidtyWithoutChecking(role);
@@ -212,8 +211,6 @@ function updateModelValue(role: "label" | "input", eventValue: string) {
       input: { value: eventValue, isValid: isInputValid.value },
     } as { id: string; label: ModelValue; input: ModelValue };
   }
-
-  console.log("FormInputTodo l.84", modelValueUpdated);
 
   emit("update:modelValue", { ...modelValueUpdated });
 }
