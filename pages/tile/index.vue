@@ -20,7 +20,8 @@
 import { Tile, TileCategory } from "~~/models/tile";
 import { useTilesStore } from "~~/stores/tiles-store";
 
-definePageMeta({ title: "My tiles", middleware: ["auth"] });
+// definePageMeta({ title: "My tiles", middleware: ["auth"] });
+definePageMeta({ title: "My tiles" });
 useHead({
   title: "My tiles",
 });
