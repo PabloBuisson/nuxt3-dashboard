@@ -34,7 +34,27 @@ Online demo : [Nuxt3 Dashboard](https://nuxt3-dashboard-f3dd0.web.app/)
   
 ## :iphone: Images
 
-TODO
+![nuxt-dashboard](https://github.com/PabloBuisson/nuxt3-dashboard/assets/41048008/e0535bcc-df9c-466f-ac50-453c3e1e97d8)
+
+### WEATHER Tile
+
+![nuxt3-dashboard-weather-tile](https://github.com/PabloBuisson/nuxt3-dashboard/assets/41048008/d2a9c8a2-9964-4418-ba13-a9196f93c84b)
+
+### EVENTS Tile
+
+![nuxt3-dashboard-event-tile](https://github.com/PabloBuisson/nuxt3-dashboard/assets/41048008/17f42888-f7fd-4580-9f60-fd09a583aaee)
+
+### TODOS Tile
+
+![nuxt3-dashboard-todos-tile](https://github.com/PabloBuisson/nuxt3-dashboard/assets/41048008/a9a75782-81d8-47fe-90da-b89d7e9fed9d)
+
+### BOOKMARK Tile
+
+![nuxt3-dashboard-bookmark-tile](https://github.com/PabloBuisson/nuxt3-dashboard/assets/41048008/8935fa83-fc86-42c6-a648-110d9b51aaf6)
+
+### BLOG POST Tile
+
+![nuxt3-dashboard-blogpost-tile](https://github.com/PabloBuisson/nuxt3-dashboard/assets/41048008/3fd276c7-7cb0-4086-a92d-b2845cfbd546)
 
 ## 🏍 Run the project
 1. Clone the repo
