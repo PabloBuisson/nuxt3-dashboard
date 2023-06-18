@@ -52,9 +52,9 @@ useHead({
     },
     {
       name: "og:image",
-      content: "https://nuxt3-dashboard-f3dd0.web.app/images/nuxt3-dashboard-facebook-image.png",
+      content: "https://nuxt3-dashboard-f3dd0.web.app/nuxt3-dashboard-facebook-image.png",
     },
-    { name: "twitter:card", content: "https://nuxt3-dashboard-f3dd0.web.app/images/nuxt3-dashboard-twitter-image" },
+    { name: "twitter:card", content: "https://nuxt3-dashboard-f3dd0.web.app/nuxt3-dashboard-twitter-image.png" },
     { name: "twitter:url", content: "https://nuxt3-dashboard-f3dd0.web.app/" },
     { name: "twitter:title", content: "My Dashboard" },
     {
@@ -64,7 +64,7 @@ useHead({
     },
     {
       name: "twitter:image",
-      content: "https://nuxt3-dashboard-f3dd0.web.app/images/nuxt3-dashboard-twitter-image",
+      content: "https://nuxt3-dashboard-f3dd0.web.app/nuxt3-dashboard-twitter-image.png",
     },
   ],
 });

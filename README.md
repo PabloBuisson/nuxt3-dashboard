@@ -24,8 +24,6 @@ Online demo : [Nuxt3 Dashboard](https://nuxt3-dashboard-f3dd0.web.app/)
 
 ## :white_check_mark: Todos
 
-* Add images to README
-* Add gif to README
 * Add a loader ?
 * Add ``tags`` to depict topics of a tile
 * Add scroll animations
