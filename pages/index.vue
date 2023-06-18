@@ -43,7 +43,7 @@ useHead({
         "Customize your own dashboard by adding todos, bookmarks, events, weather forecast and more !",
     },
     { name: "og:type", content: "website" },
-    { name: "og:url", content: "TODO_URL" },
+    { name: "og:url", content: "https://nuxt3-dashboard-f3dd0.web.app/" },
     { name: "og:title", content: "My Dashboard" },
     {
       name: "og:description",
@@ -52,10 +52,10 @@ useHead({
     },
     {
       name: "og:image",
-      content: "TODO_IMAGE",
+      content: "https://nuxt3-dashboard-f3dd0.web.app/images/nuxt3-dashboard-facebook-image.png",
     },
-    { name: "twitter:card", content: "TODO_BIG_IMAGE" },
-    { name: "twitter:url", content: "TODO_URL" },
+    { name: "twitter:card", content: "https://nuxt3-dashboard-f3dd0.web.app/images/nuxt3-dashboard-twitter-image" },
+    { name: "twitter:url", content: "https://nuxt3-dashboard-f3dd0.web.app/" },
     { name: "twitter:title", content: "My Dashboard" },
     {
       name: "twitter:description",
@@ -64,7 +64,7 @@ useHead({
     },
     {
       name: "twitter:image",
-      content: "TODO_IMAGE",
+      content: "https://nuxt3-dashboard-f3dd0.web.app/images/nuxt3-dashboard-twitter-image",
     },
   ],
 });
