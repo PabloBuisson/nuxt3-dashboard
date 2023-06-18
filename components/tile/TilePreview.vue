@@ -17,7 +17,7 @@
           >
             <NuxtLink :to="'/tile/' + article.id">
               <div class="flex justify-between items-stretch gap-2">
-                <h2 class="px-3 py-2">{{ article.title }}</h2>
+                <h2 class="px-3 py-2 text-ellipsis overflow-hidden whitespace-nowrap">{{ article.title }}</h2>
                 <div class="flex items-center justify-center px-2 bg-purple-850 rounded-r">
                   <Icon
                     aria-hidden="true"
@@ -33,7 +33,7 @@
     </template>
     <template v-else>
       <div class="flex items-center gap-2 mb-2">
-        <h1 class="text-purple-200 text-lg">{{ tile?.title }}</h1>
+        <h1 class="text-purple-200 text-lg text-ellipsis overflow-hidden whitespace-nowrap">{{ tile?.title }}</h1>
         <AppIconLink
           :link="tileLink"
           link-label="Modify"
@@ -49,10 +49,10 @@
             <ul>
               <li
                 v-for="todo of tileContent"
-                class="flex justify-between items-center gap-2 bg-purple-800 px-3 py-2 [&:not(:last-child)]:mb-[0.375rem] rounded"
+                class="flex justify-between items-center gap-2 bg-purple-800 px-3 py-2 [&:not(:last-child)]:mb-[0.375rem] rounded whitespace-nowrap"
               >
                 <label
-                  class="max-w-[12ch] text-ellipsis overflow-hidden cursor-pointer"
+                  class="text-ellipsis overflow-hidden cursor-pointer"
                   >{{ todo.key }}</label
                 >
                 <input
