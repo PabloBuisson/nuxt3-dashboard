@@ -9,10 +9,10 @@ Online demo : [Nuxt3 Dashboard](https://nuxt3-dashboard-f3dd0.web.app/)
 ## :rocket: Goals of the project
 
 * Create a **dark theme**
-* Be familiar with **Nuxt 3**
+* Explore **Nuxt 3**
 * Be familiar with **Vue Composition API**
-* Be familiar with **Vite** (env variables)
-* Be familiar with **Pinia** to manage data
+* Go further with **Vite** (env variables)
+* Improve state management with **Pinia**
 * Add **authentication**
 * Create custom **Form Validation**
 * Learn **TailwindCSS**
